@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "sudo PORT=80 node ./bin/www"
+    "start": "sudo PORT=80 pm2 ./bin/www"
   },
   "devDependencies": {
     "css-loader": "^0.26.1",
@@ -33,6 +33,7 @@
     "express": "~4.14.1",
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
+    "pm2": "^2.4.0",
     "serve-favicon": "~2.3.2"
   }
 }
