@@ -1,0 +1,9 @@
+# mac directory
+.DS_Store
+
+# npm
+node_modules/
+
+# only source file
+view/*
+!view/src/
