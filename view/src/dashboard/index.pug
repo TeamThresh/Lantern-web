@@ -1,0 +1,11 @@
+extends ../layout/layout.pug
+
+prepend title
+	|대시보드 
+
+block content
+	div#cpu-chart(style='width: 500px; height: 400px;')
+
+append script
+	script(src='http://code.highcharts.com/highcharts.js')
+	script(src='./bundle.js')

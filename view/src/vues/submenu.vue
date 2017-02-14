@@ -24,7 +24,7 @@ $iconHoverBackgroundColor: rgb(222, 222, 222);
     vertical-align: middle;
 
     i{
-        padding: 10px 10px 10px 10px;
+        padding: 5px 10px 5px 10px;
 
         &:first-child {
             margin: 0px 0px 0px 10px;

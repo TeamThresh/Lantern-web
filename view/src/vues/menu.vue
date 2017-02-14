@@ -30,7 +30,7 @@ $selectedMenuBackgroundColor: rgb(16, 20, 31);
 $greenColor: rgb(186, 209, 83);
 
 #menu-wrapper {
-    float: left;
+    position: fixed;
     width: 250px; height: 100%; 
     background-color: $menuBackgroundColor;
     color: white;
