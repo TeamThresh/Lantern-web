@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "sudo PORT=80 pm2 ./bin/www"
+    "start": "sudo PORT=80 pm2 start ./bin/www"
   },
   "devDependencies": {
     "css-loader": "^0.26.1",
