@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var schema = require('./schema/schema.js');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -20,6 +22,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'view')));
+
+/*
+db setting
+*/
+mongoose.connect('mongodb://localhost/lantern_raw_db');
+var ResSchema = new mongoose.Schema(schema.resSchema);
+var ResModel = mongoose.model('resourcemodel', ResSchema);
+
+app.all('/test', function(req, res, next) {
+  ResModel.find({}, function(err, docs) {
+    res.json(docs[docs.length - 1]);
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
