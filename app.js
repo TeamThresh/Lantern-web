@@ -32,7 +32,8 @@ var ResModel = mongoose.model('resourcemodel', ResSchema);
 
 app.all('/test', function(req, res, next) {
   ResModel.find({}, function(err, docs) {
-    res.json(docs[docs.length - 1]);
+    // res.json(docs[docs.length - 1]);
+    res.json(docs[21]);
   });
 });
 

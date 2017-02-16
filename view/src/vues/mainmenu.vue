@@ -1,5 +1,5 @@
 <template lang='pug'>
-    div#menu-wrapper
+    div#mainmenu-wrapper
         div.logo
             i.fa.fa-bolt
         div.menu
@@ -29,7 +29,7 @@ $menuBackgroundColor: rgb(28, 33, 50);
 $selectedMenuBackgroundColor: rgb(16, 20, 31);
 $greenColor: rgb(186, 209, 83);
 
-#menu-wrapper {
+#mainmenu-wrapper {
     position: fixed;
     width: 250px; height: 100%; 
     background-color: $menuBackgroundColor;

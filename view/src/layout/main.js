@@ -1,32 +1,30 @@
 require('./style.scss');
+window.Vue = require('vue');
+require('vue-resource');
 
-var menu = require('../vues/menu.vue');
+var mainmenu = require('../vues/mainmenu.vue');
 var submenu = require('../vues/submenu.vue');
 var filtermenu = require('../vues/filtermenu.vue');
 
+window.mainmenu = mainmenu;
+
 new Vue({
-    el: 'menu',
+    el: 'mainmenu',
     render: function(h) {
-        return h(menu);
-    },
-    template: '<menu/>',
-    components: {menu}
+        return h(mainmenu);
+    }
 });
 
 new Vue({
     el: 'submenu',
     render: function(h) {
         return h(submenu);
-    },
-    template: '<submenu/>',
-    components: {submenu}
+    }
 });
 
 new Vue({
     el: 'filtermenu',
     render: function(h) {
         return h(filtermenu);
-    },
-    template: '<filtermenu/>',
-    components: {filtermenu}
+    }
 });

@@ -43,10 +43,6 @@ document.addEventListener("DOMContentLoaded", function() {
    
 // }
 
-
-
-// d3.flameGraph('#flame-graph', obj).size([1000, 500]).cellHeight(20).zoomEnabled(true).render();
-
 d3.json('/test', function(err, data) {
     var stackTraces = [];
     data = data.data;
