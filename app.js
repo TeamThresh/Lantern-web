@@ -37,6 +37,12 @@ app.all('/test', function(req, res, next) {
   });
 });
 
+app.all('/testMany', function(req, res, next) {
+  ResModel.find({}, function(err, docs) {
+    res.json([docs[20], docs[21]]);
+  });
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
