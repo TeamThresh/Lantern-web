@@ -1,30 +1,15 @@
 require('./style.scss');
-window.Vue = require('vue');
+// window.Vue = require('vue');
+window.Vue = require('vue/dist/vue.common.js');
 require('vue-resource');
 
 var mainmenu = require('../vues/mainmenu.vue');
 var submenu = require('../vues/submenu.vue');
 var filtermenu = require('../vues/filtermenu.vue');
+var flameGraph = require('../vues/flameGraph.vue');
 
-window.mainmenu = mainmenu;
+Vue.component('mainmenu', mainmenu);
+Vue.component('submenu', submenu);
+Vue.component('flame-graph', flameGraph);
 
-new Vue({
-    el: 'mainmenu',
-    render: function(h) {
-        return h(mainmenu);
-    }
-});
-
-new Vue({
-    el: 'submenu',
-    render: function(h) {
-        return h(submenu);
-    }
-});
-
-new Vue({
-    el: 'filtermenu',
-    render: function(h) {
-        return h(filtermenu);
-    }
-});
+window.app = new Vue({el: '#app'});

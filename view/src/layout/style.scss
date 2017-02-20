@@ -79,3 +79,55 @@ i {
   padding: 0px 0px 0px 250px;
   width: 100%; height: 100%;
 }
+
+
+/* comfortable size control, it extends its classes with size name */
+*.width100 { width: 100%; }
+*.width90 { width: 90%; }
+*.width80 { width: 80%; }
+*.width70 { width: 70%; }
+*.width60 { width: 60%; }
+*.width50 { width: 50%; }
+*.width40 { width: 40%; }
+*.width33 { width: 33%; } /* for 3 division */
+*.width30 { width: 30%; }
+*.width25 { width: 25%; } /* for 4 division */
+*.width20 { width: 20%; }
+*.width10 { width: 10%; }
+
+
+
+
+/*
+block style
+*/
+$blockTitleTextColor: rgb(65, 65, 66);
+$blockDescTextColor: rgb(88, 89, 91);
+$blockContentBackgroundColor: rgb(255, 255, 255);
+
+.block {
+  padding: 30px 30px 30px 30px;
+
+  .title {
+    width: 100%;
+    font-size: 20px;
+    color: $blockTitleTextColor;
+  }
+
+  .desc {
+    margin: 10px 0px 0px 0px;
+    width: 100%;
+    font-size: 14px;
+    color: $blockDescTextColor;
+  }
+
+  .content {
+    margin: 10px 0px 0px 0px;
+    padding: 10px 10px 10px 10px;
+    width: 100%;
+    background-color: $blockContentBackgroundColor;
+  }
+}
+
+
+

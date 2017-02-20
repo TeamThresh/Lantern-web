@@ -4,50 +4,16 @@ prepend title
 	|대시보드 
 
 block content
-	//- div#cpu-chart(style='width: 500px; height: 400px;')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-	div(class='graph')
-
-	style.
-		.graph {
-			width: 100%;
-			height: 500px;
-		}
+	.block
+		.title 액티비티 맵
+		.desc 어플리케이션의 액티비티들의 관계와 상태를 한 눈에 볼 수 있게 제공합니다
+		.content 준비중
+	br
+	.block
+		.title 쓰레드 스택 탑 트레이스
+		.desc 어플리케이션의 모든 쓰레드의 스택 트레이스를 거꾸로 정렬하여 빈도수단위로 제공합니다
+		.content
+			flame-graph
 
 append script
-	script(src='http://code.highcharts.com/highcharts.js')
-	script(src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js')
-	script(src='https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.js')
-	link(rel='stylesheet' type='text/css' href='/assets/d3.flameGraph.css')
-	script(src='/assets/d3.flameGraph.js')
 	script(src='./bundle.js')

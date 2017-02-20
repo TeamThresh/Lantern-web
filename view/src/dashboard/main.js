@@ -1,6 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
 
-});
 
 // var cpuChart = Highcharts.chart('cpu-chart', {
 // 		chart: {
@@ -21,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
 //             name: 'Jane',
 //             data: [1, 0, 4]
 //         }, {
-//             name: 'John',
+//             name: 'Joh',
 //             data: [5, 7, 3]
 //         }]
 // 	});
@@ -153,7 +151,6 @@ d3.json('/test', function(err, data) {
     }
 
     var flameGraphData = convertToFlameGraphData(stackTraces);
-    console.log(flameGraphData);
 
     var flameGraph = d3.flameGraph().width(1400).height(540).sort(false);
     d3.select(document.querySelectorAll('.graph')[0]).datum(flameGraphData).call(flameGraph);
