@@ -1,5 +1,5 @@
 <template lang='pug'>
-    div#mainmenu-wrapper
+    div#mainmenu-wrapper()
         div.logo
             i.fa.fa-bolt
         div.menu
@@ -20,6 +20,17 @@
 </template>
 
 <script>
+    module.exports = {
+        methods: {
+            toggle: function() {
+                var width = $(this.$el).width() < 250 ? 250 : 0;
+                $(this.$el).animate({
+                    opacity: width == 0 ? width : 100,
+                    width: width
+                }, 500);
+            }
+        }
+    }
 </script>
 
 <style lang='sass' scoped>

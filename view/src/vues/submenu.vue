@@ -1,5 +1,5 @@
 <template lang='pug'>
-    div#submenu-wrapper
+    div#submenu-wrapper(@click='click')
         i.fa.fa-bars#menu-toggle-btn
         span#title Lantern
         div#right-floated
@@ -11,6 +11,33 @@
 </template>
 
 <script>
+    module.exports = {
+        methods: {
+            click: function() { 
+                var container = $(this.$el).parent();
+                
+                // find mainmenu component dom
+                $.map(this.$root.$children, function(obj) {
+                    if( obj.$options._componentTag == 'mainmenu' ) {
+                        var maxWidth = 250;
+                        var mainmenu = obj.$el;
+                        var width = $(mainmenu).width() < maxWidth ? maxWidth : 0;
+
+                        // animate mainmenu opacity & width
+                        $(mainmenu).animate({
+                            opacity: width == 0 ? 0 : 100,
+                            width: width
+                        }, 500);
+
+                        // animate submenu padding-left
+                        $(container).animate({
+                            'padding-left': width
+                        }, 500);
+                    }
+                });
+            }
+        }
+    }
 </script>
 
 <style lang='sass' scoped>
