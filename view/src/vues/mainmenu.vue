@@ -55,7 +55,6 @@ $greenColor: rgb(186, 209, 83);
 
         i {
             padding: 0px 10px 0px 10px;
-            width: 20px;
             color: $greenColor;
             font-size: 18px;
             font-weight: lighter;

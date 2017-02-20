@@ -142,48 +142,48 @@ function convertToFlameGraphData(data, rootStackName) {
 
 // });
 
-// d3.json('/test', function(err, data) {
-//     var stackTraces = [];
+d3.json('/test', function(err, data) {
+    var stackTraces = [];
 
-//     data = data.data;
-//     for( var i=0; i<data.length; i++ ) {
-//         if( data[i].type === 'res' && data[i].app !== undefined && data[i].app.thread_trace !== undefined ) {
-//             stackTraces.push(data[i].app.thread_trace.reverse());
+    data = data.data;
+    for( var i=0; i<data.length; i++ ) {
+        if( data[i].type === 'res' && data[i].app !== undefined && data[i].app.thread_trace !== undefined ) {
+            stackTraces.push(data[i].app.thread_trace.reverse());
+        }
+    }
+
+    var flameGraphData = convertToFlameGraphData(stackTraces);
+    console.log(flameGraphData);
+
+    var flameGraph = d3.flameGraph().width(1400).height(540).sort(false);
+    d3.select(document.querySelectorAll('.graph')[0]).datum(flameGraphData).call(flameGraph);
+});
+
+// d3.json('/testMany', function(err, data) {
+//     var stackTraces = [];
+//     var res = data;
+
+//     for( var j=0; j<res.length; j++ ) {
+//         data = res[j].data;
+//         var stackTrace = [];
+
+//         for( var i=0; i<data.length; i++ ) {
+//             if( data[i].type === 'res' && data[i].app !== undefined && data[i].app.thread_trace !== undefined ) {
+//                 stackTrace.push(data[i].app.thread_trace.reverse());
+//             }
 //         }
+//         stackTraces.push(stackTrace);
 //     }
 
-//     var flameGraphData = convertToFlameGraphData(stackTraces);
-//     console.log(flameGraphData);
+//     // draw
+//     var flameGraph = d3.flameGraph().sort(false);
 
-//     var flameGraph = d3.flameGraph().width(1400).height(540).sort(false);
-//     d3.select('#flame-graph').datum(flameGraphData).call(flameGraph);
+//     for( var i=0; i<stackTraces.length; i++ ) {
+//         var d = convertToFlameGraphData(stackTraces[i]);
+//         var graph = document.querySelectorAll('.graph')[i];
+//         d3.select(graph).datum(d).call(flameGraph);
+//     }
 // });
-
-d3.json('/testMany', function(err, data) {
-    var stackTraces = [];
-    var res = data;
-
-    for( var j=0; j<res.length; j++ ) {
-        data = res[j].data;
-        var stackTrace = [];
-
-        for( var i=0; i<data.length; i++ ) {
-            if( data[i].type === 'res' && data[i].app !== undefined && data[i].app.thread_trace !== undefined ) {
-                stackTrace.push(data[i].app.thread_trace.reverse());
-            }
-        }
-        stackTraces.push(stackTrace);
-    }
-
-    // draw
-    var flameGraph = d3.flameGraph().sort(false);
-
-    for( var i=0; i<stackTraces.length; i++ ) {
-        var d = convertToFlameGraphData(stackTraces[i]);
-        var graph = document.querySelectorAll('.graph')[i];
-        d3.select(graph).datum(d).call(flameGraph);
-    }
-});
 
 
 
