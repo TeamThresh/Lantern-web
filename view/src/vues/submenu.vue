@@ -1,13 +1,12 @@
 <template lang='pug'>
-    div#submenu-wrapper(@click='click')
-        i.fa.fa-bars#menu-toggle-btn
+    div#submenu-wrapper
+        i.fa.fa-bars#menu-toggle-btn(@click='click')
         span#title Lantern
-        div#right-floated
-            i.fa.fa-bell-o
-            div#user
-                i.fa.fa-user-circle-o
-                span#user-name ckcks12
-            i.fa.fa-sign-out
+        .space
+        i.fa.fa-bell-o
+        i.fa.fa-user-circle-o
+        span.user-name ckcks12
+        i.fa.fa-sign-out
 </template>
 
 <script>
@@ -45,38 +44,25 @@ $submenuBackgroundColor: rgb(255, 255, 255);
 $iconHoverBackgroundColor: rgb(222, 222, 222);
 
 #submenu-wrapper {
-    padding: 10px 0px 0px 0px;
+    display: table;
     width: 100%; height: 45px;
     background-color: $submenuBackgroundColor;
     vertical-align: middle;
 
-    i{
-        padding: 5px 10px 5px 10px;
-
-        &:first-child {
-            margin: 0px 0px 0px 10px;
-        }
-
-        &:last-child {
-            margin: 0px 10px 0px 0px;
-        }
-
-        &:hover {
-            background-color: $iconHoverBackgroundColor;
-        }
+    > * { /* amazing css selector XD */
+        display: table-cell;
+        vertical-align: middle;
+        width: 1px;
+        padding: 0px 15px 0px 15px;
     }
 
-    span#title {
-        margin: 0px 0px 0px 10px;
+    i:hover {
+        background-color: $iconHoverBackgroundColor;
     }
 
-    #right-floated {
-        float: right;
-
-        #user {
-            display: inline-block;
-            margin: 0px 10px 0px 0px;
-        }
+    .space {
+        display: table-cell;
+        width: auto;
     }
 }
 </style>

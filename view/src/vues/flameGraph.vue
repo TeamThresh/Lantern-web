@@ -89,8 +89,10 @@
 			    }
 
 			    var flameGraphData = convertToFlameGraphData(stackTraces);
+			    var width = $('.flameGraph').width();
+			    var height = $('.flameGraph').height();
 
-			    var flameGraph = d3.flameGraph().width(1400).height(540).sort(false);
+			    var flameGraph = d3.flameGraph().width(width).height(height).sort(false);
 			    d3.select(document.querySelectorAll('.flameGraph')[0]).datum(flameGraphData).call(flameGraph);
 			});
 		}
@@ -100,4 +102,12 @@
 <style lang='sass' scoped>
 @import "../layout/style.scss";
 
+.flameGraph {
+	width: 100%;
+	height: 700px;
+
+	* {
+		width: 100%;
+	}
+}
 </style>

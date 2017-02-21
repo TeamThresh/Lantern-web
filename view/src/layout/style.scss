@@ -43,7 +43,6 @@ table {
 
 html, body {
   width: 100%;
-  height: 100%;
 }
 
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
@@ -71,13 +70,13 @@ i {
 .container-wrapper {
   margin: 0 auto;
   min-width: 940px; max-width: 1920px;
-  width: 100%; height: 100%;
+  width: 100%;
   background-color: rgb(215, 215, 215);
 }
 
 .container {
   padding: 0px 0px 0px 250px;
-  width: 100%; height: 100%;
+  width: 100%;
 }
 
 
