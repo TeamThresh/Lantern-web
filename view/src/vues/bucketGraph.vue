@@ -5,28 +5,43 @@
 <script>
 	module.exports = {
 		mounted: function() {
-			nodes = [
-				{'name': 'a', 'usage': 10, 'value': 3},
-				{'name': 'b', 'usage': 30, 'value': 1},
-				{'name': 'c', 'usage': 100, 'value': 2},
-				{'name': 'd', 'usage': 50, 'value': 4},
-				{'name': 'e', 'usage': 70, 'value': 5}
-			];
+			function random(min, max) {
+				return Math.floor(Math.random() * (max - min + 1) + min);
+			}
 
-			links = [
-				{'source': 0, 'target': 2, 'value': 1},
-				{'source': 1, 'target': 2, 'value': 1},
-				{'source': 3, 'target': 2, 'value': 1},
-				{'source': 4, 'target': 2, 'value': 1},
-			];
+			function createNodes(maxCount) {
+				var nodes = [];
+				var max = random(0, maxCount);
+
+				for( var i=0; i<max; i++ ) {
+					nodes.push({'name': 'UnnamedActivity', 'usage': random(0, 100), 'value': random(1, 5)});
+					console.log(random(1, 5));
+				}
+
+				return nodes;
+			}
+
+			function createLinks(nodes) {
+				var links = [];
+				var max = random(nodes.length, nodes.length * 2);
+
+				for( var i=0; i<max; i++ ) {
+					links.push({'source': i % nodes.length, 'target': random(0, nodes.length - 1), 'value': 1});
+				}
+
+				return links;
+			}
+
+			nodes = createNodes(20);
+			links = createLinks(nodes);
 
 			var bucketGraph = $('.bucketGraph'),
 				width = bucketGraph.width(),
 				height = 700,
 				force = d3.layout.force()
 						.size([width, height])
-						.charge(-120)
-						.linkDistance(60),
+						.charge(-800)
+						.linkDistance(150),
 				svg = d3.select('.bucketGraph').append('svg')
 						.attr('width', width)
 						.attr('height', height);			
@@ -47,26 +62,34 @@
 					return g;
 				} else {
 					var color = {
-						1: '#ff0000',
-						2: '#ff5900',
+						1: '#f7472c',
+						2: '#ffa23f',
 						3: '#ffc300',
 						4: '#d0ff00',
-						5: '#00ff7f'
+						5: '#22910a'
 					}
 
 					g = svg.append("defs").append("linearGradient").attr("id", "grad" + usage + '-' + val)
 						.attr("x1", "0%").attr("x2", "0%").attr("y1", "100%").attr("y2", "0%");
 					g.append("stop").attr("offset", usage + '%').style("stop-color", color[val]);
+					g.append('stop').attr('offset', (usage + 1) + '%').style('stop-color', 'white');
 					g.append("stop").attr("offset", (100 - usage) + '%').style("stop-color", "white");
-
+					
 					return g;
 				}
 			}
 
 			var link = svg.selectAll(".link"),
-			    node = svg.selectAll(".node");
+			    node = svg.selectAll(".node"),
+			    text = svg.selectAll('.text');
 
-			var color = d3.scale.category20();
+			var color = {
+						1: '#ff0000',
+						2: '#ff5900',
+						3: '#ffc300',
+						4: '#d0ff00',
+						5: '#00ff7f'
+			};
 
 			force.nodes(nodes).links(links).start();
 
@@ -76,14 +99,19 @@
 				    .enter().append("line")
 				    .attr("class", "link");
 
-			  node = node.data(nodes)
-						    .enter().append("circle")
-							.attr("class", "node")
-							.attr("r", 14)
-							.on("dblclick", dblclick)
-							.attr('fill', function(d) { return 'url(#' + grad(d.usage, d.value).attr('id') + ')' })
-							.call(drag);
+		  	node = node.data(nodes)
+					    .enter().append("circle")
+						.attr("class", "node")
+						.attr("r", 14)
+						.on("dblclick", dblclick)
+						.attr('fill', function(d) { return 'url(#' + grad(d.usage, d.value).attr('id') + ')' })
+						.call(drag);
 
+			text = text.data(nodes)
+							.enter().append('text')
+							.attr('class', 'text')
+							.text(function(d) { return d.name; })
+							.style('text-anchor', 'middle');
 
 
 			function tick() {
@@ -94,6 +122,9 @@
 
 				node.attr("cx", function(d) { return d.x; })
 					.attr("cy", function(d) { return d.y; });
+
+				text.attr('x', function(d) { return d.x; })
+						.attr('y', function(d) { return d.y - 20; });
 			}
 
 
@@ -116,9 +147,9 @@
 	width: 100%;
 	height: 700px;
 
-	* {
+	*/* {
 		width: 100%;
-	}
+	}*/
 
 	.link {
 	  stroke: red;
@@ -133,6 +164,11 @@
 
 	.node.fixed {
 	  
+	}
+
+	.text {
+		background-color: white;
+		font-size: 12px;
 	}
 }
 </style>
