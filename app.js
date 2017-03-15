@@ -42,6 +42,13 @@ app.all('/test/:id', function(req, res, next) {
   });
 });
 
+app.all('/testCnt', function(req, res, next) {
+  ResModel.count({}, function(err, cnt) {
+    res.json({'count': cnt});
+    res.end();
+  });
+});
+
 app.all('/testMany', function(req, res, next) {
   ResModel.find({}, function(err, docs) {
     res.json([docs[20], docs[21]]);

@@ -19,7 +19,14 @@
 	<script>
 		module.exports = {
 			mounted: function() {
-				this.draw();
+				/**
+				 * set raw data index as latest one
+				 */
+				var me = this;
+				$.get('/testCnt', function(data) {
+					me.rawDataIndex = data.count;
+					me.draw();
+				});
 			},
 			data: function() {
 				return {
@@ -179,7 +186,8 @@
 						force.nodes(nodes).links(links).start();
 					
 						// 노드 갯수 표시
-						svg.append('text').text(nodes.length + '개(간선 ' + links.length + '개)').attr('x', 0).attr('y', 15);
+						var statusText = svg.append('text').text(nodes.length + '개(간선 ' + links.length + '개)').attr('x', 0).attr('y', 15);
+						// $(statusText[0]).attr('@click', 'draw');
 
 						/**
 						 * @param  {int}	the usage value. must be 0-100
