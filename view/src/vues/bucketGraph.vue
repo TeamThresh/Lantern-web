@@ -4,6 +4,10 @@
 			span Raw Data Index {{rawDataIndex}}
 			button(@click="nextData") next {{rawDataIndex + 1}}
 			br
+			span or just type the index
+			input(v-model.number="rawDataIndex" type="text")
+			button(@click="draw") go
+			br
 			span Bucket Graph Mode : {{mode}}
 			button(@click="changeMode(1)") MODE 1
 			button(@click="changeMode(2)") MODE 2
