@@ -24,14 +24,16 @@
 				 */
 				var me = this;
 				$.get('/testCnt', function(data) {
-					me.rawDataIndex = data.count;
+					me.rawDataIndex = data.count - 1;
+					me.rawDataIndexMax = data.count - 1;
 					me.draw();
 				});
 			},
 			data: function() {
 				return {
 					rawDataIndex: 43,
-					mode: 1
+					mode: 1,
+					rawDataIndexMax: 0
 				};
 			},
 			methods: {
@@ -285,12 +287,16 @@
 					});
 				},
 				prevData: function() {
-					this.rawDataIndex--;
-					this.draw();
+					if( this.rawDataIndex > 0 ) {
+						this.rawDataIndex--;
+						this.draw();
+					}
 				},
 				nextData: function() {
-					this.rawDataIndex++;
-					this.draw();
+					if( this.rawDataIndex < this.rawDataIndexMax ) {
+						this.rawDataIndex++;
+						this.draw();
+					}
 				},
 				changeMode: function(m) {
 					this.mode = m;
