@@ -140,21 +140,21 @@ function convertToFlameGraphData(data, rootStackName) {
 
 // });
 
-d3.json('/test', function(err, data) {
-    var stackTraces = [];
+// d3.json('/test', function(err, data) {
+//     var stackTraces = [];
 
-    data = data.data;
-    for( var i=0; i<data.length; i++ ) {
-        if( data[i].type === 'res' && data[i].app !== undefined && data[i].app.thread_trace !== undefined ) {
-            stackTraces.push(data[i].app.thread_trace.reverse());
-        }
-    }
+//     data = data.data;
+//     for( var i=0; i<data.length; i++ ) {
+//         if( data[i].type === 'res' && data[i].app !== undefined && data[i].app.thread_trace !== undefined ) {
+//             stackTraces.push(data[i].app.thread_trace.reverse());
+//         }
+//     }
 
-    var flameGraphData = convertToFlameGraphData(stackTraces);
+//     var flameGraphData = convertToFlameGraphData(stackTraces);
 
-    var flameGraph = d3.flameGraph().width(1400).height(540).sort(false);
-    d3.select(document.querySelectorAll('.graph')[0]).datum(flameGraphData).call(flameGraph);
-});
+//     var flameGraph = d3.flameGraph().width(1400).height(540).sort(false);
+//     d3.select(document.querySelectorAll('.graph')[0]).datum(flameGraphData).call(flameGraph);
+// });
 
 // d3.json('/testMany', function(err, data) {
 //     var stackTraces = [];

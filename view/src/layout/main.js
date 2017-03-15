@@ -12,6 +12,7 @@ Vue.component('submenu', require('../vues/submenu.vue'));
 Vue.component('filtermenu', require('../vues/filtermenu.vue'));
 Vue.component('flameGraph', require('../vues/flameGraph.vue'));
 Vue.component('bucketGraph', require('../vues/bucketGraph.vue')); 
+Vue.component('histogram', require('../vues/histogram.vue'));
 
 window.app = new Vue({el: '#app'});
 

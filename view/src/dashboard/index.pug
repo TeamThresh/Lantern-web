@@ -4,17 +4,23 @@ prepend title
 	|대시보드 
 
 block content
+	//- .block
+	//- 	.title 히스토그램 테스트
+	//- 	.desc 히스토그램 그래프 테스트
+	//- 	.content
+	//- 		histogram
+
 	.block
-		.title 액티비티 맵
+		.title 액티비티 맵1
 		.desc 어플리케이션의 액티비티들의 관계와 상태를 한 눈에 볼 수 있게 제공합니다
 		.content
 			bucket-graph
-	br
-	.block
-		.title 쓰레드 스택 탑 트레이스
-		.desc 어플리케이션의 모든 쓰레드의 스택 트레이스를 거꾸로 정렬하여 빈도수단위로 제공합니다
-		.content
-			flame-graph
+	
+	//- .block
+	//- 	.title 쓰레드 스택 탑 트레이스
+	//- 	.desc 어플리케이션의 모든 쓰레드의 스택 트레이스를 거꾸로 정렬하여 빈도수단위로 제공합니다
+	//- 	.content
+	//- 		flame-graph
 
 append script
 	script(src='./bundle.js')
