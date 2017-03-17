@@ -100,7 +100,6 @@
 </script>
 
 <style lang='sass' scoped>
-@import "../layout/style.scss";
 
 .flameGraph {
 	width: 100%;

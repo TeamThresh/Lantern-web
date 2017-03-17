@@ -1,12 +1,23 @@
 <template lang='pug'>
-    div#submenu-wrapper
-        i.fa.fa-bars#menu-toggle-btn(@click='click')
-        span#title Lantern
-        .space
-        i.fa.fa-bell-o
-        i.fa.fa-user-circle-o
-        span.user-name ckcks12
-        i.fa.fa-sign-out
+    div.submenu.ui.middle.aligned.grid
+        div.two.wide.column
+            span.logo Lantern
+        div.ten.wide.column
+        div.one.wide.column.right.floated.right.aligned
+            a(link="#")
+                i.alarm.icon.inverted.large
+                div.ui.red.label.circular.small 14
+        div.one.wide.column.right.floated.right.aligned
+            a(link="#")
+                i.envelope.icon.inverted.large
+                div.ui.teal.label.circular.small 22
+        div.one.wide.column.right.floated.right.aligned.user
+            a(link="#")
+                i.user.icon.inverted.large
+                | Guest
+        div.one.wide.column.right.floated.right.aligned
+            a(link="#")
+                i.sign.out.icon.inverted.large
 </template>
 
 <script>
@@ -40,7 +51,20 @@
 </script>
 
 <style lang='sass' scoped>
-$submenuBackgroundColor: rgb(255, 255, 255);
+    @import '../layout/style.scss';
+    $bgColor: #3B3F51;
+    div.submenu {
+        margin: 0;
+        padding: 0px $containerPadding 0px $containerPadding;
+        height: 75px;
+        background-color: $bgColor;
+
+        div.user a {
+            color: white;
+        }
+    }
+
+/*$submenuBackgroundColor: rgb(255, 255, 255);
 $iconHoverBackgroundColor: rgb(222, 222, 222);
 
 #submenu-wrapper {
@@ -49,7 +73,7 @@ $iconHoverBackgroundColor: rgb(222, 222, 222);
     background-color: $submenuBackgroundColor;
     vertical-align: middle;
 
-    > * { /* amazing css selector XD */
+    > * {  amazing css selector XD 
         display: table-cell;
         vertical-align: middle;
         width: 1px;
@@ -64,5 +88,5 @@ $iconHoverBackgroundColor: rgb(222, 222, 222);
         display: table-cell;
         width: auto;
     }
-}
+}*/
 </style>

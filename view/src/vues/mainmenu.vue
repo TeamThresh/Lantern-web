@@ -1,22 +1,36 @@
 <template lang='pug'>
-    div#mainmenu-wrapper()
-        div.logo
-            i.fa.fa-bolt
-        div.menu
-            i.fa.fa-home
-            |대시보드
-        div.menu
-            i.fa.fa-user-circle-o
-            |사용자
-        div.menu
-            i.fa.fa-exclamation-triangle
-            |오류
-        div.menu
-            i.fa.fa-tachometer
-            |성능
-        div.menu
-            i.fa.fa-bar-chart
-            |리포트
+    div.ui.fluid.vertical.menu
+        div.item
+            i.icon.home.large
+            div.header 대시보드
+            div.menu
+                a.item.active 대시보드
+                a.item 대시보드
+        div.item
+            i.tasks.icon.large
+            div.header 성능
+            div.menu
+                a.item 세부메뉴
+                a.item 를 정합시다
+        div.item
+            i.exclamation.triangle.icon.large
+            div.header 오류
+            div.menu
+                a.item 세부메뉴
+                a.item 를 정합시다22
+        div.item
+            i.user.circle.o.icon.large
+            div.header 사용자
+            div.menu
+                a.item 유저플로우
+                a.item 아님 뭐시기라도
+        div.item
+            i.bar.chart.icon.large
+            div.header 리포트
+            div.menu
+                a.item 회사제출
+                a.item 용으로
+                a.item 귀한것.
 </template>
 
 <script>
@@ -34,42 +48,5 @@
 </script>
 
 <style lang='sass' scoped>
-@import "../layout/style.scss";
 
-$menuBackgroundColor: rgb(28, 33, 50);
-$selectedMenuBackgroundColor: rgb(16, 20, 31);
-$greenColor: rgb(186, 209, 83);
-
-#mainmenu-wrapper {
-    position: fixed;
-    width: 250px; height: 100%; 
-    background-color: $menuBackgroundColor;
-    color: white;
-    font-weight: lighter;
-
-    .logo {
-        margin: 0px 0px 50px 0px;
-        padding: 15px 0px 15px 0px;
-        width: 100%;
-        color: $greenColor;
-        text-align: center;
-        font-size: 30px;
-    }
-
-    .menu {
-        padding: 20px 0px 20px 0px;
-        @include vendor(transition, background-color 200ms ease-out);
-
-        &.selected, &:hover {
-            background-color: $selectedMenuBackgroundColor;
-        }
-
-        i {
-            padding: 0px 10px 0px 10px;
-            color: $greenColor;
-            font-size: 18px;
-            font-weight: lighter;
-        }
-    }
-}
 </style>

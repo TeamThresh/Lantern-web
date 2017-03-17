@@ -11,7 +11,6 @@
 </script>
 
 <style lang='sass' scoped>
-@import "../layout/style.scss";
 
 histogram {
 

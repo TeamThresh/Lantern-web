@@ -15,6 +15,7 @@ parameter
 */
 // production mode will do minify and so on
 var isProduction = (argv.p === undefined) ? false : true;
+console.log('production mode detected');
 
 /*
 task
@@ -22,7 +23,7 @@ task
 // javascript bundling task
 // let webpack do his 'watch' job
 gulp.task('bundling', function() {
-    var src = 'view/src/**/main.js';
+    var src = 'view/src/**/bundle.js';
     var dest = 'view';
 
     var stream = gulp.src(src)
@@ -33,7 +34,8 @@ gulp.task('bundling', function() {
                 module: {
                     loaders: [
                         {test: /\.(scss|sass|css)$/, loader: 'style!css!sass'},
-                        {test: /\.vue$/, loader: 'vue'}
+                        {test: /\.vue$/, loader: 'vue'},
+                        {test: /\.(png|eot|woff2|woff|ttf|svg)$/, loader: 'url'}
                     ]
                 }
             }))

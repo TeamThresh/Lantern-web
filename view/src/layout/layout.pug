@@ -5,13 +5,14 @@ html
         title
             block title
                 | - #{LANTERN_TITLE}
-    body
-        div.container-wrapper#app
-            mainmenu
-            div.container
-                submenu
-                //- filtermenu
-                block content
+    body#body
+        div#app
+            submenu
+            div.ui.grid#container
+                div.two.wide.column
+                    mainmenu
+                div.fourteen.wide.column
+                    block content
         block script
             script(src='http://code.highcharts.com/highcharts.js')
             script(src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js')

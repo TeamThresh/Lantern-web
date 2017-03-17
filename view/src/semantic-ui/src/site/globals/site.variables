@@ -1,0 +1,6 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+@fontUrl: '//fonts.googleapis.com/earlyaccess/nanumgothic.css';
+@fontName: 'Nanum Gothic';
