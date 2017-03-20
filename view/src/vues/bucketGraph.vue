@@ -4,6 +4,10 @@
 		input(v-model="packageName" type="text" style="width: 400px;")
 		button(@click="draw") search this package
 		br
+		or these buttons are all package names I have :)
+		br
+		button(v-for="name in packageNames" @click="packageName=name; draw();") {{name}}
+		br
 		span Bucket Graph Mode : {{mode}}
 		button(@click="changeMode(1)") MODE 1
 		button(@click="changeMode(2)") MODE 2
@@ -17,10 +21,11 @@
 <script>
 	module.exports = {
 		mounted: function() {
-			/**
-			 * set raw data index as latest one
-			 */
 			var me = this;
+			$.get('/getAllPackageNames', function(data) {
+				me.packageNames = data.packageNames;
+			});
+
 			me.draw();
 		},
 		data: function() {
@@ -28,7 +33,9 @@
 				mode: 1,
 				rawData: [],
 				packageName: 'com.andromeda.adring',
-				status: '-'
+				fetchedPackageName: '',
+				status: '-',
+				packageNames: []
 			};
 		},
 		methods: {
@@ -74,22 +81,17 @@
 				var nodes = [];
 				var links = [];
 
-				/**
-				 * create node and link relation from server's raw data set
-				 */
 				var me = this;
-				me.status = me.packageName + '의 정보 가져오는 중...';
-				d3.json('/getPackageData/' + me.packageName, function(err, data) {
-					me.rawData = data;
 
-					/**
-					 * test for a package's all dump sets
-					 */
+				var work = function(err, data) {
+					me.rawData = data;
+					me.fetchedPackageName = me.packageName;
+
 					data = []
 					$.each(me.rawData, function(idx, dump) {
 						data = data.concat(dump.data);
 					});
-					me.status += ' dump 개수 : ' + me.rawData.length + ' stack 개수 : ' + data.length;
+					me.status = me.packageName + ' : dump 개수 : ' + me.rawData.length + ' stack 개수 : ' + data.length;
 
 					nodes = []
 					links = []
@@ -317,7 +319,18 @@
 					}
 
 					window.force = force;
-				});
+				};
+
+				/**
+				 * check already fetched data
+				 */
+				if( me.fetchedPackageName != me.packageName ) {
+					me.status = me.packageName + '의 정보 가져오는 중...';
+					d3.json('/getPackageData/' + me.packageName, work);
+				} else {
+					work(null, me.rawData);
+				}				
+				
 			},
 			prevData: function() {
 				if( this.rawDataIndex > 0 ) {

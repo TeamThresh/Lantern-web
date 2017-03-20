@@ -75,6 +75,18 @@ app.get('/getPackageData/:name', function(req, res, next) {
     });
 });
 
+app.get('/getAllPackageNames', function(req, res, next) {
+    ResModel.find({}, function(err, docs) {
+        var names = []
+        docs.forEach(function(doc) {
+            var doc = doc._doc;
+            if( doc.package_name && names.indexOf(doc.package_name) == -1 )
+                names.push(doc.package_name);
+        });
+        res.json({'packageNames': names});
+    });
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
