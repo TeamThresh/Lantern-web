@@ -60,7 +60,7 @@
             font-size: 18pt;
             color: $color;
             letter-spacing: -1.5px;
-            font-weight: bold;
+            font-weight: normal;
         }
 
         .content {

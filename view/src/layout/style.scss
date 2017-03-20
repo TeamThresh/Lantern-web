@@ -3,6 +3,7 @@
  */
 @import './normalize.scss';
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all');
 
 /**
  * global variables
@@ -38,6 +39,12 @@ button {
     }
 }
 
+/**
+ * fonts
+ */
+*:not(i) {
+    font-family: "Open Sans",sans-serif;
+}
 
 /**
  * body background color
@@ -60,11 +67,13 @@ button {
     .title {
         font-size: 18pt;
         color: #697882;
+        letter-spacing: 1px;
 
         .desc {
             margin: 0 0 0 10px;
             font-size: 10pt;
             color: #9eacb4;
+            letter-spacing: 0.5px;
         }
     }
 }
