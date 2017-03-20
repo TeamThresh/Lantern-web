@@ -62,6 +62,19 @@ app.all('/testMany', function(req, res, next) {
   });
 });
 
+app.get('/getAll', function(req, res, next) {
+  ResModel.find({}, function(err, docs) {
+    res.json(docs);
+    res.end();
+  });
+});
+
+app.get('/getPackageData/:name', function(req, res, next) {
+    ResModel.find({'package_name': req.params.name}, function(err, docs) {
+        res.json(docs);
+    });
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

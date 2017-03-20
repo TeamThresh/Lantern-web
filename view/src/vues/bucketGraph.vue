@@ -1,17 +1,15 @@
 <template lang='pug'>
 	div.bucketGraph
-		button(@click="prevData") prev {{rawDataIndex - 1}}
-		span Raw Data Index {{rawDataIndex}}
-		button(@click="nextData") next {{rawDataIndex + 1}}
-		br
-		span or just type the index
-		input(v-model.number="rawDataIndex" type="text")
-		button(@click="draw") go
+		span type the package name
+		input(v-model="packageName" type="text" style="width: 400px;")
+		button(@click="draw") search this package
 		br
 		span Bucket Graph Mode : {{mode}}
 		button(@click="changeMode(1)") MODE 1
 		button(@click="changeMode(2)") MODE 2
 		button(@click="changeMode(3)") MODE 3
+		br
+		span status : {{status}}
 		br
 		svg
 </template>
@@ -23,17 +21,14 @@
 			 * set raw data index as latest one
 			 */
 			var me = this;
-			$.get('/testCnt', function(data) {
-				me.rawDataIndex = data.count - 1;
-				me.rawDataIndexMax = data.count - 1;
-				me.draw();
-			});
+			me.draw();
 		},
 		data: function() {
 			return {
-				rawDataIndex: 43,
 				mode: 1,
-				rawDataIndexMax: 0
+				rawData: [],
+				packageName: 'com.andromeda.adring',
+				status: '-'
 			};
 		},
 		methods: {
@@ -65,41 +60,45 @@
 				return links;
 			},
 			draw: function() {
-				var rawDataIndex = this.rawDataIndex;
 				var mode = this.mode;
-
-				/**
-				 * clear svg
-				 */
-				$('.bucketGraph > svg').empty();
-
-				var nodes = this.createNodes(60);
-				var links = this.createLinks(nodes);
-				// links = [];
-
-				/**
-				 * random function scope
-				 */
 				var random = this.random;
 
 				var bucketGraph = $('.bucketGraph');
-                var width = 700;
-                var height = 700;
+				var width = 700;
+				var height = 700;
 				var force = d3.layout.force()
-						.size([width, height])
-						.charge(-200)
-						.linkDistance(180);
+								.size([width, height])
+								.charge(-3000)
+								.linkDistance(180);
 				var svg = d3.select('.bucketGraph > svg');
+				var nodes = [];
+				var links = [];
 
 				/**
 				 * create node and link relation from server's raw data set
 				 */
-				d3.json('/test/' + rawDataIndex, function(err, data) {
-					data = data.data
+				var me = this;
+				me.status = me.packageName + '의 정보 가져오는 중...';
+				d3.json('/getPackageData/' + me.packageName, function(err, data) {
+					me.rawData = data;
+
+					/**
+					 * test for a package's all dump sets
+					 */
+					data = []
+					$.each(me.rawData, function(idx, dump) {
+						data = data.concat(dump.data);
+					});
+					me.status += ' dump 개수 : ' + me.rawData.length + ' stack 개수 : ' + data.length;
 
 					nodes = []
 					links = []
 					usage = {}
+
+					/**
+					 * clear svg
+					 */
+					svg.selectAll('*').remove();
 
 					$.each(data, function(i, dump) {
 						if( dump.type == 'render' ) {
@@ -142,7 +141,7 @@
 												dup = true;
 										});
 										if( ! dup )
-											links.push({'source': nodes.indexOf(sourceNode), 'target': nodes.indexOf(destNode), 'value': 1});
+											links.push({'source': nodes.indexOf(sourceNode), 'target': nodes.indexOf(destNode), 'value': random(1, 5)});
 									}
 								}
 							});
@@ -171,13 +170,21 @@
 					$.each(nodes, function(i, node) {
 						if( mode == 1 ) {
 							node.value = 3;
+							// if( node.name == 'TakePhotoActivity' ) 
+							//  node.value = random(1, 3);
+						} else if( mode == 2 ) {
+							node.value = 3;
+							// if( node.name == 'TakePhotoActivity' )
+							//  node.value = random(1, 100);
 						} else {
 							node.value = 3;
+							// if( node.name == 'TakePhotoActivity' ) 
+							//  node.value = random(1, 3);
 						}
 					});
 
 					// debug
-					console.log(nodes);	
+					console.log(nodes); 
 
 					// node position init
 					var n = nodes.length;
@@ -194,7 +201,7 @@
 					/**
 					 * @param  {int}	the usage value. must be 0-100
 					 * @param  {int}	something important value. should be 1-4
-					 * @return {array}	calculated gradient for filling
+					 * @return {array}  calculated gradient for filling
 					 */
 					var grad = function(usage, val) {
 						/*
@@ -211,11 +218,22 @@
 								2: '#FFD652',
 								3: '#77CF63'
 							}
+							if( mode == 2 ) {
+								color = {
+									1: '#F80000',
+									2: '#F80000',
+									3: '#F80000'
+								}
+								usage = val;
+								val = 1;
+							} else if( mode == 3 ) {
+								usage = 100;
+							}
 
 							g = svg.append("defs").append("linearGradient").attr("id", "grad" + usage + '-' + val)
 								.attr("x1", "0%").attr("x2", "0%").attr("y1", "100%").attr("y2", "0%");
 							g.append("stop").attr("offset", usage + '%').style("stop-color", color[val]);
-							g.append('stop').attr('offset', (usage + 1) + '%').style('stop-color', 'white');
+							g.append('stop').attr('offset', (usage) + '%').style('stop-color', 'white');
 							g.append("stop").attr("offset", (100 - usage) + '%').style("stop-color", "white");
 							
 							return g;
@@ -223,23 +241,35 @@
 					}
 
 					var link = svg.selectAll(".link"),
-					    node = svg.selectAll(".node"),
-					    text = svg.selectAll('.text');
+						node = svg.selectAll(".node"),
+						text = svg.selectAll('.text');
 
 					var drag = force.drag().on("dragstart", dragstart);
 
 					link = link.data(links)
-						    .enter().append("line")
-						    .attr("class", "link");
+							.enter().append("line")
+							.attr("class", "link");
 
-				  	node = node.data(nodes)
-							    .enter().append("circle")
+					node = node.data(nodes)
+								.enter().append("circle")
 								.attr("class", "node")
 								.attr('r', function(d) { 
 									if( mode == 1 ) 
 										return 15; 
 									else
-										return 30 * (d.usage / 100);
+										return 15 + (15 * (d.usage / 100));
+								})
+								.attr('width', function(d) {
+									if( mode == 1 )
+										return 30;
+									else
+										return 15 + (40 * (d.usage / 100));
+								})
+								.attr('height', function(d) {
+									if( mode == 1 )
+										return 30;
+									else
+										return 15 + (40 * (d.usage / 100));
 								})
 								.on("dblclick", dblclick)
 								.attr('fill', function(d) { 
@@ -248,6 +278,7 @@
 									else
 										return 'url(#' + grad(100, d.value).attr('id') + ')';
 								})
+								.call(drag);
 
 					text = text.data(nodes)
 									.enter().append('text')
@@ -263,7 +294,9 @@
 							.attr("y2", function(d) { return d.target.y; });
 
 						node.attr("cx", function(d) { return d.x; })
-							.attr("cy", function(d) { return d.y; });
+							.attr("cy", function(d) { return d.y; })
+							.attr('x', function(d) { return d.x; })
+							.attr('y', function(d) { return d.y; });
 
 						text.attr('x', function(d) { return d.x; })
 							.attr('y', function(d) { return d.y - 20; });
@@ -279,7 +312,7 @@
 					}
 
 					force.on('tick', tick);
-					for( var i=0; i<50; i++ ) {
+					for( var i=0; i<40; i++ ) {
 						force.tick();
 					}
 
@@ -315,7 +348,7 @@
 	svg {
 		width: 700px;
 		height: 700px;
-        background-color: white;
+		background-color: white;
 	}
 
 	.link {
