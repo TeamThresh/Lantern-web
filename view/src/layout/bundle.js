@@ -10,11 +10,7 @@ require('vue-resource');
 // window.TWEEN = require('tween.js');
 // window._ = require('underscore');
 window.$ = require('jquery');
-
-/**
- * semantic-ui
- */
-require('../semantic-ui/dist/semantic.min.css');
+window.jQuery = window.$;
 
 Vue.component('mainmenu', require('../vues/mainmenu.vue'));
 Vue.component('submenu', require('../vues/submenu.vue'));
@@ -22,6 +18,7 @@ Vue.component('filtermenu', require('../vues/filtermenu.vue'));
 Vue.component('flameGraph', require('../vues/flameGraph.vue'));
 Vue.component('bucketGraph', require('../vues/bucketGraph.vue')); 
 Vue.component('histogram', require('../vues/histogram.vue'));
+Vue.component('screenModeViewer', require('../vues/screenModeViewer.vue'));
 
 window.app = new Vue({el: '#app'});
 

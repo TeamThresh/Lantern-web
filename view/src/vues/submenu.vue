@@ -1,23 +1,18 @@
 <template lang='pug'>
-    div.submenu.ui.middle.aligned.grid
-        div.two.wide.column
-            span.logo Lantern
-        div.ten.wide.column
-        div.one.wide.column.right.floated.right.aligned
-            a(link="#")
-                i.alarm.icon.inverted.large
-                div.ui.red.label.circular.small 14
-        div.one.wide.column.right.floated.right.aligned
-            a(link="#")
-                i.envelope.icon.inverted.large
-                div.ui.teal.label.circular.small 22
-        div.one.wide.column.right.floated.right.aligned.user
-            a(link="#")
-                i.user.icon.inverted.large
-                | Guest
-        div.one.wide.column.right.floated.right.aligned
-            a(link="#")
-                i.sign.out.icon.inverted.large
+    div.submenu
+        div.logo Lantern
+        div.content
+            a.item(link="#")
+                i.fa.fa-bell-o
+                div.notification-count 14
+            a.item(link="#")
+                i.fa.fa-envelope-o
+                div.mail-count 22
+            a.item(link="#")
+                i.fa.fa-user-o
+                | &nbsp; Guest
+            a.item(link="#")
+                i.fa.fa-sign-out
 </template>
 
 <script>
@@ -54,39 +49,50 @@
     @import '../layout/style.scss';
     $bgColor: #3B3F51;
     div.submenu {
-        margin: 0;
-        padding: 0px $containerPadding 0px $containerPadding;
+        padding: 0px $gutter 0px $gutter;
         height: 75px;
         background-color: $bgColor;
 
-        div.user a {
-            color: white;
+        .logo {
+            margin: 20px 0px 0px 0px;
+            display: inline-block;
+            $color: rgb(91, 155, 209);
+            font-size: 18pt;
+            color: $color;
+            letter-spacing: -1.5px;
+            font-weight: bold;
+        }
+
+        .content {
+            margin: 25px 0px 0px 0px;
+            display: inline-block;
+            float: right;
+
+            a {
+                margin: 0px 0px 0px 30px;
+                display: inline-block;
+                color: #aeb2c4;
+
+                div {
+                    border-radius: 25px;
+                    margin: 0px 0px 0px 10px;
+                    padding: 4px 0px 0px 0px;
+                    width: 25px;
+                    height: 25px;
+                    display: inline-block;
+                    font-size: 10pt;
+                    text-align: center;
+                    color: white;
+
+                    &.notification-count {
+                        background-color: #36c6d3;
+                    }
+
+                    &.mail-count {
+                        background-color: #ed6b75;
+                    }
+                }
+            }
         }
     }
-
-/*$submenuBackgroundColor: rgb(255, 255, 255);
-$iconHoverBackgroundColor: rgb(222, 222, 222);
-
-#submenu-wrapper {
-    display: table;
-    width: 100%; height: 45px;
-    background-color: $submenuBackgroundColor;
-    vertical-align: middle;
-
-    > * {  amazing css selector XD 
-        display: table-cell;
-        vertical-align: middle;
-        width: 1px;
-        padding: 0px 15px 0px 15px;
-    }
-
-    i:hover {
-        background-color: $iconHoverBackgroundColor;
-    }
-
-    .space {
-        display: table-cell;
-        width: auto;
-    }
-}*/
 </style>

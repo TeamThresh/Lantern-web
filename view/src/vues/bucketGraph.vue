@@ -82,14 +82,14 @@
 				 */
 				var random = this.random;
 
-				var bucketGraph = $('.bucketGraph'),
-				width = bucketGraph.width(),
-				height = 700,
-				force = d3.layout.force()
+				var bucketGraph = $('.bucketGraph');
+                var width = 700;
+                var height = 700;
+				var force = d3.layout.force()
 						.size([width, height])
 						.charge(-200)
-						.linkDistance(180),
-				svg = d3.select('.bucketGraph > svg')
+						.linkDistance(180);
+				var svg = d3.select('.bucketGraph > svg');
 
 				/**
 				 * create node and link relation from server's raw data set
@@ -313,8 +313,9 @@
 	height: 700px;
 
 	svg {
-		width: 100%;
-		height: 100%;
+		width: 700px;
+		height: 700px;
+        background-color: white;
 	}
 
 	.link {

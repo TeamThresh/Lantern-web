@@ -4,15 +4,14 @@ html
         meta(charset='utf-8')
         title
             block title
-                | - #{LANTERN_TITLE}
+            | - #{LANTERN_TITLE}
     body#body
         div#app
+            //- screen-mode-viewer
             submenu
-            div.ui.grid#container
-                div.two.wide.column
-                    mainmenu
-                div.fourteen.wide.column
-                    block content
+            mainmenu
+            div#container
+                block content
         block script
             script(src='http://code.highcharts.com/highcharts.js')
             script(src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js')

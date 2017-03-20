@@ -1,52 +1,93 @@
 <template lang='pug'>
-    div.ui.fluid.vertical.menu
-        div.item
-            i.icon.home.large
-            div.header 대시보드
-            div.menu
-                a.item.active 대시보드
-                a.item 대시보드
-        div.item
-            i.tasks.icon.large
-            div.header 성능
-            div.menu
-                a.item 세부메뉴
-                a.item 를 정합시다
-        div.item
-            i.exclamation.triangle.icon.large
-            div.header 오류
-            div.menu
-                a.item 세부메뉴
-                a.item 를 정합시다22
-        div.item
-            i.user.circle.o.icon.large
-            div.header 사용자
-            div.menu
-                a.item 유저플로우
-                a.item 아님 뭐시기라도
-        div.item
-            i.bar.chart.icon.large
-            div.header 리포트
-            div.menu
-                a.item 회사제출
-                a.item 용으로
-                a.item 귀한것.
+    div.mainmenu
+        div.group
+            a.header.selected
+                i.fa.fa-home
+                | Dashboard
+            a.menu.selected Dashboard
+        div.group
+            a.header
+                i.fa.fa-tasks
+                | Performance
+            a.menu CPU Memory
+            a.menu Network
+        div.group
+            a.header
+                i.fa.fa-exclamation-triangle
+                | Crash
+            a.menu Crash List
+            a.menu Crash Statistic
+        div.group
+            a.header
+                i.fa.fa-users
+                | User
+            a.menu User Flow
+            a.menu Device Usage
+        div.group
+            a.header
+                i.fa.fa-bar-chart
+                | Report
+            a.menu One Page Report
+            a.menu Statistics
 </template>
 
 <script>
     module.exports = {
-        methods: {
-            toggle: function() {
-                var width = $(this.$el).width() < 250 ? 250 : 0;
-                $(this.$el).animate({
-                    opacity: width == 0 ? width : 100,
-                    width: width
-                }, 500);
-            }
+        mounted: function() {
         }
     }
 </script>
 
 <style lang='sass' scoped>
+    @import '../layout/style.scss';
+    div.mainmenu {
+        margin: $gutter $gutter 0 $gutter;
+        width: 235px;
+        display: inline-block;
+        float: left;
+        background-color: white;
+    
+        div.group {
+            padding: 15px 0 5px 0;
+            width: 100%;
 
+            a.header {
+                padding: 10px 0 10px 15px;
+                display: block;
+                color: #678098;
+
+                &.selected {
+                    border-left: 2px solid #5C9ACF;
+                    background-color: #f2f6f9;
+                    color: #5b9bd1;
+                }
+
+                i {
+                    margin: 0 10px 0 0;
+                }
+            }
+
+            a.menu {
+                padding: 10px 0 10px 50px;
+                display: block;
+                color: #678098;
+                font-size: 11pt;
+
+                &.selected {
+                    border-left: 2px solid #5C9ACF;
+                    background-color: #f2f6f9;
+                    color: #5b9bd1;
+                }
+
+                &::before {
+                    content: '- ';
+                }
+
+                &:hover {
+                    background-color: #f2f6f9;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
 </style>
