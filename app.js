@@ -30,6 +30,13 @@ mongoose.connect('mongodb://localhost/lantern_raw_db');
 var ResSchema = new mongoose.Schema(schema.resSchema);
 var ResModel = mongoose.model('resourcemodel', ResSchema);
 
+/**
+ * index redirect to /dashboard
+ */
+app.all('/', function(req, res, next) {
+    res.redirect('/dashboard');
+});
+
 app.all('/test/:id', function(req, res, next) {
   ResModel.find({}, function(err, docs) {
     // res.json(docs[docs.length - 1]);
