@@ -1,18 +1,10 @@
 extends ../layout/layout.pug
 
-prepend title
-	|대시보드 
+block title
+	| Activity Map
+
+block desc
+	| shows Activities and its relations in the form of map
 
 block content
-	div.title Activity Map
-		span.desc shows Application's Activities and its relations in the form of map
-	bucket-graph
-	
-	//- .block
-	//- 	.title 쓰레드 스택 탑 트레이스
-	//- 	.desc 어플리케이션의 모든 쓰레드의 스택 트레이스를 거꾸로 정렬하여 빈도수단위로 제공합니다
-	//- 	.content
-	//- 		flame-graph
-
-append script
-	script(src='./bundle.js')
+	activity-map

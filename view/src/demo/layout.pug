@@ -2,9 +2,7 @@ doctype html
 html(lang='en')
 	head
 		meta(charset='utf-8')
-		title
-			block title
-			| - #{LANTERN_TITLE}
+		title Lantern - the smartest mobile apm ever
 		meta(http-equiv='X-UA-Compatible' content='IE=edge')
 		meta(content='width=device-width, initial-scale=1' name='viewport')
 		meta(content='The smartest Mobile APM ever' name='description')
@@ -36,12 +34,14 @@ html(lang='en')
 					div.page-content
 						div.page-head
 							div.page-title
-								h1 Activity Map 
-									small shows Activities and its relations in the form of map
+								h1
+									block title
+									| &nbsp;
+									small
+										block desc
+										| &nbsp;
 							page-toolbar
-						div.note.note-info
-							p.
-								lol it's very cool theme except pug.
+						block content
 			right-header
 			bottom-header
 		//- load scripts

@@ -19,15 +19,15 @@ window.jQuery = window.$;
 Vue.component('mainmenu', require('../vues/mainmenu.vue'));
 Vue.component('submenu', require('../vues/submenu.vue'));
 Vue.component('filtermenu', require('../vues/filtermenu.vue'));
-Vue.component('flameGraph', require('../vues/flameGraph.vue'));
-Vue.component('bucketGraph', require('../vues/bucketGraph.vue')); 
+Vue.component('flame-graph', require('../vues/flameGraph.vue'));
+Vue.component('activity-map', require('../vues/activity-map.vue')); 
 Vue.component('histogram', require('../vues/histogram.vue'));
-Vue.component('screenModeViewer', require('../vues/screenModeViewer.vue'));
-Vue.component('topHeader', require('../vues/topHeader.vue'));
-Vue.component('leftHeader', require('../vues/leftHeader.vue'));
-Vue.component('pageToolbar', require('../vues/pageToolbar.vue'));
-Vue.component('rightHeader', require('../vues/rightHeader.vue'));
-Vue.component('bottomHeader', require('../vues/bottomHeader.vue'));
+Vue.component('screen-mode-viewer', require('../vues/screenModeViewer.vue'));
+Vue.component('top-header', require('../vues/topHeader.vue'));
+Vue.component('left-header', require('../vues/leftHeader.vue'));
+Vue.component('page-toolbar', require('../vues/pageToolbar.vue'));
+Vue.component('right-header', require('../vues/rightHeader.vue'));
+Vue.component('bottom-header', require('../vues/bottomHeader.vue'));
 
 /**
  * apply Vue app
