@@ -7,7 +7,6 @@ node_modules/
 # only source file
 view/*
 !view/src/
-view/src/**/dist/
 
 # sublimetext sftp plugin
 sftp-config.json
