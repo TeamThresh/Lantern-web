@@ -31,11 +31,12 @@ gulp.task('bundling', function() {
             .pipe(named())
             .pipe(webpack({
                 watch: true,
+                context: __dirname + '/view', // file loader가 view를 [path]로 인식해버려서..
                 module: {
                     loaders: [
                         {test: /\.(scss|sass|css)$/, loader: 'style!css!sass'},
                         {test: /\.vue$/, loader: 'vue'},
-                        {test: /\.(png|eot|woff2|woff|ttf|svg)$/, loader: 'url'}
+                        {test: /\.(png|eot|woff2|woff|ttf|svg)/, loader: 'file?name=[path][name].[ext]&publicPath=/'}
                     ]
                 }
             }))

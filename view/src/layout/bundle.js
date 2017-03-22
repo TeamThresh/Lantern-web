@@ -1,17 +1,20 @@
 /**
- * custom style
+ * import styles
  */
 require('./style.scss');
 
-// window.Vue = require('vue');
-window.Vue = require('vue/dist/vue.common.js');
-require('vue-resource');
-
-// window.TWEEN = require('tween.js');
-// window._ = require('underscore');
+/**
+ * import scripts
+ */
+// Vue.js
+window.Vue = require('vue/dist/vue.min.js');
+// jQuery
 window.$ = require('jquery');
 window.jQuery = window.$;
 
+/**
+ * load Vue Components
+ */
 Vue.component('mainmenu', require('../vues/mainmenu.vue'));
 Vue.component('submenu', require('../vues/submenu.vue'));
 Vue.component('filtermenu', require('../vues/filtermenu.vue'));
@@ -20,11 +23,7 @@ Vue.component('bucketGraph', require('../vues/bucketGraph.vue'));
 Vue.component('histogram', require('../vues/histogram.vue'));
 Vue.component('screenModeViewer', require('../vues/screenModeViewer.vue'));
 
+/**
+ * apply Vue app
+ */
 window.app = new Vue({el: '#app'});
-
-/* tween animate */
-// requestAnimationFrame(animate);
-// function animate(time) {
-//     requestAnimationFrame(animate);
-//     TWEEN.update(time);
-// }

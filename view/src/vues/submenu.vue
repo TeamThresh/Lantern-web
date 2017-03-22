@@ -46,11 +46,12 @@
 </script>
 
 <style lang='sass' scoped>
-    @import '../layout/style.scss';
+    $gutter: 28px;
     $bgColor: #3B3F51;
     div.submenu {
         padding: 0px $gutter 0px $gutter;
         height: 75px;
+        background-color: $bgColor;
         background-color: $bgColor;
 
         .logo {

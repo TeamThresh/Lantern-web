@@ -4,7 +4,7 @@
 		input(v-model="packageName" type="text" style="width: 400px;")
 		button(@click="draw") search this package
 		br
-		or these buttons are all package names I have :)
+		span or these buttons are all package names I have :)
 		br
 		button(v-for="name in packageNames" @click="packageName=name; draw();") {{name}}
 		br

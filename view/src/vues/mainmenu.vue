@@ -39,7 +39,7 @@
 </script>
 
 <style lang='sass' scoped>
-    @import '../layout/style.scss';
+    $gutter: 28px;
     div.mainmenu {
         margin: $gutter $gutter 0 $gutter;
         width: 235px;

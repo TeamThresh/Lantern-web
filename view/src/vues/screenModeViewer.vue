@@ -13,7 +13,6 @@
 </script>
 
 <style lang='sass' scoped>
-    @import '../layout/style.scss';
     #screenModeViewer {
         border: 1px solid red;
         padding: 5px 5px 5px 5px;
