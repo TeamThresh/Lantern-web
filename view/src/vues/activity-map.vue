@@ -3,17 +3,17 @@
         <div class="note note-info">
             <span>type the package name</span>
             <input type="text" v-model="packageName" style="width: 400px;"/>
-            <button @click="draw">search this package</button>
+            <button class="btn btn-outline dark sbold" @click="draw">search this package</button>
         </div>
         <div class="note note-info">
             <span>all package names</span>
             <br/>
-            <button class="btn default" v-for="name in packageNames" @click="packageName = name; draw();"> {{name}} </button>
+            <button class="btn btn-outline dark sbold" v-for="name in packageNames" @click="packageName = name; draw();"> {{name}} </button>
         </div>
         <div class="note note-info">
             <span>Bucket Graph Mode : {{mode}}</span>
             <br/>
-            <button class="btn default" v-for="i in [1,2,3]" @click="changeMode(i);"> mode {{i}} </button>
+            <button class="btn btn-outline dark sbold" v-for="i in [1,2,3]" @click="changeMode(i);"> mode {{i}} </button>
         </div>
         <div class="note note-warning">
             <span>status : {{status}}</span>
@@ -43,9 +43,6 @@
             };
         },
         methods: {
-            onClick: function(e) {
-                this.draw();
-            },
             random: function(min, max) {
                 return Math.floor(Math.random() * (max - min + 1) + min);
             },
@@ -360,7 +357,6 @@
 
 .activity-map {
     width: 100%;
-    height: 700px;
 
     svg {
         width: 100%;

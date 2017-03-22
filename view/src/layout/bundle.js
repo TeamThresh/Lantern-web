@@ -10,8 +10,8 @@ require('./style.scss');
 // window.Vue = require('vue/dist/vue.min.js');
 window.Vue = require('vue/dist/vue.common.js');
 // jQuery
-window.$ = require('jquery');
-window.jQuery = window.$;
+// window.$ = require('jquery');
+// window.jQuery = window.$;
 
 /**
  * load Vue Components
