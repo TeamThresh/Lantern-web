@@ -85,108 +85,40 @@
                 var me = this;
 
                 var work = function(err, data) {
+                    if( data instanceof Array )
+                        data = data[0];
+
                     me.rawData = data;
                     me.fetchedPackageName = me.packageName;
 
-                    data = []
-                    $.each(me.rawData, function(idx, dump) {
-                        data = data.concat(dump.data);
-                    });
-                    me.status = me.packageName + ' : dump 개수 : ' + me.rawData.length + ' stack 개수 : ' + data.length;
+                    nodes = data.nodes;
+                    links = data.links;
 
-                    nodes = []
-                    links = []
-                    usage = {}
+                    // usage max
+                    var usageMax = 0;
+                    nodes.forEach(function(n) {
+                        if( n.usage > usageMax )
+                            usageMax = n.usage;
+                    });
+                    // usage to be percentage
+                    // and crash to be value
+                    nodes.forEach(function(n) {
+                        var crashPercentage = n.crashCount / n.usage;
+                        if( crashPercentage == 0 )
+                            n.value = 3;
+                        else if( crashPercentage < 3 )
+                            n.value = 2;
+                        else
+                            n.value = 1;
+                        n.usageCount = n.usage;
+                        n.usage = n.usage / usageMax * 100;
+                    });
 
                     /**
                      * clear svg
                      */
                     svg.selectAll('*').remove();
-
-                    $.each(data, function(i, dump) {
-                        if( dump.type == 'render' ) {
-                            if( dump.lifecycle_name == 'onResumed' ) {
-                                if( usage.hasOwnProperty(dump.activity_name) ) {
-                                    usage[dump.activity_name].value++;
-                                } else {
-                                    usage[dump.activity_name] = {value: 1};
-                                }
-                            }
-                        } else if( dump.type == 'res' ) {
-                            var stack = dump.app.activity_stack;
-                            $.each(stack, function(i, activityName) {
-                                var dup = false;
-                                $.each(nodes, function(i, node) {
-                                    if( node.name == activityName )
-                                        dup = true;
-                                });
-
-                                if( ! dup )
-                                    nodes.push({'name': activityName, 'usage': 100, 'value': random(3, 3)});
-
-                                // link connect
-                                if( i > 0 ) {
-                                    var sourceActivityName = stack[i - 1];
-                                    var destActivityName = activityName;
-                                    var sourceNode, destNode;
-                                    $.each(nodes, function(i, node) {
-                                        if( node.name == sourceActivityName )
-                                            sourceNode = node;
-                                        else if( node.name == destActivityName )
-                                            destNode = node;
-                                    });
-                                    if( sourceNode && destNode ) {
-                                        var sourceIndex = nodes.indexOf(sourceNode),
-                                            destIndex = nodes.indexOf(destNode);
-                                        var dup = false;
-                                        $.each(links, function(i, link) {
-                                            if( ! dup && link.source == sourceIndex && link.target == destIndex )
-                                                dup = true;
-                                        });
-                                        if( ! dup )
-                                            links.push({'source': nodes.indexOf(sourceNode), 'target': nodes.indexOf(destNode), 'value': random(1, 5)});
-                                    }
-                                }
-                            });
-                        }
-                    });
-
-                    // usage max
-                    var usageMax = 0;
-                    $.each(usage, function(name, obj) {
-                        value = obj.value;
-                        if( value > usageMax )
-                            usageMax = value;
-                    });
-
-                    // usage allocation
-                    $.each(usage, function(name, obj) {
-                        $.each(nodes, function(i, node) {
-                            if( node.name == name ) {
-                                value = obj.value;
-                                node.usage = (value / usageMax) * 100;
-                            }
-                        });
-                    });
-
-                    // node value setting
-                    $.each(nodes, function(i, node) {
-                        if( mode == 1 ) {
-                            node.value = 3;
-                            // if( node.name == 'TakePhotoActivity' ) 
-                            //  node.value = random(1, 3);
-                        } else if( mode == 2 ) {
-                            node.value = 3;
-                            // if( node.name == 'TakePhotoActivity' )
-                            //  node.value = random(1, 100);
-                        } else {
-                            node.value = 3;
-                            // if( node.name == 'TakePhotoActivity' ) 
-                            //  node.value = random(1, 3);
-                        }
-                    });
-
-                    // debug
+                    
                     console.log(nodes); 
 
                     // node position init
@@ -198,8 +130,7 @@
                     force.nodes(nodes).links(links).start();
                 
                     // 노드 갯수 표시
-                    var statusText = svg.append('text').text(nodes.length + '개(간선 ' + links.length + '개)').attr('x', 0).attr('y', 15);
-                    // $(statusText[0]).attr('@click', 'draw');
+                    me.status += ' 성공! ' + nodes.length + '개(간선 ' + links.length + '개)';
 
                     /**
                      * @param  {int}    the usage value. must be 0-100

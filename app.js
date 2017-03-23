@@ -29,6 +29,9 @@ db setting
 mongoose.connect('mongodb://localhost/lantern_raw_db');
 var ResSchema = new mongoose.Schema(schema.resSchema);
 var ResModel = mongoose.model('resourcemodel', ResSchema);
+var db = mongoose.createConnection('localhost');
+var analyzerDB = db.useDb('analyzer_db');
+var activitiesCollection = analyzerDB.model('activities', mongoose.Schema({}, {strict: false}), 'activities');
 
 /**
  * index redirect to /dashboard
@@ -70,20 +73,20 @@ app.get('/getAll', function(req, res, next) {
 });
 
 app.get('/getPackageData/:name', function(req, res, next) {
-    ResModel.find({'package_name': req.params.name}, function(err, docs) {
-        res.json(docs);
+    activitiesCollection.find({'packageName': req.params.name}, function(err, docs) {
+      res.json(docs);
     });
 });
 
 app.get('/getAllPackageNames', function(req, res, next) {
-    ResModel.find({}, function(err, docs) {
-        var names = []
-        docs.forEach(function(doc) {
-            var doc = doc._doc;
-            if( doc.package_name && names.indexOf(doc.package_name) == -1 )
-                names.push(doc.package_name);
-        });
-        res.json({'packageNames': names});
+    activitiesCollection.find({}, function(err, docs) {
+      var names = [];
+      docs.forEach(function(doc) {
+        doc = doc._doc;        
+        if( doc.packageName && names.indexOf(doc.packageName) == -1 )
+          names.push(doc.packageName);
+      });
+      res.json({'packageNames': names, 'test': 2});
     });
 });
 
