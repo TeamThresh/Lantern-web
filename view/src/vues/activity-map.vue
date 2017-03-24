@@ -10,11 +10,6 @@
             <br/>
             <button class="btn btn-outline dark sbold" v-for="name in packageNames" @click="packageName = name; draw();"> {{name}} </button>
         </div>
-        <div class="note note-info">
-            <span>Bucket Graph Mode : {{mode}}</span>
-            <br/>
-            <button class="btn btn-outline dark sbold disabled" v-for="i in [1,2,3]" @click="/*changeMode(i);*/"> mode {{i}} </button>
-        </div>
         <div class="note note-warning">
             <span>status : {{status}}</span>
         </div>
@@ -34,7 +29,6 @@
         },
         data: function() {
             return {
-                mode: 3,
                 rawData: [],
                 packageName: 'com.andromeda.adring',
                 fetchedPackageName: '',
@@ -112,6 +106,7 @@
                             n.value = 1;
                         n.usageCount = n.usage;
                         n.usage = n.usage / usageMax * 100;
+                        n.usage = Math.floor(n.usage);
                     });
 
                     /**
@@ -176,7 +171,8 @@
 
                     var link = svg.selectAll(".link"),
                         node = svg.selectAll(".node"),
-                        text = svg.selectAll('.text');
+                        text = svg.selectAll('.text'),
+                        usageText = svg.selectAll('.usageText');
 
                     var drag = force.drag().on("dragstart", dragstart);
 
@@ -184,35 +180,49 @@
                             .enter().append("line")
                             .attr("class", "link");
 
-                    node = node.data(nodes)
-                                .enter().append("circle")
+                    node = node.data(nodes).enter()
+                                .append("circle")
                                 .attr("class", "node")
                                 .attr('r', function(d) { 
-                                    if( mode == 1 ) 
-                                        return 15; 
-                                    else
-                                        return 15 + (15 * (d.usage / 100));
-                                })
-                                .attr('width', function(d) {
-                                    if( mode == 1 )
-                                        return 30;
-                                    else
-                                        return 15 + (40 * (d.usage / 100));
-                                })
-                                .attr('height', function(d) {
-                                    if( mode == 1 )
-                                        return 30;
-                                    else
-                                        return 15 + (40 * (d.usage / 100));
+                                    var base = 13;
+                                    var x = 0.63;
+                                    return base + (x * d.usage) + 'px';
                                 })
                                 .on("dblclick", dblclick)
-                                .attr('fill', function(d) { 
-                                    if( mode == 1 )
-                                        return 'url(#'  + grad(d.usage, d.value).attr('id') + ')' ;
-                                    else
-                                        return 'url(#' + grad(100, d.value).attr('id') + ')';
+                                .attr('fill', function(d) {
+                                    return 'url(#' + grad(100, d.value).attr('id') + ')';
+                                })
+                                .attr('stroke', function(d) {
+                                    var color = {
+                                        1: '#d9480f',
+                                        2: '#f59f00',
+                                        3: '#228ae6'
+                                    };
+                                    if( d.usage >= 90 )
+                                        return color[d.value];
+                                })
+                                .attr('stroke-width', function(d) {
+                                    if( d.usage >= 90 )
+                                        return 17;
+                                })
+                                .attr('stroke-opacity', function(d) {
+                                    if( d.usage >= 90 )
+                                        return 0.5;
                                 })
                                 .call(drag);
+                    usageText = usageText.data(nodes).enter()
+                                .append('text')
+                                .attr('class', 'usage-text')
+                                .attr('text-anchor', 'middle')
+                                .attr('fill', '#fff')
+                                .attr('font-size', function(d) { return 11 + ((d.usage / 100) * 24); })
+                                .attr('font-weight', function(d) {
+                                    if( d.usage >= 90 )
+                                        return 'bold';
+                                    else if( d.usage < 70 )
+                                        return 'lighter';
+                                })
+                                .text(function(d) { return d.usage + '%'; })
 
                     text = text.data(nodes)
                                     .enter().append('text')
@@ -225,7 +235,8 @@
                         link.attr("x1", function(d) { return d.source.x; })
                             .attr("y1", function(d) { return d.source.y; })
                             .attr("x2", function(d) { return d.target.x; })
-                            .attr("y2", function(d) { return d.target.y; });
+                            .attr("y2", function(d) { return d.target.y; })
+                            .attr('box-shadow');
 
                         node.attr("cx", function(d) { return d.x; })
                             .attr("cy", function(d) { return d.y; })
@@ -233,9 +244,11 @@
                             .attr('y', function(d) { return d.y; });
 
                         text.attr('x', function(d) { return d.x; })
-                            .attr('y', function(d) { return d.y - 20; });
-                    }
+                            .attr('y', function(d) { return d.y - (13 + 0.63 * d.usage) - 11/2; });
 
+                        usageText.attr('x', function(d) { return d.x; })
+                                    .attr('y', function(d) {  return d.y + parseInt(this.getAttribute('font-size')) / 3; });
+                    }
 
                     function dblclick(d) {
                         d3.select(this).classed('fixed', false);
@@ -302,8 +315,6 @@
 
     .node {
       cursor: move;
-      stroke: #000;
-      stroke-width: 1px;
     }
 
     .node.fixed {
