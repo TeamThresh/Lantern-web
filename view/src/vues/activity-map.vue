@@ -13,7 +13,7 @@
         <div class="note note-info">
             <span>Bucket Graph Mode : {{mode}}</span>
             <br/>
-            <button class="btn btn-outline dark sbold" v-for="i in [1,2,3]" @click="changeMode(i);"> mode {{i}} </button>
+            <button class="btn btn-outline dark sbold disabled" v-for="i in [1,2,3]" @click="/*changeMode(i);*/"> mode {{i}} </button>
         </div>
         <div class="note note-warning">
             <span>status : {{status}}</span>
@@ -34,7 +34,7 @@
         },
         data: function() {
             return {
-                mode: 1,
+                mode: 3,
                 rawData: [],
                 packageName: 'com.andromeda.adring',
                 fetchedPackageName: '',
@@ -148,9 +148,9 @@
                             return g;
                         } else {
                             var color = {
-                                1: '#F80000',
-                                2: '#FFD652',
-                                3: '#77CF63'
+                                1: '#d9480f',
+                                2: '#f59f00',
+                                3: '#228ae6'
                             }
                             if( mode == 2 ) {
                                 color = {
@@ -292,11 +292,11 @@
     svg {
         width: 100%;
         height: 700px;
-        background-color: white;
+        background-color: #1b1c2e;
     }
 
     .link {
-      stroke: rgb(220, 220, 220);
+      stroke: #3f3f3f;
       stroke-width: 1.5px;
     }
 
@@ -312,8 +312,8 @@
 
     .text {
         /*display: none;*/
-        background-color: white;
-        font-size: 9px;
+        font-size: 11px;
+        fill: #fff;
     }
 }
 </style>
