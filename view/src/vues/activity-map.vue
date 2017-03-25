@@ -36,12 +36,10 @@ module.exports = {
             var height = $('.activity-map > svg').height();
             var simulation = d3.forceSimulation()
 								.force('link', d3.forceLink().id(function(d) { return d.id; }))
-								.force('charge', d3.forceManyBody().strength(-30000))
+								.force('charge', d3.forceManyBody().strength(-1000))
 								.force('center', d3.forceCenter(width / 2 , height / 2))
-								.force('collide', d3.forceCollide().radius(function(d) { return d.r * 2; }).iterations(100))
-								.force('x', d3.forceX(0))
-								.force('y', d3.forceY(0));
-								// .velocityDecay(0.2);
+								.force('collide', d3.forceCollide().radius(function(d) { return d.r * 2; }))
+								.velocityDecay(0.8);
 			var svg = d3.select('.activity-map > svg');
 
 			function dragstarted(d) {
