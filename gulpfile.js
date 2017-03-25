@@ -15,7 +15,8 @@ parameter
 */
 // production mode will do minify and so on
 var isProduction = (argv.p === undefined) ? false : true;
-console.log('production mode detected');
+if( isProduction )
+	console.log('production mode detected');
 
 /*
 task
