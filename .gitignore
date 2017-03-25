@@ -11,5 +11,8 @@ view/*
 # sublimetext sftp plugin
 sftp-config.json
 
-# npm debug 
+# npm debug
 npm-debug.log
+
+# atom remote ftp config file
+.ftpconfig
