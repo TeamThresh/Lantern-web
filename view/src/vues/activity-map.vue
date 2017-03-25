@@ -1,26 +1,22 @@
 <template lang='pug'>
 div.activity-map
-	div.note.note-info
-		span type the package name
-		input(type='text' v-model='packageName' style='width: 400px')
-		button.btn.btn-outline.dark.sbold(@click='draw') search this package
-	div.note.note-info
-		span all package names
-		br
-		button.btn.btn-outline-dark.sbold(v-for='name in packageNames' @click='packageName = name; draw();') {{name}}
-	div.note.note-warning
-		span {{status}}
 	svg
+	//- div.note.note-warning
+	//- 	span {{status}}
+	//- div.note.note-info
+	//- 	span type the package name
+	//- 	input(type='text' v-model='packageName' style='width: 400px')
+	//- 	button.btn.btn-outline.dark.sbold(@click='draw') search this package
+	//- div.note.note-info
+	//- 	span all package names
+	//- 	br
+	//- 	button.btn.btn-outline-dark.sbold(v-for='name in packageNames' @click='packageName = name; draw();') {{name}}
 </template>
 
 <script>
 module.exports = {
     mounted: function() {
         var me = this;
-        $.get('/getAllPackageNames', function(data) {
-            me.packageNames = data.packageNames;
-        });
-
         me.draw();
     },
     data: function() {
@@ -28,8 +24,7 @@ module.exports = {
             rawData: [],
             packageName: 'com.andromeda.adring',
             fetchedPackageName: '',
-            status: '-',
-            packageNames: []
+            status: '-'
         };
     },
     methods: {
@@ -40,10 +35,32 @@ module.exports = {
             var width = $('.activity-map > svg').width();
             var height = $('.activity-map > svg').height();
             var simulation = d3.forceSimulation()
-								.force('link', d3.forceLink().id(function(d) { return d.id; }).distance(function(d) { return 100 + (100 - d.target.usage) * 1.26; }))
-								.force('charge', d3.forceManyBody().strength(function(d) { return -1 * d.usage * 50; }))
-								.force('center', d3.forceCenter(width / 2, height / 2));
+								.force('link', d3.forceLink().id(function(d) { return d.id; }))
+								.force('charge', d3.forceManyBody().strength(-30000))
+								.force('center', d3.forceCenter(width / 2 , height / 2))
+								.force('collide', d3.forceCollide().radius(function(d) { return d.r * 2; }).iterations(100))
+								.force('x', d3.forceX(0))
+								.force('y', d3.forceY(0));
+								// .velocityDecay(0.2);
 			var svg = d3.select('.activity-map > svg');
+
+			function dragstarted(d) {
+	            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+	            d.fx = d.x;
+	            d.fy = d.y;
+	        }
+
+	        function dragged(d) {
+	            d.fx = d3.event.x;
+	            d.fy = d3.event.y;
+	        }
+
+	        function dragended(d) {
+	            if (!d3.event.active) simulation.alphaTarget(0);
+	            d.fx = null;
+	            d.fy = null;
+	        }
+
             var nodes = [];
             var links = [];
             var color = {
@@ -58,59 +75,71 @@ module.exports = {
                 if (data instanceof Array)
                     data = data[0];
 
-                me.rawData = data;
-                me.fetchedPackageName = me.packageName;
+				if( data ) {
+					me.rawData = data;
+					me.fetchedPackageName = me.packageName;
+					nodes = data.nodes;
+					links = data.links;
+					// for d3 version4 forceLayout
+					// add id attribute and some preprocess
+					$(nodes).each(function(idx, n) {
+						n.id = n.name;
+						n.group = 1;
+						n.connectionCount = 0;
+						n.connectionAsSourceCount = 0;
+						n.connectionAsTargetCount = 0;
+					});
+					$(links).each(function(idx, l) {
+						l.sourceIndex = l.source;
+						l.source = nodes[l.source].id;
+						l.targetIndex = l.target;
+						l.target = nodes[l.target].id;
+					});
 
-                nodes = data.nodes;
-                links = data.links;
+					// the most linked node is the center of graph
+					$(links).each(function(idx, l) {
+						nodes[l.sourceIndex].connectionAsSourceCount++;
+						nodes[l.targetIndex].connectionAsTargetCount++;
+					});
+					var centerNode = null;
+					$(nodes).each(function(idx, n) {
+						n.connectionCount = n.connectionAsSourceCount + n.connectionAsTargetCount;
+						if( ! centerNode )
+						centerNode = n;
+						if( n.connectionCount > centerNode.connectionCount )
+						centerNode = n;
+					});
+					centerNode.isCenterNode = true;
+					// usage max
+					var usageMax = 0;
+					nodes.forEach(function(n) {
+						if (n.usage > usageMax)
+						usageMax = n.usage;
+					});
+					// usage to be percentage
+					// and crash to be value
+					nodes.forEach(function(n) {
+						var crashPercentage = n.crashCount / n.usage;
+						if (crashPercentage == 0)
+						n.value = 3;
+						else if (crashPercentage < 3)
+						n.value = 2;
+						else
+						n.value = 1;
+						n.usageCount = n.usage;
+						n.usage = n.usage / usageMax * 100;
+						n.usage = Math.floor(n.usage);
+					});
+				} else {
+					nodes = me.rawData.nodes;
+					links = me.rawData.links;
+				}
 
-				// for d3 version4 forceLayout
-				// add id attribute and some preprocess
-				$(nodes).each(function(idx, n) {
-					n.id = n.name;
-					n.group = 1;
-				});
-				$(links).each(function(idx, l) {
-					l.source = nodes[l.source].id;
-					l.target = nodes[l.target].id;
-				});
-
-                // usage max
-                var usageMax = 0;
-                nodes.forEach(function(n) {
-                    if (n.usage > usageMax)
-                        usageMax = n.usage;
-                });
-                // usage to be percentage
-                // and crash to be value
-                nodes.forEach(function(n) {
-                    var crashPercentage = n.crashCount / n.usage;
-                    if (crashPercentage == 0)
-                        n.value = 3;
-                    else if (crashPercentage < 3)
-                        n.value = 2;
-                    else
-                        n.value = 1;
-                    n.usageCount = n.usage;
-                    n.usage = n.usage / usageMax * 100;
-                    n.usage = Math.floor(n.usage);
-                });
-
-                /**
-                 * clear svg
-                 */
+                // clear svg
                 svg.selectAll('*').remove();
 
+				// debug log
                 console.log(me.packageName, nodes, links);
-
-                // node position init
-                var n = nodes.length;
-                nodes.forEach(function(d, i) {
-                    d.x = d.y = width / n * i;
-                });
-
-                // 노드 갯수 표시
-                me.status += ' 성공! ' + nodes.length + '개(간선 ' + links.length + '개)';
 
                 var link = svg.selectAll(".link"),
                     node = svg.selectAll(".node"),
@@ -140,6 +169,7 @@ module.exports = {
                         if (d.usage >= 90)
                             return 17;
                     })
+					.call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended))
                     .attr('stroke-opacity', function(d) {
                         if (d.usage >= 90)
                             return 0.5;
@@ -172,33 +202,34 @@ module.exports = {
                     .style('text-anchor', 'middle');
 
 				simulation.nodes(nodes).on('tick', tick);
-				simulation.force('link').links(links);
+				if( links.length > 0 )
+					simulation.force('link').links(links);
 
                 function tick() {
-                    link.attr("x1", function(d) {
-                            return d.source.x;
-                        })
-                        .attr("y1", function(d) {
-                            return d.source.y;
-                        })
-                        .attr("x2", function(d) {
-                            return d.target.x;
-                        })
-                        .attr("y2", function(d) {
-                            return d.target.y;
-                        })
-                        .attr('box-shadow');
+					if( links.length > 0 ) {
+	                    link.attr("x1", function(d) {
+	                            return d.source.x;
+	                        })
+	                        .attr("y1", function(d) {
+	                            return d.source.y;
+	                        })
+	                        .attr("x2", function(d) {
+	                            return d.target.x;
+	                        })
+	                        .attr("y2", function(d) {
+	                            return d.target.y;
+	                        })
+	                        .attr('box-shadow');
+					}
 
                     node.attr("cx", function(d) {
+							// if( d.isCenterNode )
+							// 	return d.x = width / 2;
                             return d.x;
                         })
                         .attr("cy", function(d) {
-                            return d.y;
-                        })
-                        .attr('x', function(d) {
-                            return d.x;
-                        })
-                        .attr('y', function(d) {
+							// if( d.isCenterNode )
+							// 	return d.y = height / 2;
                             return d.y;
                         });
 
@@ -223,7 +254,7 @@ module.exports = {
                 me.status = me.packageName + '의 정보 가져오는 중...';
                 d3.json('/getPackageData/' + me.packageName, work);
             } else {
-                work(null, me.rawData);
+                work();
             }
 
         },
