@@ -75,6 +75,11 @@
                 var svg = d3.select('.activity-map > svg');
                 var nodes = [];
                 var links = [];
+                var color = {
+                    1: '#d9480f',
+                    2: '#f59f00',
+                    3: '#228ae6'
+                };
 
                 var me = this;
 
@@ -87,6 +92,7 @@
 
                     nodes = data.nodes;
                     links = data.links;
+                    links = [];
 
                     // usage max
                     var usageMax = 0;
@@ -113,8 +119,8 @@
                      * clear svg
                      */
                     svg.selectAll('*').remove();
-                    
-                    console.log(nodes); 
+
+                    console.log(me.packageName, nodes, links);
 
                     // node position init
                     var n = nodes.length;
@@ -123,51 +129,9 @@
                     });
 
                     force.nodes(nodes).links(links).start();
-                
+
                     // 노드 갯수 표시
                     me.status += ' 성공! ' + nodes.length + '개(간선 ' + links.length + '개)';
-
-                    /**
-                     * @param  {int}    the usage value. must be 0-100
-                     * @param  {int}    something important value. should be 1-4
-                     * @return {array}  calculated gradient for filling
-                     */
-                    var grad = function(usage, val) {
-                        /*
-                        name will be like this form
-                        grad10-3 means 10 is usage value and 3 is important value
-                         */
-                        var g = $('#grad' + usage + '-' + val);
-                        
-                        if( g.length > 0 ) {
-                            return g;
-                        } else {
-                            var color = {
-                                1: '#d9480f',
-                                2: '#f59f00',
-                                3: '#228ae6'
-                            }
-                            if( mode == 2 ) {
-                                color = {
-                                    1: '#F80000',
-                                    2: '#F80000',
-                                    3: '#F80000'
-                                }
-                                usage = val;
-                                val = 1;
-                            } else if( mode == 3 ) {
-                                usage = 100;
-                            }
-
-                            g = svg.append("defs").append("linearGradient").attr("id", "grad" + usage + '-' + val)
-                                .attr("x1", "0%").attr("x2", "0%").attr("y1", "100%").attr("y2", "0%");
-                            g.append("stop").attr("offset", usage + '%').style("stop-color", color[val]);
-                            g.append('stop').attr('offset', (usage) + '%').style('stop-color', 'white');
-                            g.append("stop").attr("offset", (100 - usage) + '%').style("stop-color", "white");
-                            
-                            return g;
-                        }
-                    }
 
                     var link = svg.selectAll(".link"),
                         node = svg.selectAll(".node"),
@@ -183,21 +147,16 @@
                     node = node.data(nodes).enter()
                                 .append("circle")
                                 .attr("class", "node")
-                                .attr('r', function(d) { 
+                                .attr('r', function(d) {
                                     var base = 13;
                                     var x = 0.63;
                                     return base + (x * d.usage) + 'px';
                                 })
                                 .on("dblclick", dblclick)
                                 .attr('fill', function(d) {
-                                    return 'url(#' + grad(100, d.value).attr('id') + ')';
+                                    return color[d.value];
                                 })
                                 .attr('stroke', function(d) {
-                                    var color = {
-                                        1: '#d9480f',
-                                        2: '#f59f00',
-                                        3: '#228ae6'
-                                    };
                                     if( d.usage >= 90 )
                                         return color[d.value];
                                 })
@@ -222,7 +181,8 @@
                                     else if( d.usage < 70 )
                                         return 'lighter';
                                 })
-                                .text(function(d) { return d.usage + '%'; })
+                                .text(function(d) { return d.usage + '%'; });
+                    console.log('usageText', usageText);
 
                     text = text.data(nodes)
                                     .enter().append('text')
@@ -230,9 +190,14 @@
                                     .text(function(d) { return d.name; })
                                     .style('text-anchor', 'middle');
 
+                    console.log('tick before');
 
                     function tick() {
-                        link.attr("x1", function(d) { return d.source.x; })
+                        console.assert(link, null);
+                        link.attr("x1", function(d) {
+                            console.log(d);
+                            return d.source.x;
+                        })
                             .attr("y1", function(d) { return d.source.y; })
                             .attr("x2", function(d) { return d.target.x; })
                             .attr("y2", function(d) { return d.target.y; })
@@ -246,8 +211,10 @@
                         text.attr('x', function(d) { return d.x; })
                             .attr('y', function(d) { return d.y - (13 + 0.63 * d.usage) - 11/2; });
 
-                        usageText.attr('x', function(d) { return d.x; })
-                                    .attr('y', function(d) {  return d.y + parseInt(this.getAttribute('font-size')) / 3; });
+                        // usageText.attr('x', function(d) { return d.x; })
+                        //             .attr('y', function(d) {
+                        //                 return d.y + parseInt(this.getAttribute('font-size')) / 3;
+                        //             });
                     }
 
                     function dblclick(d) {
@@ -260,7 +227,9 @@
 
                     force.on('tick', tick);
                     for( var i=0; i<40; i++ ) {
+                        console.log(i);
                         force.tick();
+                        console.log(i);
                     }
 
                     window.force = force;
@@ -274,8 +243,8 @@
                     d3.json('/getPackageData/' + me.packageName, work);
                 } else {
                     work(null, me.rawData);
-                }               
-                
+                }
+
             },
             prevData: function() {
                 if( this.rawDataIndex > 0 ) {
@@ -297,7 +266,7 @@
     };
 </script>
 
-<style lang='sass'>
+<style lang='scss'>
 
 .activity-map {
     width: 100%;
@@ -305,7 +274,7 @@
     svg {
         width: 100%;
         height: 700px;
-        background-color: #1b1c2e;
+		background-color: #1b1c2e;
     }
 
     .link {
@@ -318,7 +287,7 @@
     }
 
     .node.fixed {
-      
+
     }
 
     .text {
