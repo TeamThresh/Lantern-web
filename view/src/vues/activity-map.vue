@@ -156,7 +156,8 @@ module.exports = {
                     .attr('r', function(d) {
                         var base = 13;
                         var x = 0.63;
-                        return base + (x * d.usage) + 'px';
+
+                        return (d.r = base + (x * d.usage)) + 'px';
                     })
                     .attr('fill', function(d) {
                         return color[d.value];
@@ -221,16 +222,15 @@ module.exports = {
 	                        })
 	                        .attr('box-shadow');
 					}
-
                     node.attr("cx", function(d) {
 							// if( d.isCenterNode )
 							// 	return d.x = width / 2;
-                            return d.x;
+                            return d.x = Math.max(d.r, Math.min(width - d.r, d.x));
                         })
                         .attr("cy", function(d) {
 							// if( d.isCenterNode )
 							// 	return d.y = height / 2;
-                            return d.y;
+                            return d.y = Math.max(d.r, Math.min(height - d.r, d.y));
                         });
 
                     text.attr('x', function(d) {
