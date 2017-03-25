@@ -12,6 +12,10 @@
 				<button class="btn btn-outline dark sbold" @click="changePackage(name);"> {{name}} </button>
 				<br/>
 			</div>
+			<br/>
+			<br/>
+			<h3>Data Update</h3>
+			<button class="btn btn-outline dark sbold" @click="analyze();"> Analyze </button>
         </div>
     </div>
     <!-- END THEME PANEL -->
@@ -35,6 +39,27 @@ module.exports = {
 		changePackage: function(name) {
 			window.app.$refs.activityMap.packageName = name;
 			window.app.$refs.activityMap.draw();
+		},
+		analyze: function() {
+			$.blockUI({
+				message: '<div class="loading-message loading-message-boxed"><span>&nbsp;&nbsp;작업중...</span></div>',
+				baseZ: 9996,
+				css: {
+					top: '10%',
+					border: '0',
+					padding: '0',
+					backgroundColor: 'none'
+				},
+				overlayCSS: {
+					backgroundColor: '#555',
+					opacity: 0.25,
+					cursor: 'wait'
+				}
+			});
+			$.get('/analyze', function(data) {
+				bootbox.alert('분석 완료!');
+				$.unblockUI();
+			});
 		}
 	}
 };

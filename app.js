@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var schema = require('./schema/schema.js');
+var analyze = require('../Lantern-analyzer/analyze');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -82,12 +83,18 @@ app.get('/getAllPackageNames', function(req, res, next) {
     activitiesCollection.find({}, function(err, docs) {
       var names = [];
       docs.forEach(function(doc) {
-        doc = doc._doc;        
+        doc = doc._doc;
         if( doc.packageName && names.indexOf(doc.packageName) == -1 )
           names.push(doc.packageName);
       });
       res.json({'packageNames': names, 'test': 2});
     });
+});
+
+app.get('/analyze', function(req, res, next) {
+	analyze.work().then(function() {
+		res.json({'data': '새로 분석하였습니다!'});
+	});
 });
 
 // catch 404 and forward to error handler
