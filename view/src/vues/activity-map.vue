@@ -146,7 +146,17 @@ module.exports = {
 
                 link = link.data(links)
                     .enter().append("line")
-                    .attr("class", "link");
+                    .attr("class", "link")
+					.attr('stroke', function(d) {
+						var value = Math.min(nodes[d.sourceIndex].value, nodes[d.targetIndex].value);
+						if( value == 1 )
+							return color[1];
+						else if( value == 2 )
+							return color[2];
+						else
+							return '#3f3f3f';
+					})
+					.attr('stroke-width', 1);
 
                 node = node.data(nodes).enter()
                     .append("circle")
@@ -294,11 +304,6 @@ module.exports = {
         width: 100%;
         height: 700px;
         background-color: #1b1c2e;
-    }
-
-    .link {
-        stroke: #3f3f3f;
-        stroke-width: 1.5px;
     }
 
     .node {
