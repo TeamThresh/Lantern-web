@@ -29,6 +29,7 @@ Vue.component('page-toolbar', require('../vues/page-toolbar.vue'));
 Vue.component('right-header', require('../vues/right-header.vue'));
 Vue.component('bottom-header', require('../vues/bottom-header.vue'));
 Vue.component('activity-map-toolbar', require('../vues/activity-map-toolbar.vue'));
+Vue.component('portlet', require('../vues/portlet.vue'));
 
 /**
  * apply Vue app

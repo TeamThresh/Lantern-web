@@ -1,0 +1,39 @@
+<template lang="html">
+<div class="portlet light">
+	<div class="portlet-title">
+		<div class="caption font-white">
+			<span class="caption-subject bold uppercase">{{title}}</span>
+			<span class="caption-helper">{{desc}}</span>
+		</div>
+		<div class="actions">
+			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
+				<i class="icon-cloud-upload"></i>
+			</a> -->
+			<a class="font-white" href="javascript:;">
+				<i class="material-icons">settings</i>
+			</a>
+			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
+				<i class="icon-trash"></i>
+			</a>
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"> </a> -->
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="" style="height:200px" data-always-visible="1" data-rail-visible="1" data-rail-color="red" data-handle-color="green">
+			{{content}}
+		</div>
+	</div>
+</div>
+</template>
+
+<script>
+module.exports = {
+	props: ['title', 'desc', 'content']
+}
+</script>
+
+<style lang="css" scoped>
+	.portlet {
+		background-color: #252734;
+	}
+</style>
