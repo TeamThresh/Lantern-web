@@ -182,7 +182,9 @@ module.exports = {
                     .attr('stroke-opacity', function(d) {
                         if (d.usage >= 90)
                             return 0.5;
-                    });
+                    })
+					.style('cursor', 'pointer')
+					.on('click', function() { location.href = '/activitySummary/12345'; });
 
                 usageText = usageText.data(nodes).enter()
                     .append('text')
@@ -200,7 +202,10 @@ module.exports = {
                     })
                     .text(function(d) {
                         return d.usage + '%';
-                    });
+                    })
+					.call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended))
+					.style('cursor', 'pointer')
+					.on('click', function() { location.href = '/activitySummary/12345'; });
 
                 text = text.data(nodes)
                     .enter().append('text')
