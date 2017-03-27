@@ -19,8 +19,8 @@
 		</div>
 	</div>
 	<div class="portlet-body">
-		<div class="" style="height:200px" data-always-visible="1" data-rail-visible="1" data-rail-color="red" data-handle-color="green">
-			{{content}}
+		<div class="font-white">
+			<slot></slot>
 		</div>
 	</div>
 </div>

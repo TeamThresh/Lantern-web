@@ -41,6 +41,11 @@ app.all('/', function(req, res, next) {
     res.redirect('/dashboard');
 });
 
+app.get('/activitySummary/:id', function(req, res, next) {
+	res.sendfile(path.join(__dirname, 'view/activitySummary/index.html'));
+});
+
+// apis
 app.all('/test/:id', function(req, res, next) {
   ResModel.find({}, function(err, docs) {
     // res.json(docs[docs.length - 1]);
