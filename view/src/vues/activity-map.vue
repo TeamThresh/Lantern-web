@@ -198,7 +198,19 @@ module.exports = {
                     .text(function(d) {
                         return d.name;
                     })
-                    .style('text-anchor', 'middle');
+                    .style('text-anchor', 'middle')
+					.style('font-weight', function(d) {
+						if( d.isCenterNode )
+							return 600;
+						else
+							return 300;
+					})
+					.attr('fill', function(d) {
+						if( d.isCenterNode )
+							return '#fff';
+						else
+							return '#ccc';
+					});
 
 				simulation.nodes(nodes).on('tick', tick);
 				if( links.length > 0 )
@@ -221,21 +233,19 @@ module.exports = {
 	                        .attr('box-shadow');
 					}
                     node.attr("cx", function(d) {
-							// if( d.isCenterNode )
-							// 	return d.x = width / 2;
                             return d.x = Math.max(d.r, Math.min(width - d.r, d.x));
                         })
                         .attr("cy", function(d) {
-							// if( d.isCenterNode )
-							// 	return d.y = height / 2;
-                            return d.y = Math.max(d.r, Math.min(height - d.r, d.y));
+							var padding = 10 + 11 + 17; // caption text padding, caption font-size, node border
+                            return d.y = Math.max(d.r + padding, Math.min(height - d.r - padding, d.y));
                         });
 
                     text.attr('x', function(d) {
                             return d.x;
                         })
                         .attr('y', function(d) {
-                            return d.y - (13 + 0.63 * d.usage) - 11 / 2;
+							var padding = 10;
+                            return d.y - (13 + 0.63 * d.usage) - 11 / 2 - padding;
                         });
 
                     usageText.attr('x', function(d) { return d.x; })
@@ -300,7 +310,6 @@ module.exports = {
     .text {
         /*display: none;*/
         font-size: 11px;
-        fill: #fff;
     }
 }
 </style>
