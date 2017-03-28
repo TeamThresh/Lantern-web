@@ -145,29 +145,31 @@ module.exports = {
 }
 </script>
 
-<style lang="css" scoped>
-.one-depth-user-flow svg {
-	width: 100%;
-	height: 300px;
-}
-.node rect {
-	cursor: move;
-	fill-opacity: .9;
-	shape-rendering: crispEdges;
-}
+<style lang="sass">
+.one-depth-user-flow {
+	svg {
+		width: 100%;
+		height: 300px;
+	}
+	.node rect {
+		cursor: move;
+		fill-opacity: .9;
+		shape-rendering: crispEdges;
+	}
 
-.node text {
-	pointer-events: none;
-	text-shadow: 0 1px 0 #fff;
-}
+	.node text {
+		pointer-events: none;
+		text-shadow: 0 1px 0 #fff;
+	}
 
-.link {
-	fill: none;
-	stroke: #000;
-	stroke-opacity: .2;
-}
+	.link {
+		fill: none;
+		stroke: #000;
+		stroke-opacity: .2;
+	}
 
-.link:hover {
-	stroke-opacity: .5;
+	.link:hover {
+		stroke-opacity: .5;
+	}
 }
 </style>
