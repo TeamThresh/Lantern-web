@@ -119,14 +119,14 @@ module.exports = {
 					nodes.forEach(function(n) {
 						var crashPercentage = n.crashCount / n.usage;
 						if (crashPercentage == 0)
-						n.value = 3;
-						else if (crashPercentage < 3)
-						n.value = 2;
+							n.value = 3;
+						else if (crashPercentage < 0.03)
+							n.value = 2;
 						else
-						n.value = 1;
+							n.value = 1;
 						n.usageCount = n.usage;
 						n.usage = n.usage / usageMax * 100;
-						n.usage = Math.floor(n.usage);
+						n.usage = Math.ceil(n.usage);
 					});
 				} else {
 					nodes = me.rawData.nodes;

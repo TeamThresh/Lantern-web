@@ -18,12 +18,14 @@ block content
 				one-depth-user-flow
 		div.col-md-6
 			portlet(title='UI Rendering Elapsed Time')
-				dist-graph
+				dist-graph(ref='ui')
 	div.row
 		div.col-md-6
 			portlet(title='CPU Usage')
+				dist-graph
 		div.col-md-6
 			portlet(title='Memory Usage')
+				dist-graph
 	div.row
 		div.col-md-6
 			portlet(title='Network Outband Call')
