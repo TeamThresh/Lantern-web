@@ -1,7 +1,7 @@
 /**
  * import styles
  */
-require('./style.scss');
+// require('./style.scss');
 
 /**
  * import scripts
@@ -30,6 +30,8 @@ Vue.component('right-header', require('../vues/right-header.vue'));
 Vue.component('bottom-header', require('../vues/bottom-header.vue'));
 Vue.component('activity-map-toolbar', require('../vues/activity-map-toolbar.vue'));
 Vue.component('portlet', require('../vues/portlet.vue'));
+Vue.component('one-depth-user-flow', require('../vues/one-depth-user-flow.vue'));
+Vue.component('dist-graph', require('../vues/dist-graph.vue'));
 
 /**
  * apply Vue app

@@ -1,7 +1,7 @@
 <template lang="html">
 <div class="portlet light">
 	<div class="portlet-title">
-		<div class="caption font-white">
+		<div class="caption">
 			<span class="caption-subject bold uppercase">{{title}}</span>
 			<span class="caption-helper">{{desc}}</span>
 		</div>
@@ -19,7 +19,7 @@
 		</div>
 	</div>
 	<div class="portlet-body">
-		<div class="font-white">
+		<div class="">
 			<slot></slot>
 		</div>
 	</div>
@@ -34,6 +34,6 @@ module.exports = {
 
 <style lang="css" scoped>
 	.portlet {
-		background-color: #252734;
+		/*background-color: #252734;*/
 	}
 </style>

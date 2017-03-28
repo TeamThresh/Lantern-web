@@ -1,7 +1,7 @@
 extends ../layout/layout.pug
 
 block title
-	span(style='color: #fff;') Activity Summary
+	span Activity Summary
 
 block desc
 	| shows selected activity's usage and profile informations
@@ -9,15 +9,16 @@ block desc
 block page-toolbar
 	
 block content
-	portlet(title='About Activity' desc='this card is description of the activity')
-		h4 Reserved Activity
+	portlet(title='Activity name')
 		p.
 			nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.
 	div.row
 		div.col-md-6
 			portlet(title='One-depth User Flow')
+				one-depth-user-flow
 		div.col-md-6
 			portlet(title='UI Rendering Elapsed Time')
+				dist-graph
 	div.row
 		div.col-md-6
 			portlet(title='CPU Usage')
@@ -31,8 +32,7 @@ block content
 block style
 	style.
 		body {
-			background-color: #1b1c2e !important;
+			/*background-color: #1b1c2e !important;*/
 		}
 		
 prepend script
-	
