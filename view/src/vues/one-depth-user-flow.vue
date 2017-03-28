@@ -145,7 +145,7 @@ module.exports = {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .one-depth-user-flow svg {
 	width: 100%;
 	height: 300px;
