@@ -32,6 +32,7 @@ Vue.component('activity-map-toolbar', require('../vues/activity-map-toolbar.vue'
 Vue.component('portlet', require('../vues/portlet.vue'));
 Vue.component('one-depth-user-flow', require('../vues/one-depth-user-flow.vue'));
 Vue.component('dist-graph', require('../vues/dist-graph.vue'));
+Vue.component('super-table', require('../vues/super-table.vue'));
 
 /**
  * apply Vue app
