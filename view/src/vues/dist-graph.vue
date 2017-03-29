@@ -162,7 +162,8 @@ module.exports = {
 					.attr('height', boxHeight)
 					.attr('x', data.x)
 					.attr('y', data.y)
-					.attr('fill', data.color);
+					.attr('fill', data.color)
+					.attr('class', 'box');
 				svg.append('text')
 					.attr('x', data.x)
 					.attr('y', data.y + 8)
@@ -208,17 +209,20 @@ module.exports = {
 		width: 100%;
 		height: 300px;
 		// border: 1px solid red; // for debug
-	}
-	.x-axis, .y-axis {
-		.domain {
-			display: none;
+		.box {
+			shape-rendering: crispEdges;
 		}
-		.tick {
-			line {
+		.x-axis, .y-axis {
+			.domain {
 				display: none;
 			}
-			text {
-				fill: #868e96;
+			.tick {
+				line {
+					display: none;
+				}
+				text {
+					fill: #868e96;
+				}
 			}
 		}
 	}

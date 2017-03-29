@@ -17,12 +17,15 @@ div.activity-map
 module.exports = {
     mounted: function() {
         var me = this;
-        me.draw();
+		$.get('/getAllPackageNames', function(data) {
+            me.packageName = data.packageNames[0];
+			me.draw();
+        });
     },
     data: function() {
         return {
             rawData: [],
-            packageName: 'com.andromeda.adring',
+            packageName: '',
             fetchedPackageName: '',
             status: '-'
         };

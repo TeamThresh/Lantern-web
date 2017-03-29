@@ -8,6 +8,7 @@
         </a>
         <div class="dropdown-menu pull-right dropdown-custom hold-on-click page-toolbar-content">
             <h3>Package List</h3>
+			<span class="sbold">{{packageName}}</span>
 			<div v-for="name in packageNames">
 				<button class="btn btn-outline dark sbold" @click="changePackage(name);"> {{name}} </button>
 				<br/>
@@ -24,7 +25,7 @@
 </template>
 <script>
 module.exports = {
-	created: function() {
+	mounted: function() {
 		var me = this;
         $.get('/getAllPackageNames', function(data) {
             me.packageNames = data.packageNames;
@@ -32,11 +33,14 @@ module.exports = {
 	},
 	data: function() {
 		return {
-			packageNames: []
+			packageNames: [],
+			packageName: ''
 		};
 	},
 	methods: {
 		changePackage: function(name) {
+			var me = this;
+			me.packageName = name;
 			window.app.$refs.activityMap.packageName = name;
 			window.app.$refs.activityMap.draw();
 		},

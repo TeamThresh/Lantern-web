@@ -22,7 +22,8 @@ module.exports = {
 			];
 			var me = this;
 			var width = $(me.$el).width();
-			var height = $(me.$el).height();
+			var height = (width / 3) * 2.5;
+			$(me.$el).height(height);
 
 			// not selector. should pass dom element
 			me.drawRadarChart('.radar-chart', data, {
@@ -45,7 +46,7 @@ module.exports = {
 
 <style lang="sass">
 	.radar-chart {
-		width: 300px;
-		height: 250px;
+		width:  100%;
+		max-width: 350px;
 	}
 </style>
