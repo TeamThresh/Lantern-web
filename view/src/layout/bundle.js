@@ -33,6 +33,7 @@ Vue.component('portlet', require('../vues/portlet.vue'));
 Vue.component('one-depth-user-flow', require('../vues/one-depth-user-flow.vue'));
 Vue.component('dist-graph', require('../vues/dist-graph.vue'));
 Vue.component('super-table', require('../vues/super-table.vue'));
+Vue.component('radar-chart', require('../vues/radar-chart.vue'));
 
 /**
  * apply Vue app
