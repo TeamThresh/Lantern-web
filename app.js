@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var schema = require('./schema/schema.js');
-var analyze = require('../Lantern-analyzer/analyze');
+var db = require('../Lantern-analyzer/db');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -30,8 +30,7 @@ db setting
 mongoose.connect('mongodb://localhost/lantern_raw_db');
 var ResSchema = new mongoose.Schema(schema.resSchema);
 var ResModel = mongoose.model('resourcemodel', ResSchema);
-var db = mongoose.createConnection('localhost');
-var analyzerDB = db.useDb('analyzer_db');
+var analyzerDB = mongoose.createConnection('localhost').useDb('analyzer_db');
 var activitiesCollection = analyzerDB.model('activities', mongoose.Schema({}, {strict: false}), 'activities');
 
 /**
@@ -85,20 +84,58 @@ app.get('/getPackageData/:name', function(req, res, next) {
 });
 
 app.get('/getAllPackageNames', function(req, res, next) {
-    activitiesCollection.find({}, function(err, docs) {
-      var names = [];
-      docs.forEach(function(doc) {
-        doc = doc._doc;
-        if( doc.packageName && names.indexOf(doc.packageName) == -1 )
-          names.push(doc.packageName);
-      });
-      res.json({'packageNames': names, 'test': 2});
-    });
+	db.analyzed.find({}, {'package_name': 1}).toArray(function(err, docs) {
+		var names = [];
+		docs.forEach(function(doc) {
+			if( doc.package_name && names.indexOf(doc.package_name) == -1 )
+				names.push(doc.package_name);
+		});
+		res.json({'packageNames': names});
+	});
 });
 
-app.get('/analyze', function(req, res, next) {
-	analyze.work().then(function() {
-		res.json({'data': '새로 분석하였습니다!'});
+app.get('/getNodesAndLinks/:packageName', function(req, res, next) {
+	db.analyzed.find({'package_name': req.params.packageName}, {'dumps.nodes': 1, 'dumps.links': 1}).toArray(function(err, docs) {
+		var nodes = [];
+		var links = [];
+		var addNode = function(node) {
+			(function() {
+				for(var i = 0; i < nodes.length; i++ ) {
+					if( nodes[i].name == node.name ) {
+						nodes[i].usageCount += node.usage_count;
+						nodes[i].crashCount += node.crash_count;
+						return;
+					}
+				};
+				nodes.push({
+					'name': node.name,
+					'usageCount': node.usage_count,
+					'crashCount': node.crash_count
+				});
+			})();
+		};
+		var addLink = function(link) {
+			(function() {
+				for(var i = 0; i < links.length; i++ ) {
+					if( links[i].source == link.source && links[i].target == link.target ) {
+						links[i].value += link.value;
+						return;
+					}
+				};
+				links.push(link);
+			})();
+		};
+		docs.forEach(function(doc) {
+			doc.dumps.forEach(function(dump) {
+				dump.nodes.forEach(function(node) {
+					addNode(node);
+				});
+				dump.links.forEach(function(link) {
+					addLink(link);
+				});
+			});
+		});
+		res.json({'nodes': nodes, 'links': links});
 	});
 });
 
