@@ -90,17 +90,24 @@ module.exports = {
 						n.connectionAsSourceCount = 0;
 						n.connectionAsTargetCount = 0;
 					});
-					$(links).each(function(idx, l) {
-						l.sourceIndex = l.source;
-						l.source = nodes[l.source].id;
-						l.targetIndex = l.target;
-						l.target = nodes[l.target].id;
-					});
-
+					// self prerequite link delete
+					for( var i = 0; i < links.length; i++ ) {
+						if( links[i].source == links[i].target ) {
+							links.splice(i, 1);
+							i--;
+						}
+					}
 					// the most linked node is the center of graph
 					$(links).each(function(idx, l) {
-						nodes[l.sourceIndex].connectionAsSourceCount++;
-						nodes[l.targetIndex].connectionAsTargetCount++;
+						$.each(nodes, function(i, n) {
+							if( n.name == l.source ) {
+								n.connectionAsSourceCount++;
+								l.sourceIndex = i;
+							} else if( n.name == l.target ) {
+								n.connectionAsTargetCount++;
+								l.targetIndex = i;
+							}
+						});
 					});
 					var centerNode = null;
 					$(nodes).each(function(idx, n) {
@@ -114,21 +121,20 @@ module.exports = {
 					// usage max
 					var usageMax = 0;
 					nodes.forEach(function(n) {
-						if (n.usage > usageMax)
-						usageMax = n.usage;
+						if (n.usageCount > usageMax)
+						usageMax = n.usageCount;
 					});
 					// usage to be percentage
 					// and crash to be value
 					nodes.forEach(function(n) {
-						var crashPercentage = n.crashCount / n.usage;
+						var crashPercentage = n.crashCount / n.usageCount;
 						if (crashPercentage == 0)
 							n.value = 3;
 						else if (crashPercentage < 0.03)
 							n.value = 2;
 						else
 							n.value = 1;
-						n.usageCount = n.usage;
-						n.usage = n.usage / usageMax * 100;
+						n.usage = n.usageCount / usageMax * 100;
 						n.usage = Math.ceil(n.usage);
 					});
 				} else {
@@ -151,6 +157,8 @@ module.exports = {
                     .enter().append("line")
                     .attr("class", "link")
 					.attr('stroke', function(d) {
+						if( nodes[d.targetIndex] == undefined )
+							console.log(d);
 						var value = Math.min(nodes[d.sourceIndex].value, nodes[d.targetIndex].value);
 						if( value == 1 )
 							return color[1];
@@ -187,7 +195,7 @@ module.exports = {
                             return 0.5;
                     })
 					.style('cursor', 'pointer')
-					.on('click', function() { location.href = '/activitySummary/12345'; });
+					.on('click', function(d) { location.href = '/activitySummary/' + me.packageName + '/' + d.name; });
 
                 usageText = usageText.data(nodes).enter()
                     .append('text')
@@ -208,7 +216,7 @@ module.exports = {
                     })
 					.call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended))
 					.style('cursor', 'pointer')
-					.on('click', function() { location.href = '/activitySummary/12345'; });
+					.on('click', function(d) { location.href = '/activitySummary/' + me.packageName + '/' + d.name; });
 
                 text = text.data(nodes)
                     .enter().append('text')
@@ -278,7 +286,7 @@ module.exports = {
              */
             if (me.fetchedPackageName != me.packageName) {
                 me.status = me.packageName + '의 정보 가져오는 중...';
-                d3.json('/getPackageData/' + me.packageName, work);
+                d3.json('/getNodesAndLinks/' + me.packageName, work);
             } else {
                 work();
             }

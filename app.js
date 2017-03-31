@@ -40,7 +40,7 @@ app.all('/', function(req, res, next) {
     res.redirect('/dashboard');
 });
 
-app.get('/activitySummary/:id', function(req, res, next) {
+app.get('/activitySummary/:packageName/:activityName', function(req, res, next) {
 	res.sendfile(path.join(__dirname, 'view/activitySummary/index.html'));
 });
 
