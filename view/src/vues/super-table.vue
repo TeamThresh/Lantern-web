@@ -3,18 +3,19 @@ div.table-scrollable
 	table.table.table-striped.table-hover
 		thead
 			tr
-				th.text-center(v-for='name in data.head') {{name}}
+				th.text-center(v-for='name in head') {{name}}
 		tbody
-			tr(v-for='b in data.body')
+			tr(v-for='b in body')
 				td.text-center(v-for='d in b') {{d}}
 </template>
 
 <script>
 module.exports = {
-	props: ['initData'],
+	props: ['initData', 'url'],
 	data: function() {
 		return {
-			data: {}
+			head: [],
+			body: []
 		};
 	},
 	methods: {
@@ -82,8 +83,29 @@ module.exports = {
 	},
 	created: function() {
 		var me = this;
-		if( me.initData )
-			me.data = me.initData;
+		if( me.initData ) {
+			me.head = me.initData.head;
+			me.body = me.initData.body;
+		} else if( me.url ) {
+			$.get(me.url).then(function(d) {
+				me.head = ['name', 'timestamp', 'activity'];
+				me.body = [];
+				$.each(d.crashList, function(i, c) {
+					me.body.push([c.name, moment(c.timestamp).format('YYYY-MM-DD HH:MM:SS'), c.topActivity]);
+				});
+			});
+		} else {
+			var packageName = location.pathname.split('/')[2];
+			var activityName = location.pathname.split('/')[3];
+			$.get('/getCrashList/' + packageName).then(function(d) {
+				me.head = ['name', 'timestamp', 'activity'];
+				me.body = [];
+				$.each(d.crashList, function(i, c) {
+					if( c.topActivity == activityName )
+						me.body.push([c.name, moment(c.timestamp).format('YYYY-MM-DD HH:MM:SS'), c.topActivity]);
+				});
+			});
+		}
 	}
 }
 </script>

@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var schema = require('./schema/schema.js');
 var db = require('../Lantern-analyzer/db');
+var analyzer = require('../Lantern-analyzer/analyzer');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -146,23 +147,48 @@ app.get('/getCrashList/:packageName', function(req, res, next) {
 			doc.dumps.forEach(function(dump) {
 				dump.activities.forEach(function(activity) {
 					activity.crash.forEach(function(c) {
-						for( var i = 0; i < crash.length; i++ ) {
-							if( crash[i].name == c.name ) {
-								crash[i].count++;
-								if( crash[i].topActivities.indexOf(activity.name) < 0 )
-									crash[i].topActivities.push(activity.name);
-								return;
-							}
-						}
-						c.count = 1;
-						c.topActivities = [];
-						c.topActivities.push(activity.name);
+						// for( var i = 0; i < crash.length; i++ ) {
+						// 	if( crash[i].name == c.name ) {
+						// 		crash[i].count++;
+						// 		if( crash[i].topActivities.indexOf(activity.name) < 0 )
+						// 			crash[i].topActivities.push(activity.name);
+						// 		return;
+						// 	}
+						// }
+						// c.count = 1;
+						// c.topActivities = [];
+						// c.topActivities.push(activity.name);
+						// crash.push(c);
+						c.topActivity = activity.name;
 						crash.push(c);
 					});
 				});
 			});
 		});
 		res.json({'crashList': crash});
+	});
+});
+
+app.get('/analyze', function(req, res, next) {
+	db.p.then(function() {
+		db.analyzed.drop(function(err) {
+			db.resourcemodels.find({}).toArray(function(e, docs) {
+				var work = function(idx) {
+					if( idx >= docs.length ) {
+						res.send('done');
+					}
+					var package = analyzer.parsePackage(docs[idx]);
+					db.analyzed.isPackageExists(package.package_name).then(function(b) {
+						if( ! b )
+						db.analyzed.putPackage(package.package_name);
+						db.analyzed.putDump(package.package_name, package.dumps[0]).then(function() {
+							work(idx + 1);
+						});
+					});
+				};
+				work(0);
+			});
+		});
 	});
 });
 
