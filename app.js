@@ -139,6 +139,33 @@ app.get('/getNodesAndLinks/:packageName', function(req, res, next) {
 	});
 });
 
+app.get('/getCrashList/:packageName', function(req, res, next) {
+	db.analyzed.find({'package_name': req.params.packageName}, {'dumps.activities.name': 1, 'dumps.activities.crash': 1}).toArray(function(err, docs) {
+		var crash = [];
+		docs.forEach(function(doc) {
+			doc.dumps.forEach(function(dump) {
+				dump.activities.forEach(function(activity) {
+					activity.crash.forEach(function(c) {
+						for( var i = 0; i < crash.length; i++ ) {
+							if( crash[i].name == c.name ) {
+								crash[i].count++;
+								if( crash[i].topActivities.indexOf(activity.name) < 0 )
+									crash[i].topActivities.push(activity.name);
+								return;
+							}
+						}
+						c.count = 1;
+						c.topActivities = [];
+						c.topActivities.push(activity.name);
+						crash.push(c);
+					});
+				});
+			});
+		});
+		res.json({'crashList': crash});
+	});
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
