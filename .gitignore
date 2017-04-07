@@ -4,10 +4,6 @@
 # npm
 node_modules/
 
-# only source file
-view/*
-!view/src/
-
 # sublimetext sftp plugin
 sftp-config.json
 
