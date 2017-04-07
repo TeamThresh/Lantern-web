@@ -65,4 +65,4 @@ gulp.task('watch', function() {
 	gulp.watch('view/src/**/*.pug', ['pug']);
 });
 
-gulp.task('default', ['watch', 'bundling', 'pug']);
+gulp.task('default', ['watch', 'bundling']);
