@@ -24,7 +24,7 @@ task
 // javascript bundling task
 // let webpack do his 'watch' job
 gulp.task('bundling', function() {
-    var src = 'view/src/**/bundle.js';
+    var src = 'view/**/bundle.js';
     var dest = 'view';
 
     var stream = gulp.src(src)
@@ -65,4 +65,4 @@ gulp.task('watch', function() {
 	gulp.watch('view/src/**/*.pug', ['pug']);
 });
 
-gulp.task('default', ['watch', 'bundling']);
+gulp.task('default', ['bundling']);
