@@ -4,14 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var db = require('../Lantern-analyzer/db');
+var db = require('./db/db');
 var analyzer = require('../Lantern-analyzer/analyzer');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-
-// const
-var mongodbServerIp = '10.99.0.11';
 
 var app = express();
 
