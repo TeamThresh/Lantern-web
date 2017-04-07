@@ -4,6 +4,9 @@
 # npm
 node_modules/
 
+# exclude view/assets
+view/assets
+
 # sublimetext sftp plugin
 sftp-config.json
 
