@@ -4,13 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var schema = require('./schema/schema.js');
 var db = require('../Lantern-analyzer/db');
 var analyzer = require('../Lantern-analyzer/analyzer');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
+// const
+var mongodbServerIp = '10.99.0.11';
 
 var app = express();
 
@@ -27,15 +28,6 @@ app.use(cookieParser());
 // static
 app.use('/assets', express.static(path.join(__dirname, 'view/assets')));
 
-/*
-db setting
-*/
-mongoose.connect('mongodb://localhost/lantern_raw_db');
-var ResSchema = new mongoose.Schema(schema.resSchema);
-var ResModel = mongoose.model('resourcemodel', ResSchema);
-var analyzerDB = mongoose.createConnection('localhost').useDb('analyzer_db');
-var activitiesCollection = analyzerDB.model('activities', mongoose.Schema({}, {strict: false}), 'activities');
-
 /**
  * index redirect to /dashboard
  */
@@ -45,39 +37,6 @@ app.all('/', function(req, res, next) {
 
 app.get('/activitySummary/:packageName/:activityName', function(req, res, next) {
 	res.sendfile(path.join(__dirname, 'view/activitySummary/index.html'));
-});
-
-// apis
-app.all('/test/:id', function(req, res, next) {
-  ResModel.find({}, function(err, docs) {
-    // res.json(docs[docs.length - 1]);
-    // res.json(docs[21]);
-    if( docs.length > req.params.id )
-      res.json(docs[req.params.id]);
-    else
-      res.json({});
-    res.end();
-  });
-});
-
-app.all('/testCnt', function(req, res, next) {
-  ResModel.count({}, function(err, cnt) {
-    res.json({'count': cnt});
-    res.end();
-  });
-});
-
-app.all('/testMany', function(req, res, next) {
-  ResModel.find({}, function(err, docs) {
-    res.json([docs[20], docs[21]]);
-  });
-});
-
-app.get('/getAll', function(req, res, next) {
-  ResModel.find({}, function(err, docs) {
-    res.json(docs);
-    res.end();
-  });
 });
 
 app.get('/getPackageData/:name', function(req, res, next) {
