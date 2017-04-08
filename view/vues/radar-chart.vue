@@ -35,7 +35,7 @@ module.exports = {
 				color: d3.scaleOrdinal(d3.schemeCategory10)
 			});
 		},
-		drawRadarChart: require('../../assets/d3/radar.js').drawRadarChart
+		drawRadarChart: require('../assets/d3/radar.js').drawRadarChart
 	},
 	mounted: function() {
 		var me = this;

@@ -1,0 +1,21 @@
+extends layout.pug
+
+block title
+	span(style='color: #fff;') Activity Map
+
+block desc
+	| shows Activities and its relations in the form of map
+
+block page-toolbar
+	activity-map-toolbar(ref='activityMapToolbar')
+
+block content
+	activity-map(ref='activityMap')
+
+block style
+	style.
+		body {
+			background-color: #1b1c2e !important;
+		}
+		
+prepend script

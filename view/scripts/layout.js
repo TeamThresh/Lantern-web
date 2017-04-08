@@ -1,9 +1,4 @@
 /**
- * import styles
- */
-// require('./style.scss');
-
-/**
  * import scripts
  */
 // Vue.js

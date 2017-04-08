@@ -24,15 +24,15 @@ task
 // javascript bundling task
 // let webpack do his 'watch' job
 gulp.task('bundling', function() {
-    var src = 'view/**/bundle.js';
-    var dest = 'view';
+    var src = 'view/scripts/*.js';
+    var dest = 'view/assets/bundles';
 
     var stream = gulp.src(src)
             .pipe(plumber())
             .pipe(named())
             .pipe(webpack({
                 watch: true,
-                context: __dirname + '/view', // file loader가 view를 [path]로 인식해버려서..
+                context: __dirname + '/view/assets/bundles', // file loader가 view를 [path]로 인식해버려서..
                 module: {
                     loaders: [
                         {test: /\.(scss|sass|css)$/, loader: 'style!css!sass'},
@@ -42,7 +42,7 @@ gulp.task('bundling', function() {
                 }
             }))
             .pipe(rename(function(file) {
-                file.basename = 'bundle';
+                // file.basename = 'bundle';
             }));
     if( isProduction )
         stream.pipe(uglifyjs({mangle: {toplevel: true}}));

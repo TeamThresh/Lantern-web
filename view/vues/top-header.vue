@@ -423,7 +423,7 @@
 
 <script>
     module.exports = {
-        
+
     }
 </script>
 
