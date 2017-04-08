@@ -63,6 +63,7 @@ module.exports = {
 			$.get('/analyze', function(data) {
 				bootbox.alert('분석 완료!');
 				$.unblockUI();
+				location.href = '/dashboard'; // redirect
 			});
 		}
 	}
