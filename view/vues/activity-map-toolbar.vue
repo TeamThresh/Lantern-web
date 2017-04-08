@@ -61,9 +61,8 @@ module.exports = {
 				}
 			});
 			$.get('/analyze', function(data) {
-				bootbox.alert('분석 완료!');
+				bootbox.alert(data.cnt + '개 분석 완료. 새로고침 해주세요.');
 				$.unblockUI();
-				location.href = '/dashboard'; // redirect
 			});
 		}
 	}

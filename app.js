@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var analyzer = require('../Lantern-analyzer/analyzer');
 var subdomain = require('express-subdomain');
 var lanternRouter = require('./routes/lantern');
 var threshRouter = require('./routes/thresh');
