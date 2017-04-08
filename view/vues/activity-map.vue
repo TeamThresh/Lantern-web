@@ -17,7 +17,7 @@ div.activity-map
 module.exports = {
     mounted: function() {
         var me = this;
-		$.get('/getAllPackageNames', function(data) {
+		$.get('/api/getAllPackageNames', function(data) {
             me.packageName = data.packageNames[0];
 			me.draw();
         });
@@ -286,7 +286,7 @@ module.exports = {
              */
             if (me.fetchedPackageName != me.packageName) {
                 me.status = me.packageName + '의 정보 가져오는 중...';
-                d3.json('/getNodesAndLinks/' + me.packageName, work);
+                d3.json('/api/getNodesAndLinks/' + me.packageName, work);
             } else {
                 work();
             }

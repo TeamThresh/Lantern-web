@@ -27,7 +27,7 @@
 module.exports = {
 	mounted: function() {
 		var me = this;
-        $.get('/getAllPackageNames', function(data) {
+        $.get('/api/getAllPackageNames', function(data) {
             me.packageNames = data.packageNames;
         });
 	},
