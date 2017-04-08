@@ -6,9 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var db = require('./db/db');
 var analyzer = require('../Lantern-analyzer/analyzer');
-
-var index = require('./routes/index');
-var users = require('./routes/users');
+var subdomain = require('express-subdomain');
+var lanternRouter = require('./routes/lantern');
+var threshRouter = require('./routes/thresh');
 
 var app = express();
 
@@ -24,6 +24,11 @@ app.use(cookieParser());
 
 // static
 app.use('/assets', express.static(path.join(__dirname, 'view/assets')));
+
+// routes
+app.use(subdomain('lantern', lanternRouter));
+app.use('/', threshRouter);
+
 
 /**
  * index redirect to /dashboard
@@ -172,3 +177,8 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+// bin/www migration
+var http = require('http');
+var server = http.createServer(app);
+server.listen(80);
