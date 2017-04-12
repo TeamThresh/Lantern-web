@@ -24,8 +24,7 @@ app.use(cookieParser());
 app.use('/assets', express.static(path.join(__dirname, 'view/assets')));
 
 // routes
-app.use('/lantern', lanternRouter);
-app.use('/thresh', threshRouter);
+app.use('/', lanternRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
