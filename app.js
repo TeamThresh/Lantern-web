@@ -53,4 +53,5 @@ module.exports = app;
 // bin/www migration
 var http = require('http');
 var server = http.createServer(app);
-server.listen(80);
+var privateIp = '10.99.0.15';
+server.listen(80, privateIp);
