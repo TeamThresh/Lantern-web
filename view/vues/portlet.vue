@@ -9,7 +9,7 @@
 			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
 				<i class="icon-cloud-upload"></i>
 			</a> -->
-			<a class="font-white" href="javascript:;">
+			<a class="" href="javascript:;">
 				<i class="material-icons">settings</i>
 			</a>
 			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
