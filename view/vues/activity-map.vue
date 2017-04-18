@@ -1,16 +1,20 @@
 <template lang='pug'>
 div.activity-map
+	div.alert.alert-info
+		| 현재 앱 이름, 버젼, 등등
+		| &nbsp;&nbsp;
+		a.btn.green
+			i.icon-wrench
+			| &nbsp;&nbsp;Crash
+		| &nbsp;&nbsp;
+		a.btn.green
+			i.icon-layers
+			| &nbsp;&nbsp;Resource
+		| &nbsp;&nbsp;
+		a.btn.green
+			i.icon-feed
+			| &nbsp;&nbsp;Network
 	svg
-	//- div.note.note-warning
-	//- 	span {{status}}
-	//- div.note.note-info
-	//- 	span type the package name
-	//- 	input(type='text' v-model='packageName' style='width: 400px')
-	//- 	button.btn.btn-outline.dark.sbold(@click='draw') search this package
-	//- div.note.note-info
-	//- 	span all package names
-	//- 	br
-	//- 	button.btn.btn-outline-dark.sbold(v-for='name in packageNames' @click='packageName = name; draw();') {{name}}
 </template>
 
 <script>
@@ -147,6 +151,22 @@ module.exports = {
 
 				// debug log
                 console.log(me.packageName, nodes, links);
+
+				// index
+				var indexGradient = svg.append('defs')
+				.append('linearGradient')
+				.attr('id', 'index')
+				.attr('x1', '0%').attr('x2', '100%')
+				.attr('y1', '0%').attr('y2', '0%');
+				indexGradient.append('stop').attr('offset', '0%').attr('stop-color', '#228ae6');
+				indexGradient.append('stop').attr('offset', '50%').attr('stop-color', '#f59f00');
+				indexGradient.append('stop').attr('offset', '100%').attr('stop-color', '#d9480f');
+				svg.append('rect').attr('x', 0).attr('y', 0).attr('width', 250).attr('height', 25).attr('fill', 'url(#index)');
+				svg.append('text').attr('x', 0).attr('y', 25).text('danger').attr('font-size', 14).attr('dy', 14).attr('fill', 'white');
+
+				if( nodes === undefined || nodes.length == 0 ) {
+					return;
+				}
 
                 var link = svg.selectAll(".link"),
                     node = svg.selectAll(".node"),

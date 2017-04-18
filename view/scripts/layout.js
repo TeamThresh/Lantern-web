@@ -29,6 +29,9 @@ Vue.component('one-depth-user-flow', require('../vues/one-depth-user-flow.vue'))
 Vue.component('dist-graph', require('../vues/dist-graph.vue'));
 Vue.component('super-table', require('../vues/super-table.vue'));
 Vue.component('radar-chart', require('../vues/radar-chart.vue'));
+Vue.component('device-usage-graph', require('../vues/device-usage-graph.vue'));
+Vue.component('line-graph', require('../vues/line-graph.vue'));
+Vue.component('worldmap-graph', require('../vues/worldmap-graph.vue'));
 
 /**
  * apply Vue app

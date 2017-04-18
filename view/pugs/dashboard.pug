@@ -7,11 +7,23 @@ block desc
 	| shows Activities and its relations in the form of map
 
 block page-toolbar
-	activity-map-toolbar(ref='activityMapToolbar')
+	//- activity-map-toolbar(ref='activityMapToolbar')
 
 block content
-	activity-map(ref='activityMap')
-
+	div.col-lg-8.col-sm-12
+		activity-map(ref='activityMap')
+	div.col-lg-4.col-sm-12
+		portlet(title='Top Device')
+			device-usage-graph
+		portlet(title='접속률 / 복귀율')
+			div.m-grid-col-lg-6(style='display: inline-block')
+				line-graph
+			div.m-grid-col-lg-6(style='display: inline-block')
+				line-graph
+		portlet(title='World Outbound Call')
+			worldmap-graph
+		portlet(title='Top Error')
+			super-table(:init-data='{head:["crash","count"],body:[["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"]]}')
 block style
 	style.
 		body {
