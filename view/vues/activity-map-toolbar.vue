@@ -13,9 +13,6 @@
 				<button class="btn btn-outline dark sbold" @click="changePackage(name);"> {{name}} </button>
 				<br/>
 			</div>
-			<br/>
-			<br/>
-			<h3>Data Update</h3>
         </div>
     </div>
     <!-- END THEME PANEL -->
