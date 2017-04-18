@@ -17,7 +17,7 @@ div.activity-map
 module.exports = {
     mounted: function() {
         var me = this;
-		$.get('/api/getAllPackageNames', function(data) {
+		$.get('/api/packageNames', function(data) {
             me.packageName = data.packageNames[0];
 			me.draw();
         });
