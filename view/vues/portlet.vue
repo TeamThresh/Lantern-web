@@ -1,6 +1,6 @@
 <template lang="html">
 <div class="portlet light">
-	<div class="portlet-title">
+	<div class="portlet-title" v-if="!simple">
 		<div class="caption">
 			<span class="caption-subject bold uppercase">{{title}}</span>
 			<span class="caption-helper">{{desc}}</span>
@@ -28,7 +28,7 @@
 
 <script>
 module.exports = {
-	props: ['title', 'desc', 'content']
+	props: ['title', 'desc', 'content', 'simple']
 }
 </script>
 

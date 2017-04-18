@@ -24,13 +24,13 @@
 					<h3 class="uppercase">Performance</h3>
 				</li>
 				<li class="nav-item  ">
-					<a href="/" class="nav-link">
+					<a href="/activityDetail/cpu" class="nav-link">
 						<i class="icon-layers"></i>
 						<span class="title">CPU/Memory</span>
 					</a>
 				</li>
 				<li class="nav-item">
-					<a href="/" class="nav-link">
+					<a href="/activityDetail/network" class="nav-link">
 						<i class="icon-feed"></i>
 						<span class="title">Network</span>
 					</a>

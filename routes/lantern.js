@@ -18,4 +18,10 @@ router.get('/activitySummary/:packageName/:activityName', function(req, res, nex
 	});
 });
 
+router.get('/activityDetail/:resourceType', function(req, res, next) {
+	res.render('../view/pugs/activityDetail.pug', {
+		resourceType: req.params.resourceType
+	});
+});
+
 module.exports = router;
