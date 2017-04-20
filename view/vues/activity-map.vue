@@ -36,7 +36,6 @@ module.exports = {
 		drawIndex: function() {
 			// index
 			var svg = d3.select(this.$el).select('svg.index');
-			console.log(svg);
 			var indexGradient = svg.append('defs')
 				.append('linearGradient')
 				.attr('id', 'index')
