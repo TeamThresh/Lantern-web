@@ -1,26 +1,24 @@
 <template lang='pug'>
 div.activity-map
-	div.alert.alert-info
-		| 현재 앱 이름, 버젼, 등등
-		| &nbsp;&nbsp;
-		a.btn.green
+	div
+		a.btn.grey-mint.active
+			| Crash
 			i.icon-wrench
-			| &nbsp;&nbsp;Crash
-		| &nbsp;&nbsp;
-		a.btn.green
+		a.btn.grey-mint
+			| Resource
 			i.icon-layers
-			| &nbsp;&nbsp;Resource
-		| &nbsp;&nbsp;
-		a.btn.green
+		a.btn.grey-mint
+			| Network
 			i.icon-feed
-			| &nbsp;&nbsp;Network
-	svg
+		svg.index
+	svg.map
 </template>
 
 <script>
 module.exports = {
     mounted: function() {
         var me = this;
+		me.drawIndex();
 		$.get('/api/packageNames', function(data) {
             me.packageName = data.packageNames[0];
 			me.draw();
@@ -35,6 +33,27 @@ module.exports = {
         };
     },
     methods: {
+		drawIndex: function() {
+			// index
+			var svg = d3.select(this.$el).select('svg.index');
+			console.log(svg);
+			var indexGradient = svg.append('defs')
+				.append('linearGradient')
+				.attr('id', 'index')
+				.attr('x1', '0%').attr('x2', '100%')
+				.attr('y1', '0%').attr('y2', '0%');
+			indexGradient.append('stop').attr('offset', '0%').attr('stop-color', '#0086df');
+			indexGradient.append('stop').attr('offset', '35%').attr('stop-color', '#5590a3');
+			indexGradient.append('stop').attr('offset', '66%').attr('stop-color', '#e49f00');
+			indexGradient.append('stop').attr('offset', '100%').attr('stop-color', '#ef4000');
+			svg.append('rect').attr('x', 80).attr('y', 5).attr('width', 76).attr('height', 8).attr('fill', 'url(#index)');
+			svg.append('text').attr('x', 80 + (76 / 2)).attr('y', 13).text('Danger').attr('font-size', 11).attr('dy', 11).attr('fill', 'white')
+				.attr('text-anchor', 'middle');
+
+			svg.append('circle').attr('cx', 15).attr('cy', 15).attr('r', 7).attr('class', 'node')
+				.attr('fill', '#228ae6').attr('stroke', '#228ae6').attr('stroke-width', 3).attr('stroke-opacity', 0.5);
+			svg.append('text').attr('x', 30).attr('y', 15).text('User').attr('font-size', 11).attr('dy', 5).attr('fill', 'white');
+		},
         draw: function() {
             var mode = this.mode;
             var random = this.random;
@@ -47,7 +66,7 @@ module.exports = {
 								.force('center', d3.forceCenter(width / 2 , height / 2))
 								.force('collide', d3.forceCollide().radius(function(d) { return d.r * 2; }))
 								.velocityDecay(0.8);
-			var svg = d3.select('.activity-map > svg');
+			var svg = d3.select('.activity-map > svg.map');
 
 			function dragstarted(d) {
 	            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
@@ -151,18 +170,6 @@ module.exports = {
 
 				// debug log
                 console.log(me.packageName, nodes, links);
-
-				// index
-				var indexGradient = svg.append('defs')
-				.append('linearGradient')
-				.attr('id', 'index')
-				.attr('x1', '0%').attr('x2', '100%')
-				.attr('y1', '0%').attr('y2', '0%');
-				indexGradient.append('stop').attr('offset', '0%').attr('stop-color', '#228ae6');
-				indexGradient.append('stop').attr('offset', '50%').attr('stop-color', '#f59f00');
-				indexGradient.append('stop').attr('offset', '100%').attr('stop-color', '#d9480f');
-				svg.append('rect').attr('x', 0).attr('y', 0).attr('width', 250).attr('height', 25).attr('fill', 'url(#index)');
-				svg.append('text').attr('x', 0).attr('y', 25).text('danger').attr('font-size', 14).attr('dy', 14).attr('fill', 'white');
 
 				if( nodes === undefined || nodes.length == 0 ) {
 					return;
@@ -334,9 +341,11 @@ module.exports = {
 
 <style lang='sass'>
 .activity-map {
-    width: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
 
-    svg {
+    svg.map {
         width: 100%;
         height: 700px;
         background-color: #1b1c2e;
@@ -352,5 +361,36 @@ module.exports = {
         /*display: none;*/
         font-size: 11px;
     }
+
+	.btn {
+		width: 110px;
+		height: 30px;
+		text-align: left;
+		border-radius: 3px !important;
+		font-size: 13px;
+		line-height: 13px !important;
+
+		&:not(:first-child) {
+			margin: 0 0 0 10px;
+		}
+
+		&.active {
+			background-color: #4e5fc4 !important;
+			border-color: #4e5fc4 !important;
+		}
+
+		& > i {
+			float: right;
+			vertical-align: middle;
+		}
+	}
+
+	svg.index {
+		margin: 0 0 0 30px;
+		height: 30px;
+		display: inline-block;
+		background-color: #1b1c2e;
+		vertical-align: middle;
+	}
 }
 </style>
