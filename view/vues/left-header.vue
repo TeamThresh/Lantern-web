@@ -16,7 +16,7 @@
 				<i class="fa fa-dropbox fa-4"></i>
 				Dropbox
 			</a>
-			<ul class="page-sidebar-menu   " data-keep-expanded="false" data-auto-scroll="false" data-slide-speed="200">
+			<ul class="page-sidebar-menu   page-header-fixed" data-keep-expanded="false" data-auto-scroll="false" data-slide-speed="200">
 				<li class="nav-item start">
 					<a href="/" class="nav-link">
 						<i class="icon-home"></i>

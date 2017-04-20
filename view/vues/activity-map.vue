@@ -367,7 +367,7 @@ module.exports = {
 		text-align: left;
 		border-radius: 3px !important;
 		font-size: 13px;
-		line-height: 13px !important;
+		// line-height: 13px !important;
 
 		&:not(:first-child) {
 			margin: 0 0 0 10px;
@@ -381,6 +381,7 @@ module.exports = {
 		& > i {
 			float: right;
 			vertical-align: middle;
+			line-height: inherit;
 		}
 	}
 
