@@ -12,6 +12,10 @@
 			<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
 			<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+			<a class="btn blue" id="btnAppName">
+				<i class="fa fa-dropbox fa-4"></i>
+				Dropbox
+			</a>
 			<ul class="page-sidebar-menu   " data-keep-expanded="false" data-auto-scroll="false" data-slide-speed="200">
 				<li class="nav-item start">
 					<a href="/" class="nav-link">
@@ -89,4 +93,26 @@
 </script>
 
 <style lang="sass" scoped>
+	/* side bar height 길게 */
+	div.page-container, div.page-sidebar-wrapper, div.page-sidebar {
+		height: 100% !important;
+	}
+	div.page-sidebar-wrapper {
+		display: inline !important;
+	}
+	a#btnAppName {
+		margin: 0;
+		padding: 0 0 0 20px;
+		width: 100%;
+		height: 50px;
+		display: block;
+		// background-color: #007eed;
+		text-align: left;
+		line-height: 50px;
+
+		& > i {
+			font-size: 27px;
+			vertical-align: middle;
+		}
+	}
 </style>
