@@ -9,6 +9,7 @@ var named = require('vinyl-named-with-path');
 var through = require('through');
 var path = require('path');
 var plumber = require('gulp-plumber');
+var babel = require('gulp-babel');
 
 /*
 parameter
@@ -29,6 +30,7 @@ gulp.task('bundling', function() {
 
     var stream = gulp.src(src)
             .pipe(plumber())
+			.pipe(babel({presets: ['es2015']}))
             .pipe(named())
             .pipe(webpack({
                 watch: true,
