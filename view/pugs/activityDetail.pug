@@ -9,45 +9,46 @@ block desc
 block page-toolbar
 
 block content
-	div.col-lg-5.col-sm-12
-		portlet(title=resourceType + ' 사용량')
-			dist-graph
-	div.col-lg-7.col-sm-12
-		portlet(simple="true")
-			div.tabbable-line
-				ul.nav.nav-tabs
-					li.active
-						a(href='#tabCallStack' data-toggle='tab') Call Stack
-					li
-						a(href='#tabOs' data-toggle='tab') OS
-				div.tab-content
-					div.tab-pane.active#tabCallStack
-						div.panel-group.accordion#callStackAccordion
-							div.panel.panel-default
-								div.panel-heading
-									div.panel-title
-										a.accordion-toggle(href='#thread1' data-toggle='collapse') thread1
-								div.panel-collapse.collapse#thread1
-									div.panel-body
-										h1 thread1
-										div.jstree.jstree-default.jstree-1(role='tree')
-											ul.jstree-container-ul.jstree-children(role='group')
-												li.jstree-node
-													i.jstree-icon.jstree-ocl
-													a.jstree-anchor stacktrace1
-													ul.jstree-children
-														li.jstree-node.jstree-leaf
-															i.jstree-icon.jstree-ocl
-															a.jstree-anchor stacktrace2
-							div.panel.panel-default
-								div.panel-heading
-									div.panel-title
-										a.accordion-toggle(href='#thread2' data-toggle='collapse') thread2
-								div.panel-collapse.collapse#thread2
-									div.panel-body
-										h1 thread2
-					div.tab-pane#tabOs
-						h1 OS
+	div.row
+		div.col-lg-5.col-sm-12
+			portlet(title=resourceType + ' 사용량')
+				dist-graph
+		div.col-lg-7.col-sm-12
+			portlet(simple="true")
+				div.tabbable-line
+					ul.nav.nav-tabs
+						li.active
+							a(href='#tabCallStack' data-toggle='tab') Call Stack
+						li
+							a(href='#tabOs' data-toggle='tab') OS
+					div.tab-content
+						div.tab-pane.active#tabCallStack
+							div.panel-group.accordion#callStackAccordion
+								div.panel.panel-default
+									div.panel-heading
+										div.panel-title
+											a.accordion-toggle(href='#thread1' data-toggle='collapse') thread1
+									div.panel-collapse.collapse#thread1
+										div.panel-body
+											h1 thread1
+											div.jstree.jstree-default.jstree-1(role='tree')
+												ul.jstree-container-ul.jstree-children(role='group')
+													li.jstree-node
+														i.jstree-icon.jstree-ocl
+														a.jstree-anchor stacktrace1
+														ul.jstree-children
+															li.jstree-node.jstree-leaf
+																i.jstree-icon.jstree-ocl
+																a.jstree-anchor stacktrace2
+								div.panel.panel-default
+									div.panel-heading
+										div.panel-title
+											a.accordion-toggle(href='#thread2' data-toggle='collapse') thread2
+									div.panel-collapse.collapse#thread2
+										div.panel-body
+											h1 thread2
+						div.tab-pane#tabOs
+							h1 OS
 		
 block style
 		
