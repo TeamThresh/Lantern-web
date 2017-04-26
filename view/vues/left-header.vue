@@ -36,10 +36,88 @@
 					<h3 class="uppercase">Filter</h3>
 				</li>
 				<li class="nav-item">
-					<a href="#" class="nav-link">
-						<i class="fa fa-filter"></i>
-						<span class="title">some menus</span>
+					<a href="#" class="nav-link nav-toggle">
+						<!-- <i class="fa fa-filter"></i> -->
+						<span class="title">Devices</span>
+						<span class="arrow"></span>
 					</a>
+					<ul class="sub-menu">
+						<li class="nav-item">
+							<a href="#" class="nav-link">갤럭시 S8 사쿠라 에디션</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">갤럭시 S8+ 무궁화 에디션</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">안철수 - 실망스럽습니다폰</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">안철수 - 4초만에뭐하징?폰</a>
+						</li>
+					</ul>
+				</li>
+				<li class="nav-item">
+					<a href="#" class="nav-link nav-toggle">
+						<!-- <i class="fa fa-filter"></i> -->
+						<span class="title">Location</span>
+						<span class="arrow"></span>
+					</a>
+					<ul class="sub-menu">
+						<li class="nav-item">
+							<a href="#" class="nav-link">칸코쿠</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">니뽄</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">미구크</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">유러브</a>
+						</li>
+					</ul>
+				</li>
+				<li class="nav-item">
+					<a href="#" class="nav-link nav-toggle">
+						<!-- <i class="fa fa-filter"></i> -->
+						<span class="title">OS</span>
+						<span class="arrow"></span>
+					</a>
+					<ul class="sub-menu">
+						<li class="nav-item">
+							<a href="#" class="nav-link">누가바(7.0)</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">마시써로우(6.0)</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">2NE1롤리팝(5.1)</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">고디바 아이스크림(4.2)</a>
+						</li>
+					</ul>
+				</li>
+				<li class="nav-item">
+					<a href="#" class="nav-link nav-toggle">
+						<!-- <i class="fa fa-filter"></i> -->
+						<span class="title">Filter Set</span>
+						<span class="arrow"></span>
+					</a>
+					<ul class="sub-menu">
+						<li class="nav-item">
+							<a href="#" class="nav-link">이은찬이만든 필터셋1</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">샐래디맛있땅</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">연어샐러드는126kcal</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">치킨샐러드는102kcal 헐대박 짱짜맨</a>
+						</li>
+					</ul>
 				</li>
 			</ul>
 			<!-- END SIDEBAR MENU -->
