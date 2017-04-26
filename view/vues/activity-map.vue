@@ -20,8 +20,9 @@ module.exports = {
         var me = this;
 		me.drawIndex();
 		$.get('/api/packageNames', function(data) {
-            me.packageName = data.packageNames[0];
+            me.packageName = data.packageNames[1];
 			me.draw();
+			window.app.debug && console.log(data.packageNames);
         });
     },
     data: function() {
@@ -312,7 +313,7 @@ module.exports = {
              */
             if (me.fetchedPackageName != me.packageName) {
                 me.status = me.packageName + '의 정보 가져오는 중...';
-                d3.json('/api/getNodesAndLinks/' + me.packageName, work);
+                d3.json('/api/nodesAndLinks/' + me.packageName, work);
             } else {
                 work();
             }
