@@ -20,7 +20,7 @@ module.exports = {
         var me = this;
 		me.drawIndex();
 		$.get('/api/packageNames', function(data) {
-            me.packageName = data.packageNames[1];
+            me.packageName = data.packageNames[2];
 			me.draw();
 			window.app.debug && console.log(data.packageNames);
         });

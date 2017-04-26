@@ -23,7 +23,7 @@
 				<li class="nav-item">
 					<a href="#" class="nav-link">
 						<i class="fa fa-th-large"></i>
-						<span class="title">Kakaotalk</span>
+						<span class="title">Fake App Name</span>
 					</a>
 				</li>
 				<li class="nav-item">
@@ -32,6 +32,20 @@
 						<span class="title">1.0.16</span>
 					</a>
 				</li>
+				<template v-for="packageName in packageNames">
+					<li class="nav-item">
+						<a href="#" class="nav-link" @click="changePackageName(packageName)">
+							<i class="fa fa-th-large"></i>
+							<span class="title">{{packageName.substr(0, 20)}}</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link">
+							<i class="fa fa-code-fork"></i>
+							<span class="title">{{Math.floor(Math.random() * 4) + '.' + Math.floor(Math.random() * 100) + '.' + Math.floor(Math.random() * 100)}}</span>
+						</a>
+					</li>
+				</template>
 				<li class="heading">
 					<h3 class="uppercase">Filter</h3>
 				</li>
@@ -128,6 +142,24 @@
 </template>
 
 <script>
+	module.exports = {
+		data() {
+			return {
+				packageNames: []
+			}
+		},
+		methods: {
+			changePackageName(name) {
+				window.app.$refs.activityMap.packageName = name;
+				window.app.$refs.activityMap.draw();
+			}
+		},
+		mounted() {
+			$.get('/api/packageNames', (data) => {
+				this.packageNames = data.packageNames;
+			});
+		}
+	}
 </script>
 
 <style lang="sass" scoped>
