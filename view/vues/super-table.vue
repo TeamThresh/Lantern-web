@@ -100,8 +100,6 @@ module.exports = {
 				for( var i=0; i<100; i++ ) {
 					this.body.push([i + 1, Math.round(Math.random() * 255), this.createRandomCrashName(Math.floor(Math.random() * 20) + 30)]);
 				}
-				this.$root.debug && console.log(this.head, this.body);
-				this.$root.debug && console.log(this.createRandomCrashName(Math.floor(Math.random() * 10) + 15));
 			}
 		} else if( me.url ) {
 			$.get(me.url).then(function(d) {
