@@ -13,11 +13,11 @@ module.exports = {
 		draw: function() {
 			$(this.$el).vectorMap({
 			    map: 'world_en',
-				backgroundColor: '#fff',
+				backgroundColor: '',
 			    borderColor: '#818181',
 			    borderOpacity: 0.25,
 			    borderWidth: 1,
-			    color: '#888',
+			    color: 'rgb(90, 92, 103)',
 			    enableZoom: true,
 			    hoverColor: '#c9dfaf',
 			    hoverOpacity: null,
@@ -48,5 +48,12 @@ module.exports = {
 .worldmap-graph {
 	width: 100%;
 	height: 300px;
+
+	.jqvmap-zoomin, .jqvmap-zoomout{
+		width: 15px;
+		height: 15px;
+		background-color: white;
+		color: black;
+	}
 }
 </style>
