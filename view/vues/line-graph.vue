@@ -22,7 +22,7 @@ module.exports = {
 			let yAxis = d3.axisLeft(yScale).ticks(1).tickSize(0);
 			svg.append('g').attr('class', 'x-axis').attr('transform', `translate(0, ${height - 13})`).call(xAxis)
 				.selectAll('line').remove();
-			svg.append('g').attr('class', 'y-axis').attr('transform', `translate(3, 0)`).call(yAxis)
+			svg.append('g').attr('class', 'y-axis').attr('transform', `translate(20, 0)`).call(yAxis)
 				.selectAll('line').remove();
 			let guideGroup = svg.append('g').attr('class', 'guide-group');
 			guideGroup.selectAll('line')
@@ -80,7 +80,7 @@ module.exports = {
 
 		g.y-axis {
 			text {
-				text-anchor: start;
+				// text-anchor: ;
 			}
 		}
 
