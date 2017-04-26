@@ -70,6 +70,13 @@
                     </div>
                 </form> -->
                 <!-- END HEADER SEARCH BOX -->
+				<div class="hor-menu">
+					<ul class="nav navbar-nav pull-left">
+						<li><a href="/">Dashboard</a></li>
+						<li><a href="/">Crash List</a></li>
+						<li><a href="/">Report</a></li>
+					</ul>
+				</div>
                 <!-- BEGIN TOP NAVIGATION MENU -->
                 <div class="top-menu">
                     <ul class="nav navbar-nav pull-right">
