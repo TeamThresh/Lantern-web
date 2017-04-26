@@ -24,4 +24,10 @@ router.get('/activityDetail/:resourceType', function(req, res, next) {
 	});
 });
 
+router.get('/crashList', (req, res, next) => {
+	res.render('../view/pugs/crashList.pug', {
+
+	});
+});
+
 module.exports = router;

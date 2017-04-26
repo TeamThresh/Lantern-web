@@ -1,0 +1,32 @@
+extends layout.pug
+
+block title
+	span(style='color: #fff;') Crash List
+
+block desc
+	| shows all crash occured on your app
+
+block page-toolbar
+	//- activity-map-toolbar(ref='activityMapToolbar')
+
+block content
+	span.title Top Error
+	super-table(:init-data='{head:["crash","count"],body:[["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"]]}')
+block style
+	style.
+		.page-content > div {
+			display: inline-block;
+			vertical-align: top;
+		}
+		div.card {
+			border: 1px solid #3e3e3e;
+			margin: 0px 0px 10px 0px;
+			padding: 10px 0 0 10px;
+		}
+		div.card span.title {
+			display: inline-block;
+			/*margin: 10px 0 0 10px;*/
+			color: #fff;
+			font-size: 13px;
+		}
+prepend script
