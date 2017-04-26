@@ -25,24 +25,24 @@ block content
 						| nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.
 	div.row
 		div.col-md-6
-			portlet(title='One-depth User Flow')
+			portlet(title='One-depth User Flow' package-name=packageName activity-name=activityName resource-type='userflow')
 				one-depth-user-flow
 		div.col-md-6
-			portlet(title='UI Rendering Elapsed Time')
+			portlet(title='UI Rendering Elapsed Time' package-name=packageName activity-name=activityName resource-type='ui')
 				dist-graph(ref='ui')
 	div.row
 		div.col-md-6
-			portlet(title='CPU Usage')
+			portlet(title='CPU Usage' package-name=packageName activity-name=activityName resource-type='cpu')
 				dist-graph
 		div.col-md-6
-			portlet(title='Memory Usage')
+			portlet(title='Memory Usage' package-name=packageName activity-name=activityName resource-type='memory')
 				dist-graph
 	div.row
 		div.col-md-6
-			portlet(title='Network Outband Call')
+			portlet(title='Network Outband Call' package-name=packageName activity-name=activityName resource-type='network')
 				super-table(:init-data='{head:["domain","count","success","responsetime"],body:[["naver.com","196","96%","19ms"],["eunchan.kr","122","90%","202ms"],["leagueoflegend.com","101","98%","112ms"],["naver.com","196","96%","19ms"],["eunchan.kr","122","90%","202ms"],["leagueoflegend.com","101","98%","112ms"],["naver.com","196","96%","19ms"],["eunchan.kr","122","90%","202ms"],["leagueoflegend.com","101","98%","112ms"],["naver.com","196","96%","19ms"],["eunchan.kr","122","90%","202ms"],["leagueoflegend.com","101","98%","112ms"]]}')
 		div.col-md-6
-			portlet(title='Crash List')
+			portlet(title='Crash List' package-name=packageName activity-name=activityName resource-type='crash')
 				//- super-table(:init-data='{head:["crash","count"],body:[["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"]]}')
 				super-table
 block style

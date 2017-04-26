@@ -9,8 +9,8 @@
 			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
 				<i class="icon-cloud-upload"></i>
 			</a> -->
-			<a class="" href="javascript:;">
-				<i class="material-icons">settings</i>
+			<a class="" :href="'/activityDetail/' + packageName + '/' + activityName + '/' + resourceType">
+				<i class="material-icons">loupe</i>
 			</a>
 			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
 				<i class="icon-trash"></i>
@@ -28,7 +28,10 @@
 
 <script>
 module.exports = {
-	props: ['title', 'desc', 'content', 'simple']
+	props: [
+		'title', 'desc', 'content', 'simple',
+		'packageName', 'activityName', 'resourceType' // for top-right button
+	]
 }
 </script>
 
