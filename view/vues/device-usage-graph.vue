@@ -103,7 +103,8 @@ module.exports = {
 			}
 
 			path {
-				stroke-width: 1px;
+				// stroke-width: px;
+				stroke: none;
 			}
 		}
 	}
