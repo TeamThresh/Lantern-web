@@ -18,7 +18,7 @@ router.get('/activitySummary/:packageName/:activityName', function(req, res, nex
 	});
 });
 
-router.get('/activityDetail/:packageNAme/:activityName/:resourceType', function(req, res, next) {
+router.get('/activityDetail/:resourceType/:packageNAme/:activityName', function(req, res, next) {
 	res.render('../view/pugs/activityDetail.pug', {
 		packageName: req.params.packageName,
 		activityName: req.params.activityNameg,

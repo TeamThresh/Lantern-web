@@ -9,7 +9,7 @@
 			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
 				<i class="icon-cloud-upload"></i>
 			</a> -->
-			<a class="" :href="'/activityDetail/' + packageName + '/' + activityName + '/' + resourceType">
+			<a class="" :href="'/activityDetail/' + resourceType + '/' + packageName + '/' + activityName">
 				<i class="material-icons">loupe</i>
 			</a>
 			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
