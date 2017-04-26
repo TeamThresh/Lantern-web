@@ -79,13 +79,30 @@ module.exports = {
 			if( data instanceof Object ) {
 
 			}
+		},
+		createRandomCrashName(n) {
+			let tmp = '';
+			for( let i=0; i<n; i++ ) {
+				tmp += String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+				if( i % 10 == 0 ) {
+					tmp += '.';
+				}
+			}
+			return tmp;
 		}
 	},
-	created: function() {
+	mounted: function() {
 		var me = this;
 		if( me.initData ) {
-			me.head = me.initData.head;
-			me.body = me.initData.body;
+			if( me.initData == 'crash' ) {
+				this.head = ['rank', 'count', 'name'];
+				this.body = [];
+				for( var i=0; i<100; i++ ) {
+					this.body.push([i + 1, Math.round(Math.random() * 255), this.createRandomCrashName(Math.floor(Math.random() * 20) + 30)]);
+				}
+				this.$root.debug && console.log(this.head, this.body);
+				this.$root.debug && console.log(this.createRandomCrashName(Math.floor(Math.random() * 10) + 15));
+			}
 		} else if( me.url ) {
 			$.get(me.url).then(function(d) {
 				me.head = ['name', 'timestamp', 'activity'];
