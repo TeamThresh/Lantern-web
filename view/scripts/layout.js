@@ -36,5 +36,4 @@ Vue.component('worldmap-graph', require('../vues/worldmap-graph.vue'));
 /**
  * apply Vue app
  */
-window.app = new Vue({el: '#app'});
-window.app.debug = true;
+window.app = new Vue({el: '#app', data: {debug: true}});
