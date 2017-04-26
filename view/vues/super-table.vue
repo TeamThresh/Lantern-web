@@ -1,6 +1,6 @@
 <template lang="pug">
 div.table-scrollable
-	table.table.table-striped.table-hover
+	table.table.table-striped
 		thead
 			tr
 				th.text-center(v-for='name in head') {{name}}
@@ -110,5 +110,24 @@ module.exports = {
 }
 </script>
 
-<style lang="sass">
+<style scoped lang="css">
+	table.table {
+		background-color: transparent;
+		color: white;
+		border: none;
+	}
+
+	tr {
+		background-color: transparent !important;
+	}
+
+	table, .table-scrollable, tr, th, td {
+		border: none;
+		border-top: none !important;
+	}
+
+	th {
+		border-top: 1px solid #565c63 !important;
+		border-bottom: 1px solid #565c63 !important;
+	}
 </style>
