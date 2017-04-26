@@ -31,15 +31,21 @@ block content
 									div.panel-collapse.collapse#thread1
 										div.panel-body
 											h1 thread1
-											div.jstree.jstree-default.jstree-1(role='tree')
-												ul.jstree-container-ul.jstree-children(role='group')
-													li.jstree-node
+											div.jstree.jstree-default.jstree-1
+												ul.jstree-container-ul.jstree-children
+													li.jstree-node#root
 														i.jstree-icon.jstree-ocl
 														a.jstree-anchor stacktrace1
 														ul.jstree-children
 															li.jstree-node.jstree-leaf
 																i.jstree-icon.jstree-ocl
 																a.jstree-anchor stacktrace2
+															li.jstree-node.jstree-leaf.jstree-last
+																i.jstree-icon.jstree-ocl
+																a.jstree-anchor stacktrace3
+													li.jstree-node.jstree-leaf.jstree-last
+														i.jstree-icon.jstree-ocl
+														a.jstree-anchor stacktrace4
 								div.panel.panel-default
 									div.panel-heading
 										div.panel-title
@@ -53,3 +59,7 @@ block content
 block style
 		
 prepend script
+	script.
+		$(function() {
+			$('.jstree-1').jstree();
+		});
