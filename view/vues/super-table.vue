@@ -142,7 +142,10 @@ module.exports = {
 	}
 
 	th {
-		border-top: 1px solid #565c63 !important;
-		border-bottom: 1px solid #565c63 !important;
+		border: 1px solid #2e3139 !important;
+		background-color: #585f72;
+		color: #fff;
+		font-size: 12px;
+		font-weight: bold;
 	}
 </style>

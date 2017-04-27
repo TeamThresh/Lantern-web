@@ -7,31 +7,20 @@ block desc
 	| shows Activities and its relations in the form of map
 
 block page-toolbar
-	//- activity-map-toolbar(ref='activityMapToolbar')
 
 block content
-	div.m-grid-col-lg-8.m-grid-col-sm-12
+	card.col-lg-8.col-sm-12
 		activity-map(ref='activityMap')
-	div.m-grid-col-lg-4.m-grid-col-sm-12
-		//- portlet(title='Top Device')
-		div.card
-			span.title Device on each OS
+	div.col-lg-4.col-sm-12
+		card(title='Device / OS')
 			device-usage-graph
-		//- portlet(title='접속률 / 복귀율')
-		div.card
-			div.m-grid-col-lg-6(style='display: inline-block')
-				span.title 접속률
-				line-graph
-			div.m-grid-col-lg-6(style='display: inline-block')
-				span.title 복귀율
-				line-graph
-		//- portlet(title='World Outbound Call')
-		div.card
-			span.title World Outbound Call
+		card.col-lg-6.a(title='접속률')
+			line-graph
+		card.col-lg-6.a(title='복귀율')
+			line-graph
+		card(title='World Outbound Call')
 			worldmap-graph
-		//- portlet(title='Top Error')
-		div.card
-			span.title Top Error
+		card(title='Top Error')
 			super-table(init-data='crash')
 block style
 	style.
@@ -39,15 +28,8 @@ block style
 			display: inline-block;
 			vertical-align: top;
 		}
-		div.card {
-			border: 1px solid #3e3e3e;
-			margin: 0px 0px 10px 0px;
-			padding: 10px 0 0 10px;
-		}
-		div.card span.title {
-			display: inline-block;
-			/*margin: 10px 0 0 10px;*/
-			color: #fff;
-			font-size: 13px;
+		.a {
+			display: inline-block; 
+			float: none !important;
 		}
 prepend script

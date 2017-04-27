@@ -1,13 +1,13 @@
 <template lang='pug'>
 div.activity-map
 	div
-		a.btn.grey-mint.active
+		a.btn.grey-mint.active(@click='changeType("crash", $event)')
 			| Crash
 			i.icon-wrench
-		a.btn.grey-mint
+		a.btn.grey-mint(@click='changeType("resource", $event)')
 			| Resource
 			i.icon-layers
-		a.btn.grey-mint
+		a.btn.grey-mint(@click='changeType("network", $event)')
 			| Network
 			i.icon-feed
 		svg.index
@@ -20,7 +20,7 @@ module.exports = {
         var me = this;
 		me.drawIndex();
 		$.get('/api/packageNames', function(data) {
-            me.packageName = data.packageNames[2];
+            me.packageName = data.packageNames[0];
 			me.draw();
 			window.app.debug && console.log(data.packageNames);
         });
@@ -30,7 +30,8 @@ module.exports = {
             rawData: [],
             packageName: '',
             fetchedPackageName: '',
-            status: '-'
+            status: '-',
+			type: 'crash'
         };
     },
     methods: {
@@ -150,15 +151,39 @@ module.exports = {
 					// usage to be percentage
 					// and crash to be value
 					nodes.forEach(function(n) {
-						var crashPercentage = n.crashCount / n.usageCount;
-						if (crashPercentage == 0)
-							n.value = 3;
-						else if (crashPercentage < 0.03)
-							n.value = 2;
-						else
-							n.value = 1;
+						switch( me.type ) {
+							case 'crash':
+								var crashPercentage = n.crashCount / n.usageCount;
+								if (crashPercentage == 0)
+									n.value = 3;
+								else if (crashPercentage < 0.03)
+									n.value = 2;
+								else
+									n.value = 1;
+								break;
+							case 'resource':
+								if( n.cpuUsage >= 40 || n.memoryUsage >= 40 ) {
+									n.value = 1;
+								} else if( n.cpuUsage >= 20 || n.memoryUsage >= 20 ) {
+									n.value = 2;
+								} else {
+									n.value = 3;
+								}
+								break;
+							case 'network':
+								let networkPercentage = n.networkCount / n.usageCount;
+								if( networkPercentage == 0 ) {
+									n.value = 3;
+								} else if( networkPercentage < 0.03 ) {
+									n.value = 2;
+								} else {
+									n.value = 3;
+								}
+								break;
+						}
 						n.usage = n.usageCount / usageMax * 100;
 						n.usage = Math.ceil(n.usage);
+						console.log(n.name, n.value, me.type);
 					});
 				} else {
 					nodes = me.rawData.nodes;
@@ -315,7 +340,7 @@ module.exports = {
                 me.status = me.packageName + '의 정보 가져오는 중...';
                 d3.json('/api/nodesAndLinks/' + me.packageName, work);
             } else {
-                work();
+                work(null, me.rawData);
             }
 
         },
@@ -334,7 +359,17 @@ module.exports = {
         changeMode: function(m) {
             this.mode = m;
             this.draw();
-        }
+        },
+		changeType(t, e) {
+			$(this.$el).find('a.btn').removeClass('active');
+			if( $(e.target).prop('tagName') == 'I' ) {
+				$(e.target).parent().addClass('active');
+			} else {
+				$(e.target).addClass('active');
+			}
+			this.type = t;
+			this.draw();
+		}
     }
 };
 </script>
@@ -348,7 +383,7 @@ module.exports = {
     svg.map {
         width: 100%;
         height: 700px;
-        background-color: #1b1c2e;
+        background-color: #2e3139;
     }
 
     .node {
@@ -390,7 +425,7 @@ module.exports = {
 		margin: 0 0 0 30px;
 		height: 30px;
 		display: inline-block;
-		background-color: #1b1c2e;
+		background-color: #2e3139;
 		vertical-align: middle;
 	}
 }

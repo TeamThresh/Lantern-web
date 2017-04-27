@@ -18,34 +18,32 @@
 			</a> -->
 			<ul class="page-sidebar-menu   page-header-fixed" data-keep-expanded="false" data-auto-scroll="false" data-slide-speed="200">
 				<li class="heading">
-					<h3 class="uppercase">Your App Information</h3>
+					<h3 class="uppercase">Apps</h3>
 				</li>
-				<li class="nav-item">
-					<a href="#" class="nav-link">
+				<li class="nav-item start active">
+					<a href="javascript:;" class="nav-link nav-toggle">
 						<i class="fa fa-th-large"></i>
-						<span class="title">Fake App Name</span>
+						<span class="title">{{packageName}}</span>
+						<span class="selected"></span>
+						<span class="arrow"></span>
 					</a>
+					<ul class="sub-menu">
+						<template v-for="n in packageNames">
+							<li :class="'nav-item ' + (n == packageName ? 'active' : '')">
+								<a href="#" class="nav-link" @click="changePackageName(n)">
+									<i class="fa fa-th-large"></i>
+									<span class="title">{{n.substr(0, 20)}}</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link">
+									<i class="fa fa-code-fork"></i>
+									<span class="title">{{Math.floor(Math.random() * 4) + '.' + Math.floor(Math.random() * 100) + '.' + Math.floor(Math.random() * 100)}}</span>
+								</a>
+							</li>
+						</template>
+					</ul>
 				</li>
-				<li class="nav-item">
-					<a href="#" class="nav-link">
-						<i class="fa fa-code-fork"></i>
-						<span class="title">1.0.16</span>
-					</a>
-				</li>
-				<template v-for="packageName in packageNames">
-					<li class="nav-item">
-						<a href="#" class="nav-link" @click="changePackageName(packageName)">
-							<i class="fa fa-th-large"></i>
-							<span class="title">{{packageName.substr(0, 20)}}</span>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a href="#" class="nav-link">
-							<i class="fa fa-code-fork"></i>
-							<span class="title">{{Math.floor(Math.random() * 4) + '.' + Math.floor(Math.random() * 100) + '.' + Math.floor(Math.random() * 100)}}</span>
-						</a>
-					</li>
-				</template>
 				<li class="heading">
 					<h3 class="uppercase">Filter</h3>
 				</li>
@@ -145,11 +143,13 @@
 	module.exports = {
 		data() {
 			return {
-				packageNames: []
+				packageNames: [],
+				packageName: ''
 			}
 		},
 		methods: {
 			changePackageName(name) {
+				this.packageName = name;
 				window.app.$refs.activityMap.packageName = name;
 				window.app.$refs.activityMap.draw();
 			}
@@ -157,6 +157,7 @@
 		mounted() {
 			$.get('/api/packageNames', (data) => {
 				this.packageNames = data.packageNames;
+				this.packageName = data.packageNames[0];
 			});
 		}
 	}
