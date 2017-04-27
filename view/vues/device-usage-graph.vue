@@ -21,7 +21,7 @@ module.exports = {
 		draw: function(data) {
 			$(this.$el).find('*').remove();
 			for( d of data ) {
-				$(this.$el).append('<div class="graph">></div>');
+				$(this.$el).append(`<div class="graph"><span class="title">${d.ver}</span></div>`);
 				let el = $(this.$el).find('.graph')[$(this.$el).find('.graph').length - 1];
 				for( v of d.device ) {
 					v.label = v.name;
@@ -105,8 +105,9 @@ module.exports = {
 
 	.graph {
 		width: 25%;
-		height: 150px;
+		height: 120px;
 		display: inline-block;
+		text-align: center;
 
 		svg {
 			width: 100%;
@@ -120,6 +121,12 @@ module.exports = {
 				// stroke-width: px;
 				stroke: none;
 			}
+		}
+
+		span.title {
+			color: white;
+			font-size: 12px;
+			font-weight: bold;
 		}
 	}
 }
