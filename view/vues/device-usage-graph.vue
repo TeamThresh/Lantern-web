@@ -1,37 +1,51 @@
 <template lang="pug">
 div.device-usage-graph
-	div.graph
-		svg
-	div.graph
-		svg
-	div.graph
-		svg
-	div.graph
-		svg
 </template>
 
 <script>
 module.exports = {
 	data: function() {
 		return {
-			data: []
+			data: [],
+			app: this.$root.app
 		};
 	},
+	watch: {
+		'app.packageName': function(d) {
+			$.get(`/api/deviceByOS/${d}`).then((res) => {
+				this.draw(res.os);
+			});
+		}
+	},
 	methods: {
-		draw: function() {
-			var graphs = $('.device-usage-graph > .graph');
-			$.each(graphs, function(idx, dom) {
+		draw: function(data) {
+			$(this.$el).find('*').remove();
+			for( d of data ) {
+				$(this.$el).append('<div class="graph">></div>');
+				let el = $(this.$el).find('.graph')[$(this.$el).find('.graph').length - 1];
+				for( v of d.device ) {
+					v.label = v.name;
+					v.value = v.count;
+				}
 				new Morris.Donut({
-					element: dom,
-					data: [
-						{label: '갤럭시 S8', value: 12},
-						{label: '갤럭시 S7', value: 44},
-						{label: '아이폰 7', value: 12},
-						{label: 'V20', value: 32}
-					],
+					element: el,
+					data: d.device,
 					resize: true
 				});
-			});
+			}
+			// var graphs = $('.device-usage-graph > .graph');
+			// $.each(graphs, function(idx, dom) {
+			// 	new Morris.Donut({
+			// 		element: dom,
+			// 		data: [
+			// 			{label: '갤럭시 S8', value: 12},
+			// 			{label: '갤럭시 S7', value: 44},
+			// 			{label: '아이폰 7', value: 12},
+			// 			{label: 'V20', value: 32}
+			// 		],
+			// 		resize: true
+			// 	});
+			// });
 
 			// var svg = d3.select(this.$el).select('.graph:first-child');
 			// var arc = d3.arc().innerRadius(0).outerRadius(40);
@@ -79,7 +93,7 @@ module.exports = {
 		}
 	},
 	mounted: function() {
-		this.draw();
+		// this.draw();
 	}
 }
 </script>

@@ -29,6 +29,11 @@ module.exports = {
 			app: this.$root.app
         };
     },
+	watch: {
+		'app.packageName': function(d) {
+			this.draw();
+		}
+	},
     methods: {
 		drawIndex: function() {
 			// index

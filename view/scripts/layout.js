@@ -52,11 +52,6 @@ window.app = new Vue({
 		$.get('/api/packageNames', (data) => {
             this.app.packageNames = data.packageNames;
 			this.app.packageName = this.app.packageNames[0];
-
-			// lazy update
-			if( this.$refs.activityMap ) {
-				this.$refs.activityMap.draw();
-			}
         });
 	}
 });

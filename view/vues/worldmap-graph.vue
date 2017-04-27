@@ -6,21 +6,91 @@ div.worldmap-graph
 module.exports = {
 	data: function() {
 		return {
-			data: []
+			data: [],
+			app: this.$root.app
 		};
 	},
+	watch: {
+		'app.packageName': function(packageName) {
+			$.get(`/api/location/${packageName}`).then((res) => {
+				this.draw(res.location);
+			});
+		}
+	},
 	methods: {
-		draw: function() {
+		draw: function(data) {
+			var gdpData = {};
+			for( d of data ) {
+				let code = d.country_code.toLowerCase();
+				let value = 0;
+				if( d.usage_count == 0 ) {
+					value = 0;
+				} else {
+					if( d.crash_count > 0 ) {
+						value = d.crash_count / d.usage_count;
+					} else {
+						value = d.usage_count;
+					}
+				}
+				gdpData[code] = value;
+			}
+			var max = 0,
+			    min = Number.MAX_VALUE,
+			    cc,
+			    startColor = [200, 238, 255],
+			    endColor = [0, 100, 145],
+			    colors = {},
+			    hex;
+
+			//find maximum and minimum values
+			for (cc in gdpData)
+			{
+			    if (parseFloat(gdpData[cc]) > max)
+			    {
+			        max = parseFloat(gdpData[cc]);
+			    }
+			    if (parseFloat(gdpData[cc]) < min)
+			    {
+			        min = parseFloat(gdpData[cc]);
+			    }
+			}
+
+			//set colors according to values of GDP
+			for (cc in gdpData)
+			{
+			    if (gdpData[cc] > 0)
+			    {
+			        colors[cc] = '#';
+			        for (var i = 0; i<3; i++)
+			        {
+			            hex = Math.round(startColor[i]
+			                + (endColor[i]
+			                - startColor[i])
+			                * (gdpData[cc] / (max - min))).toString(16);
+
+			            if (hex.length == 1)
+			            {
+			                hex = '0'+hex;
+			            }
+
+			            colors[cc] += (hex.length == 1 ? '0' : '') + hex;
+			        }
+			    }
+			}
+
+			console.log(colors);
+
 			$(this.$el).vectorMap({
 			    map: 'world_en',
 				backgroundColor: '',
 			    borderColor: '#818181',
 			    borderOpacity: 0.25,
 			    borderWidth: 1,
-			    color: 'rgb(90, 92, 103)',
+				color: 'rgb(90, 92, 103)',
+			    colors: colors,
 			    enableZoom: true,
-			    hoverColor: '#c9dfaf',
-			    hoverOpacity: null,
+			    hoverColor: false,
+			    hoverOpacity: 0.7,
 			    normalizeFunction: 'linear',
 			    scaleColors: ['#b6d6ff', '#005ace'],
 			    selectedColor: '#c9dfaf',
@@ -39,7 +109,6 @@ module.exports = {
 		}
 	},
 	mounted: function() {
-		this.draw();
 	}
 }
 </script>
