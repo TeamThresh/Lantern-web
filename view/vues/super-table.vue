@@ -11,12 +11,19 @@ div.table-scrollable
 
 <script>
 module.exports = {
-	props: ['initData', 'url'],
+	props: ['initData'],
 	data: function() {
 		return {
+			data: {},
 			head: [],
 			body: []
 		};
+	},
+	watch: {
+		'data': function(d) {
+			this.head = d.head;
+			this.body = d.body;
+		}
 	},
 	methods: {
 		transformData: function(data) {
@@ -101,25 +108,6 @@ module.exports = {
 					this.body.push([i + 1, Math.round(Math.random() * 255), this.createRandomCrashName(Math.floor(Math.random() * 20) + 30)]);
 				}
 			}
-		} else if( me.url ) {
-			$.get(me.url).then(function(d) {
-				me.head = ['name', 'timestamp', 'activity'];
-				me.body = [];
-				$.each(d.crashList, function(i, c) {
-					me.body.push([c.name, moment(c.timestamp).format('YYYY-MM-DD HH:MM:SS'), c.topActivity]);
-				});
-			});
-		} else {
-			var packageName = location.pathname.split('/')[2];
-			var activityName = location.pathname.split('/')[3];
-			$.get('/getCrashList/' + packageName).then(function(d) {
-				me.head = ['name', 'timestamp', 'activity'];
-				me.body = [];
-				$.each(d.crashList, function(i, c) {
-					if( c.topActivity == activityName )
-						me.body.push([c.name, moment(c.timestamp).format('YYYY-MM-DD HH:MM:SS'), c.topActivity]);
-				});
-			});
 		}
 	}
 }

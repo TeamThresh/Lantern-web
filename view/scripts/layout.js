@@ -33,6 +33,7 @@ Vue.component('device-usage-graph', require('../vues/device-usage-graph.vue'));
 Vue.component('line-graph', require('../vues/line-graph.vue'));
 Vue.component('worldmap-graph', require('../vues/worldmap-graph.vue'));
 Vue.component('card', require('../vues/card.vue'));
+Vue.component('top-crash', require('../vues/top-crash.vue'));
 
 /**
  * apply Vue app
