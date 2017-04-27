@@ -23,13 +23,13 @@
 				<li class="nav-item start active">
 					<a href="javascript:;" class="nav-link nav-toggle">
 						<i class="fa fa-th-large"></i>
-						<span class="title">{{packageName}}</span>
+						<span class="title">{{app.packageName}}</span>
 						<span class="selected"></span>
 						<span class="arrow"></span>
 					</a>
 					<ul class="sub-menu">
-						<template v-for="n in packageNames">
-							<li :class="'nav-item ' + (n == packageName ? 'active' : '')">
+						<template v-for="n in app.packageNames">
+							<li :class="'nav-item ' + (n == app.packageName ? 'active' : '')">
 								<a href="#" class="nav-link" @click="changePackageName(n)">
 									<i class="fa fa-th-large"></i>
 									<span class="title">{{n.substr(0, 20)}}</span>
@@ -143,22 +143,16 @@
 	module.exports = {
 		data() {
 			return {
-				packageNames: [],
-				packageName: ''
+				app: this.$root.app
 			}
 		},
 		methods: {
 			changePackageName(name) {
-				this.packageName = name;
-				window.app.$refs.activityMap.packageName = name;
+				this.app.packageName = name;
 				window.app.$refs.activityMap.draw();
 			}
 		},
 		mounted() {
-			$.get('/api/packageNames', (data) => {
-				this.packageNames = data.packageNames;
-				this.packageName = data.packageNames[0];
-			});
 		}
 	}
 </script>

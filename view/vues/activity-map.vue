@@ -19,19 +19,14 @@ module.exports = {
     mounted: function() {
         var me = this;
 		me.drawIndex();
-		$.get('/api/packageNames', function(data) {
-            me.packageName = data.packageNames[0];
-			me.draw();
-			window.app.debug && console.log(data.packageNames);
-        });
     },
     data: function() {
         return {
             rawData: [],
-            packageName: '',
             fetchedPackageName: '',
             status: '-',
-			type: 'crash'
+			type: 'crash',
+			app: this.$root.app
         };
     },
     methods: {
@@ -102,7 +97,7 @@ module.exports = {
 
 				if( data ) {
 					me.rawData = data;
-					me.fetchedPackageName = me.packageName;
+					me.fetchedPackageName = me.app.packageName;
 					nodes = data.nodes;
 					links = data.links;
 					// for d3 version4 forceLayout
@@ -183,7 +178,6 @@ module.exports = {
 						}
 						n.usage = n.usageCount / usageMax * 100;
 						n.usage = Math.ceil(n.usage);
-						console.log(n.name, n.value, me.type);
 					});
 				} else {
 					nodes = me.rawData.nodes;
@@ -194,7 +188,7 @@ module.exports = {
                 svg.selectAll('*').remove();
 
 				// debug log
-                console.log(me.packageName, nodes, links);
+                console.log(me.app.packageName, nodes, links);
 
 				if( nodes === undefined || nodes.length == 0 ) {
 					return;
@@ -247,7 +241,7 @@ module.exports = {
                             return 0.5;
                     })
 					.style('cursor', 'pointer')
-					.on('click', function(d) { location.href = '/activitySummary/' + me.packageName + '/' + d.name; });
+					.on('click', function(d) { location.href = '/activitySummary/' + me.app.packageName + '/' + d.name; });
 
                 usageText = usageText.data(nodes).enter()
                     .append('text')
@@ -268,7 +262,7 @@ module.exports = {
                     })
 					.call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended))
 					.style('cursor', 'pointer')
-					.on('click', function(d) { location.href = '/activitySummary/' + me.packageName + '/' + d.name; });
+					.on('click', function(d) { location.href = '/activitySummary/' + me.app.packageName + '/' + d.name; });
 
                 text = text.data(nodes)
                     .enter().append('text')
@@ -336,9 +330,9 @@ module.exports = {
             /**
              * check already fetched data
              */
-            if (me.fetchedPackageName != me.packageName) {
-                me.status = me.packageName + '의 정보 가져오는 중...';
-                d3.json('/api/nodesAndLinks/' + me.packageName, work);
+            if (me.fetchedPackageName != me.app.packageName) {
+                me.status = me.app.packageName + '의 정보 가져오는 중...';
+                d3.json('/api/nodesAndLinks/' + me.app.packageName, work);
             } else {
                 work(null, me.rawData);
             }

@@ -37,4 +37,26 @@ Vue.component('card', require('../vues/card.vue'));
 /**
  * apply Vue app
  */
-window.app = new Vue({el: '#app', data: {debug: true}});
+window.app = new Vue({
+	el: '#app',
+	data: {
+		debug: true,
+		app: {
+			packageNames: [],
+			packageName: '',
+			activityName: '',
+			resourceType: ''
+		}
+	},
+	created() {
+		$.get('/api/packageNames', (data) => {
+            this.app.packageNames = data.packageNames;
+			this.app.packageName = this.app.packageNames[0];
+
+			// lazy update
+			if( this.$refs.activityMap ) {
+				this.$refs.activityMap.draw();
+			}
+        });
+	}
+});
