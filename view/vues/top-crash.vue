@@ -9,15 +9,22 @@ module.exports = {
 			app: this.$root.app
 		}
 	},
-	mounted() {
-		$.get(`/api/topError/${app.packageName}`).then((res) => {
-			let head = ['rank', 'count', 'name'];
-			let body = [];
-			res.error_rank.forEach((d, idx) => {
-				body.push([idx, d.count, d.name]);
+	watch: {
+		'app.packageName': function(d) {
+			$.get(`/api/topError/${this.app.packageName}`).then((res) => {
+				let head = ['rank', 'count', 'name'];
+				let body = [];
+				console.log(res);
+				res.error_rank.forEach((d, idx) => {
+					body.push([idx + 1, d.count, d.crash_name]);
+				});
+				this.$refs.table.head = head;
+				this.$refs.table.body = body;
+				console.log(head, body);
 			});
-			this.$refs.table.data = {head: head, body: body};
-		});
+		}
+	},
+	mounted() {
 	}
 }
 </script>

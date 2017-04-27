@@ -19,12 +19,13 @@ module.exports = {
 			body: []
 		};
 	},
-	watch: {
-		'data': function(d) {
-			this.head = d.head;
-			this.body = d.body;
-		}
-	},
+	// watch: {
+	// 	'data': function(d) {
+	// 		// this.head = d.head;
+	// 		// this.body = d.body;
+	// 		console.log(d);
+	// 	}
+	// },
 	methods: {
 		transformData: function(data) {
 			/**
