@@ -63,11 +63,11 @@ module.exports = {
             var height = $('.activity-map > svg').height();
             var simulation = d3.forceSimulation()
 								.force('link', d3.forceLink().id(function(d) { return d.id; }))
-								.force('charge', d3.forceManyBody().strength(-500))
+								.force('charge', d3.forceManyBody().strength(-100))
 								.force('center', d3.forceCenter(width / 2 , height / 2))
 								.force('collide', d3.forceCollide().radius(function(d) { return d.r * 2; }))
 								.velocityDecay(0.8);
-			var svg = d3.select('.activity-map > svg.map');
+			let svg = d3.select(this.$el).select('svg.map');
 
 			function dragstarted(d) {
 	            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
@@ -113,6 +113,10 @@ module.exports = {
 						n.connectionCount = 0;
 						n.connectionAsSourceCount = 0;
 						n.connectionAsTargetCount = 0;
+						n.cx = width / 2;
+						n.cy = height / 2;
+						n.x = n.cx;
+						n.y = n.cy;
 					});
 					// self prerequite link delete
 					for( var i = 0; i < links.length; i++ ) {

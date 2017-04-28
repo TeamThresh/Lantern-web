@@ -14,13 +14,11 @@ module.exports = {
 			$.get(`/api/topError/${this.app.packageName}`).then((res) => {
 				let head = ['rank', 'count', 'name'];
 				let body = [];
-				console.log(res);
 				res.error_rank.forEach((d, idx) => {
 					body.push([idx + 1, d.count, d.crash_name]);
 				});
 				this.$refs.table.head = head;
 				this.$refs.table.body = body;
-				console.log(head, body);
 			});
 		}
 	},

@@ -149,7 +149,6 @@
 		methods: {
 			changePackageName(name) {
 				this.app.packageName = name;
-				window.app.$refs.activityMap.draw();
 			}
 		},
 		mounted() {
