@@ -63,20 +63,11 @@ html(lang='en')
 			top-header
 			div.clearfix
 			div.page-container
-				left-header
-				div.page-content-wrapper
-					div.page-content
-						div.page-head
-							div.page-title
-								h1
-									block title
-									| &nbsp;
-									small
-										block desc
-										| &nbsp;
-							block page-toolbar
-								page-toolbar
-						br
+				div.container-fluid
+					br
+					div.row
+						div.col-xs-12.col-sm-4
+							filter-bar
 						block content
 			right-header
 			bottom-header

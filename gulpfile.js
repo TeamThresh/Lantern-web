@@ -30,13 +30,13 @@ gulp.task('bundling', function() {
 
     var stream = gulp.src(src)
             .pipe(plumber())
-			.pipe(babel({presets: ['es2015']}))
             .pipe(named())
             .pipe(webpack({
                 watch: true,
                 context: __dirname + '/view/assets/bundles', // file loader가 view를 [path]로 인식해버려서..
                 module: {
                     loaders: [
+												{test: /\.js$/, loader: 'babel', query: {presets: ['es2015']}},
                         {test: /\.(scss|sass|css)$/, loader: 'style!css!sass'},
                         {test: /\.vue$/, loader: 'vue'},
                         {test: /\.(png|eot|woff2|woff|ttf|svg)/, loader: 'file?name=[path][name].[ext]&publicPath=/'}

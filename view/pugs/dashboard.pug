@@ -1,22 +1,14 @@
 extends layout.pug
 
-block title
-	span(style='color: #fff;') Activity Map
-
-block desc
-	| shows Activities and its relations in the form of map
-
-block page-toolbar
-
 block content
-	card.col-lg-8.col-sm-12
+	card.col-xs-12.col-sm-5
 		activity-map(ref='activityMap')
-	div.col-lg-4.col-sm-12
-		card(title='Device / OS')
-			device-usage-graph
-		card.col-lg-6.a(title='접속률')
+	div.col-xs-12.col-sm-3
+		//- card(title='Device / OS')
+		//- 	device-usage-graph
+		card.col-xs-6.a(title='접속률')
 			line-graph
-		card.col-lg-6.a(title='복귀율')
+		card.col-xs-6.a(title='복귀율')
 			line-graph
 		card(title='World Outbound Call')
 			worldmap-graph

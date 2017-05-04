@@ -34,6 +34,10 @@ Vue.component('line-graph', require('../vues/line-graph.vue'));
 Vue.component('worldmap-graph', require('../vues/worldmap-graph.vue'));
 Vue.component('card', require('../vues/card.vue'));
 Vue.component('top-crash', require('../vues/top-crash.vue'));
+// Vue.component('filter-bar', require('../vues/filter-bar.vue'));
+import FilterBar from '../vues/filter-bar.vue'
+Vue.component('filter-bar', FilterBar)
+console.log(FilterBar)
 
 /**
  * apply Vue app

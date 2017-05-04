@@ -430,6 +430,8 @@ module.exports = {
 		display: inline-block;
 		background-color: #2e3139;
 		vertical-align: middle;
+    position: absolute;
+    right: 0;
 	}
 }
 </style>

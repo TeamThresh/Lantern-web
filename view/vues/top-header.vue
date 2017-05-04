@@ -8,7 +8,7 @@
                 <a href="index.html">
                     <img src="/assets/theme2/layouts/layout4/img/logo-light.png" alt="logo" class="logo-default" />
                 </a>
-                <div class="menu-toggler sidebar-toggler">
+                <div class="menu-toggler sidebar-toggler hide">
 					<span></span>
                     <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
                 </div>
