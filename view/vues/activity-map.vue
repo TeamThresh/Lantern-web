@@ -1,16 +1,16 @@
 <template lang='pug'>
 div.activity-map
-	div
-		a.btn.grey-mint.active(@click='changeType("crash", $event)')
-			| Crash
-			i.icon-wrench
-		a.btn.grey-mint(@click='changeType("resource", $event)')
-			| Resource
-			i.icon-layers
-		a.btn.grey-mint(@click='changeType("network", $event)')
-			| Network
-			i.icon-feed
-		svg.index
+	//- div
+	//- 	a.btn.grey-mint.active(@click='changeType("crash", $event)')
+	//- 		| Crash
+	//- 		i.icon-wrench
+	//- 	a.btn.grey-mint(@click='changeType("resource", $event)')
+	//- 		| Resource
+	//- 		i.icon-layers
+	//- 	a.btn.grey-mint(@click='changeType("network", $event)')
+	//- 		| Network
+	//- 		i.icon-feed
+	//- 	svg.index
 	svg.map
 </template>
 
@@ -386,7 +386,7 @@ module.exports = {
     svg.map {
         width: 100%;
         height: 700px;
-        background-color: #2e3139;
+        background-color: #110f11;
     }
 
     .node {

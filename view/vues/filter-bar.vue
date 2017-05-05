@@ -1,6 +1,5 @@
 <template lang="pug">
-card
-	span hello
+card(title='filter bar')
 </template>
 
 <script>

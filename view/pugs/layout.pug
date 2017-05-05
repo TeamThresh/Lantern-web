@@ -42,14 +42,17 @@ html(lang='en')
 				/*height: 100% !important;*/
 			}
 			body {
-				background-color: #364150 !important;
+				background-color: #110f11 !important;
+			}
+			.page-header.navbar {
+				background-color: #2e3139 !important;
 			}
 			div.page-content-wrapper {
-				background-color: #1b1c2e !important;
+				background-color: #110f11 !important;
 			}
 			div.page-content {
 				padding: 15px 20px 10px 20px !important;
-				background-color: #1b1c2e !important;
+				background-color: #110f11 !important;
 			}
 			div.page-title {
 				margin: 0px 0px 20px 0px !important;
@@ -67,8 +70,12 @@ html(lang='en')
 					br
 					div.row
 						div.col-xs-12.col-sm-4
+							app-status
 							filter-bar
-						block content
+						div.col-xs-12.col-sm-8
+							h4.title
+								block title
+							block content
 			right-header
 			bottom-header
 		//- BEGIN CORE PLUGINS

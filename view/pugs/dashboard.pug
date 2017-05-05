@@ -1,18 +1,22 @@
 extends layout.pug
 
+block title
+	span.font-white(style='font-weight: 300;') Activity Map
+
 block content
-	card.col-xs-12.col-sm-5
+	div.col-xs-12.col-sm-12
 		activity-map(ref='activityMap')
-	div.col-xs-12.col-sm-3
+	div.col-xs-12.col-sm-12
 		//- card(title='Device / OS')
 		//- 	device-usage-graph
-		card.col-xs-6.a(title='접속률')
-			line-graph
-		card.col-xs-6.a(title='복귀율')
-			line-graph
-		card(title='World Outbound Call')
+		div.col-xs-2
+			card.col-xs-6.a(title='접속률')
+				line-graph
+			card.col-xs-6.a(title='복귀율')
+				line-graph
+		card.col-xs-5(title='World Outbound Call')
 			worldmap-graph
-		card(title='Top Error')
+		card.col-xs-5(title='Top Error')
 			top-crash
 block style
 	style.
