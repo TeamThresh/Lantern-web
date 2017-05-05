@@ -7,17 +7,18 @@ block content
 	div.col-xs-12.col-sm-12
 		activity-map(ref='activityMap')
 	div.col-xs-12.col-sm-12
-		//- card(title='Device / OS')
-		//- 	device-usage-graph
-		div.col-xs-2
-			card.col-xs-6.a(title='접속률')
-				line-graph
-			card.col-xs-6.a(title='복귀율')
-				line-graph
-		card.col-xs-5(title='World Outbound Call')
-			worldmap-graph
-		card.col-xs-5(title='Top Error')
-			top-crash
+		div.row
+			div.col-xs-4
+				card.col-xs-12.a(title='접속률')
+					line-graph
+				card.col-xs-12.a(title='복귀율')
+					line-graph
+			div.col-xs-4
+				card(title='World Outbound Call')
+					worldmap-graph
+			div.col-xs-4
+				card(title='Top Error')
+					top-crash
 block style
 	style.
 		.page-content > div {

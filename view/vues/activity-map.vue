@@ -385,7 +385,7 @@ module.exports = {
 
     svg.map {
         width: 100%;
-        height: 700px;
+        height: 450px;
         background-color: #110f11;
     }
 
