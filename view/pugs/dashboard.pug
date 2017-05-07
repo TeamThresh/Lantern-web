@@ -7,17 +7,17 @@ block content
 	div.col-xs-12.col-sm-12
 		activity-map(ref='activityMap')
 	div.col-xs-12.col-sm-12
-		div.row
-			div.col-xs-4
-				card.col-xs-12.a(title='접속률')
+		div.m-grid.m-grid-row
+			div.m-grid-col.m-grid-col-xs-3.a
+				card(title='접속률' style='margin: 0;')
 					line-graph
-				card.col-xs-12.a(title='복귀율')
+				card(title='복귀율')
 					line-graph
-			div.col-xs-4
-				card(title='World Outbound Call')
+			div.m-grid-col.m-grid-col-xs-4.a
+				card(title='World Outbound Call' style='height: 378px;')
 					worldmap-graph
-			div.col-xs-4
-				card(title='Top Error')
+			div.m-grid-col.m-grid-col-xs-5.a
+				card(title='Top Error' style='height: 378px;')
 					top-crash
 block style
 	style.
@@ -26,7 +26,6 @@ block style
 			vertical-align: top;
 		}
 		.a {
-			display: inline-block; 
-			float: none !important;
+			padding: 0 7.5px;
 		}
 prepend script

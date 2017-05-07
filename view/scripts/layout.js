@@ -36,6 +36,7 @@ Vue.component('card', require('../vues/card.vue'));
 Vue.component('top-crash', require('../vues/top-crash.vue'));
 Vue.component('filter-bar', require('../vues/filter-bar.vue'));
 Vue.component('app-status', require('../vues/app-status.vue'));
+Vue.component('filter-layer', require('../vues/filter-layer.vue'));
 
 /**
  * apply Vue app
