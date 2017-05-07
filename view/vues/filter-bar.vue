@@ -18,41 +18,26 @@ div.filter-bar
 		a.type-filter.btn.grey-mint
 			| Network
 			i.icon-feed
-	div.layer
-		div.header
-			i.fa.fa-android
-			div Android
-			div.see-all-btn See All
-		div.content
-			svg
-	div.layer
-		div.header
-			i.fa.fa-android
-			div Android
-			div.see-all-btn See All
-		div.content
-			svg
+	filter-layer(title='Android')
+		i.fa.fa-android(slot='icon')
+	filter-layer(title='OS')
+		i.fa.fa-terminal(slot='icon')
+	filter-layer(title='Device')
+		i.fa.fa-mobile(slot='icon')
+	filter-layer(title='Location')
+		i.fa.fa-globe(slot='icon')
 </template>
 
 <script>
 module.exports = {
 	methods: {
-		drawTest() {
-			let svg = d3.select(this.$el).select('svg')
 
-			for( let i=0; i<20; i++ ) {
-				svg.append('circle').attr('class', 'node good')
-					.attr('cx', 10).attr('cy', 20 + i * 10).attr('r', '5')
-			}
-		}
 	},
 	mounted() {
 		$(this.$el).find('.selectpicker').selectpicker({
 			style: 'btn',
 			size: 4
 		})
-
-		this.drawTest()
 	}
 }
 </script>
@@ -93,67 +78,6 @@ div.filter-bar {
 				float: right;
 				vertical-align: middle;
 				line-height: inherit;
-			}
-		}
-	}
-
-	div.layer {
-		height: 121px;
-		display: flex;
-
-		&:not(:first-child) {
-			margin: 10px 0 0 0;
-		}
-
-		div.header {
-			width: 70px;
-			height: 100%;
-			flex: none;
-			// display: inline-block;
-			background-color: #23252d;
-			text-align: center;
-			color: white;
-
-			i {
-				margin: 33px 0 5px 0;
-				font-size: 20px;
-				color: white;
-				vertical-align: middle;
-			}
-
-			.see-all-btn {
-				border: 1px solid #787878;
-				margin: 28px auto 0 auto;
-				width: 60px;
-				background-color: #2e3139;
-				color: #eee;
-				font-size: 11px;
-				text-align: center;
-			}
-		}
-
-		div.content {
-			margin: 0 0 0 2px;
-			width: 100%;
-			height: 100%;
-			// display: inline-block;
-			background-color: #23252d;
-
-			svg {
-				width: 100%;
-				height: 100%;
-
-				.node {
-					&.good {
-						fill: #228ae6;
-					}
-					&.soso {
-						fill: #f59f00;
-					}
-					&.bad {
-						fill: #d9480f;
-					}
-				}
 			}
 		}
 	}
