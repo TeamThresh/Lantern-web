@@ -26,6 +26,7 @@ div.filter-bar
 		i.fa.fa-mobile(slot='icon')
 	filter-layer(title='Location')
 		i.fa.fa-globe(slot='icon')
+	filter-group
 </template>
 
 <script>

@@ -37,6 +37,7 @@ Vue.component('top-crash', require('../vues/top-crash.vue'));
 Vue.component('filter-bar', require('../vues/filter-bar.vue'));
 Vue.component('app-status', require('../vues/app-status.vue'));
 Vue.component('filter-layer', require('../vues/filter-layer.vue'));
+Vue.component('filter-group', require('../vues/filter-group.vue'));
 
 /**
  * apply Vue app
