@@ -20,16 +20,17 @@ module.exports = {
 	},
 	methods: {
 		createSampleData() {
-			this.nodes = []
+			let nodes = []
 			for( let i=0; i<19; i++ ) {
-				this.nodes.push({
+				nodes.push({
 					name: 'asdfasdf',
 					sizeValue: Math.floor(Math.random() * 100) + 1,
 					colorValue: Math.floor(Math.random() * 3) + 1
 				})
 			}
+			return nodes
 		},
-		drawTest() {
+		draw(nodes) {
 			let svg = d3.select(this.$el).select('svg')
 			let width = $(svg.node()).width()
 			let height = $(svg.node()).height()
@@ -37,9 +38,7 @@ module.exports = {
 			let nodeHeight = height / 2
 			let sizeScale = d3.scaleLinear().domain([1, 100]).range([3, 15])
 
-			this.createSampleData()
-
-			this.nodes.forEach((node, idx) => {
+			nodes.forEach((node, idx) => {
 				let cx = (idx % 5) * nodeWidth + nodeWidth / 2
 				let cy = Math.floor(idx / 5) * nodeHeight + nodeHeight / 2 - 10
 				let color = ''
@@ -61,36 +60,79 @@ module.exports = {
 					.attr('x', cx).attr('y', cy + 30).text(node.name)
 			})
 		},
+		clear() {
+			let svg = d3.select(this.$el).select('svg')
+			svg.selectAll('*').remove()
+		},
+		makeOthers(nodes) {
+			if( nodes.length <= 10 ) {
+				return nodes
+			}
+
+			// for deep copy
+			let nodes2 = JSON.parse(JSON.stringify(nodes))
+			nodes2 = nodes2.slice(0, 10)
+			let node = nodes2[9]
+			node.name = 'Others'
+
+			for( let i=10; i<nodes2.length; i++ ) {
+				node.sizeValue += nodes2[i].sizeValue
+				node.colorValue += nodes2[i].colorValue
+				node.sizeValue = node.sizeValue > 100 ? 100 : node.sizeValue
+				node.colorValue = node.colorValue > 3 ? 3 : node.colorValue
+			}
+			nodes2[9] = node
+			console.log(nodes, nodes2)
+			return nodes2
+		},
 		seeAll(e) {
 			let isExpanded = $(this.$el).find('.content').hasClass('expanded')
+
+			if( ! isExpanded ) {
+				this.clear()
+				this.draw(this.nodes)
+			}
 
 			$('div.layer').toArray().forEach((div, idx) => {
 				let content = $(div).find('.content')
 				let dim = $(div).find('.dim')
+				let svg = $(div).find('svg')
 				let btn = $(div).find('.see-all-btn')
 				let btnIcon = $(btn).find('i')
 
 				if( isExpanded ) {
 					content.removeClass('expanded')
 					dim.addClass('hidden')
+					svg.removeClass('expanded')
 					btn.removeClass('active')
 					btnIcon.removeClass('fa-chevron-up').addClass('fa-chevron-down')
-				} else if( div == this.$el ) {
-					content.addClass('expanded')
-					dim.addClass('hidden')
-					btn.addClass('active')
-					btnIcon.addClass('fa-chevron-up').removeClass('fa-chevron-down')
 				} else {
-					content.removeClass('expanded')
-					dim.removeClass('hidden')
-					btn.removeClass('active')
-					btnIcon.removeClass('fa-chevron-up').addClass('fa-chevron-down')
+					if( div == this.$el ) {
+						content.addClass('expanded')
+						dim.addClass('hidden')
+						svg.addClass('expanded')
+						btn.addClass('active')
+						btnIcon.addClass('fa-chevron-up').removeClass('fa-chevron-down')
+					} else {
+						content.removeClass('expanded')
+						dim.removeClass('hidden')
+						svg.removeClass('expanded')
+						btn.removeClass('active')
+						btnIcon.removeClass('fa-chevron-up').addClass('fa-chevron-down')
+					}
 				}
 			})
+
+			// svg가 좁아진 이후에 그려야한다. 자동으로 height width를 계산하기 때문
+			if( isExpanded ) {
+				this.clear()
+				this.draw(this.makeOthers(this.nodes))
+			}
 		}
 	},
 	mounted() {
-		this.drawTest()
+		this.nodes = this.createSampleData()
+		this.draw(this.makeOthers(this.nodes))
 	}
 }
 </script>
@@ -148,11 +190,16 @@ div.layer {
 			height: 200%;
 			position: relative;
 			z-index: 950903;
+			overflow-y: scroll;
 		}
 
 		svg {
 			width: 100%;
 			height: 100%;
+
+			&.expanded {
+				height: 240px;
+			}
 
 			.node {
 				&.good {
