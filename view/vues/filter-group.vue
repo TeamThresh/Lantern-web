@@ -16,6 +16,14 @@ div.filter-group
 
 <script>
 module.exports = {
+	data() {
+		return {
+			groups: []
+		}
+	},
+	mounted() {
+
+	}
 }
 </script>
 
