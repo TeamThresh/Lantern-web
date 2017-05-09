@@ -2,27 +2,42 @@
 div.filter-group
 	div.title Filter Group
 	div.input
-		input.form-control(type=text placeholder='...filter name')
-		button.btn.btn-success SAVE
+		input.form-control(type=text placeholder='...filter name' v-model='tmpGroupName')
+		button.btn.btn-success(@click='createGroup') SAVE
 	div.groups
-		span.group.hvr-bounce-in 차부장님용
-		span.group.hvr-bounce-in 게임폐인들꺼
-		span.group.hvr-bounce-in 매크로 의심
-		span.group.hvr-bounce-in 동북아친구들
-		span.group.hvr-bounce-in 피쉬앤칩스 Awkkk
-		span.group.hvr-bounce-in 헤이브루클린~
-		span.group.hvr-bounce-in 의경친구들1090기
+		span.group.hvr-bounce-in(v-for='group in groups') {{ group.name }}
 </template>
 
 <script>
 module.exports = {
 	data() {
 		return {
-			groups: []
+			groups: [],
+			tmpGroupName: ''
+		}
+	},
+	methods: {
+		createSampleGroups() {
+			let max = Math.floor(Math.random() * 10) + 1
+			let groups = []
+			for( let i=0; i<max; i++ ) {
+				groups.push({
+					hash: 'ad8f7ad8f7ad78fa',
+					name: `group${i + 1}`
+				})
+			}
+			return groups
+		},
+		createGroup() {
+			this.groups.push({
+				hash: 'tmp',
+				name: this.tmpGroupName
+			})
+			this.tmpGroupName = ''
 		}
 	},
 	mounted() {
-
+		this.groups = this.createSampleGroups()
 	}
 }
 </script>

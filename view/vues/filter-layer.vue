@@ -54,10 +54,14 @@ module.exports = {
 						break
 				}
 				let r = sizeScale(node.sizeValue)
-				svg.append('circle').attr('class', `node ${color}`)
+				let g = svg.append('g')
+				g.append('circle').attr('class', `node ${color}`)
 					.attr('cx', cx).attr('cy', cy).attr('r', r)
-				svg.append('text').attr('class', 'text')
+				g.append('text').attr('class', 'text')
 					.attr('x', cx).attr('y', cy + 30).text(node.name)
+				g.on('click', function() {
+					console.log(node)
+				})
 			})
 		},
 		clear() {
@@ -82,7 +86,6 @@ module.exports = {
 				node.colorValue = node.colorValue > 3 ? 3 : node.colorValue
 			}
 			nodes2[9] = node
-			console.log(nodes, nodes2)
 			return nodes2
 		},
 		seeAll(e) {
