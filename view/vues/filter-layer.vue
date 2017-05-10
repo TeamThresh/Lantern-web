@@ -15,8 +15,8 @@ module.exports = {
 	props: ['title'],
 	data() {
 		return {
-			nodes: [],
-			app: this.$root.app
+			app: this.$root.app,
+			nodes: []
 		}
 	},
 	watch: {
@@ -37,6 +37,16 @@ module.exports = {
 			}
 			return nodes
 		},
+		filterUpdate() {
+			let filters = this.app.filters[this.title.toLowerCase()]
+			this.nodes.forEach((node) => {
+				if( node.selected && filters.indexOf(node.name) < 0 ) {
+					filters.push(node.name)
+				} else if( ! node.selected && filters.indexOf(node.name) > -1 ) {
+					filters.splice(filters.indexOf(node.name), 1)
+				}
+			})
+		},
 		fetchData() {
 			return new Promise((s, f) => {
 				switch( this.title.toLowerCase() ) {
@@ -55,6 +65,7 @@ module.exports = {
 								} else {
 									node.colorValue = 1
 								}
+								node.selected = false
 							})
 							res.forEach((node, idx) => {
 								node.sizeValue = (node.usageCount / max) * 100
@@ -78,6 +89,7 @@ module.exports = {
 								} else {
 									node.colorValue = 1
 								}
+								node.selected = false
 							})
 							res.forEach((node, idx) => {
 								node.sizeValue = (node.usageCount / max) * 100
@@ -101,6 +113,7 @@ module.exports = {
 								} else {
 									node.colorValue = 1
 								}
+								node.selected = false
 							})
 							res.forEach((node, idx) => {
 								node.sizeValue = (node.usageCount / max) * 100
@@ -124,6 +137,7 @@ module.exports = {
 								} else {
 									node.colorValue = 1
 								}
+								node.selected = false
 							})
 							res.forEach((node, idx) => {
 								node.sizeValue = (node.usageCount / max) * 100
@@ -184,6 +198,8 @@ module.exports = {
 						n.selected = ! n.selected
 					}
 					$(this).find('circle').toggleClass('selected')
+
+					me.filterUpdate()
 				})
 			})
 		},

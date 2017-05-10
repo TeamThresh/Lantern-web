@@ -50,7 +50,13 @@ window.app = new Vue({
 			packageNames: [],
 			packageName: '',
 			activityName: '',
-			resourceType: ''
+			resourceType: '',
+			filters: {
+				location: [],
+				device: [],
+				os: [],
+				android: []
+			}
 		}
 	},
 	created() {

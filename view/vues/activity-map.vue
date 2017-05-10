@@ -1,16 +1,5 @@
 <template lang='pug'>
 div.activity-map
-	//- div
-	//- 	a.btn.grey-mint.active(@click='changeType("crash", $event)')
-	//- 		| Crash
-	//- 		i.icon-wrench
-	//- 	a.btn.grey-mint(@click='changeType("resource", $event)')
-	//- 		| Resource
-	//- 		i.icon-layers
-	//- 	a.btn.grey-mint(@click='changeType("network", $event)')
-	//- 		| Network
-	//- 		i.icon-feed
-	//- 	svg.index
 	svg.map
 </template>
 
@@ -32,6 +21,12 @@ module.exports = {
 	watch: {
 		'app.packageName': function(d) {
 			this.draw();
+		},
+		'app.filters': {
+			handler: function(v, ov) {
+				this.draw()
+			},
+			deep: true
 		}
 	},
     methods: {
@@ -336,16 +331,41 @@ module.exports = {
                 }
             };
 
-            /**
-             * check already fetched data
-             */
-            if (me.fetchedPackageName != me.app.packageName) {
-                me.status = me.app.packageName + '의 정보 가져오는 중...';
-                d3.json('/api/nodesAndLinks/' + me.app.packageName, work);
-            } else {
-                work(null, me.rawData);
-            }
+			let location = ''
+			this.app.filters.location.forEach((l) => {
+				location += l + ','
+			})
 
+			let device = ''
+			this.app.filters.device.forEach((d) => {
+				device += d + ','
+			})
+
+			let os = ''
+			this.app.filters.os.forEach((d) => {
+				os += d + ','
+			})
+
+			let android = ''
+			this.app.filters.android.forEach((d) => {
+				android += d + ','
+			})
+
+			let query = '?'
+			if( location != '' ) {
+				query += `&location=${location}`
+			}
+			if( device != '' ) {
+				query += `&device=${device}`
+			}
+			if( os != '' ) {
+				query += `&os=${os}`
+			}
+			if( android != '' ) {
+				query += `&activity=${android}`
+			}
+
+            d3.json('/api/nodesAndLinks/' + me.app.packageName + query, work);
         },
         prevData: function() {
             if (this.rawDataIndex > 0) {
