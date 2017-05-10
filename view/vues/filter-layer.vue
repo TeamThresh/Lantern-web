@@ -16,12 +16,27 @@ module.exports = {
 	data() {
 		return {
 			app: this.$root.app,
-			nodes: []
+			nodes: [],
+			expanded: false
 		}
 	},
 	watch: {
 		'app.packageName': function(v, ov) {
 			this.fetchData().then(() => this.draw(this.makeOthers(this.nodes)))
+		},
+		'app.filters': {
+			handler: function(v, ov) {
+				this.fetchData().then(() => {
+					let filters = this.app.filters[this.title.toLowerCase()]
+					// select mark
+					this.nodes.forEach((node) => {
+						node.selected = filters.indexOf(node.name) > -1
+					})
+					this.clear()
+					this.draw(this.expanded ? this.nodes : this.makeOthers(this.nodes))
+				})
+			},
+			deep: true
 		}
 	},
 	methods: {
@@ -49,9 +64,46 @@ module.exports = {
 		},
 		fetchData() {
 			return new Promise((s, f) => {
+				// filter make
+				let location = ''
+				this.app.filters.location.forEach((l) => {
+					location += l + ','
+				})
+
+				let device = ''
+				this.app.filters.device.forEach((d) => {
+					device += d + ','
+				})
+
+				let os = ''
+				this.app.filters.os.forEach((d) => {
+					os += d + ','
+				})
+
+				let android = ''
+				this.app.filters.android.forEach((d) => {
+					android += d + ','
+				})
+
+				let query = '?'
+				if( location != '' ) {
+					query += `&location=${location}`
+				}
+				if( device != '' ) {
+					query += `&device=${device}`
+				}
+				if( os != '' ) {
+					query += `&os=${os}`
+				}
+				if( android != '' ) {
+					query += `&activity=${android}`
+				}
+
+				// nodes clear
+				this.nodes = []
 				switch( this.title.toLowerCase() ) {
 					case 'location':
-						$.get(`/api/statusOfLocation/${this.app.packageName}`).then((res) => {
+						$.get(`/api/statusOfLocation/${this.app.packageName}${query}`).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
 							res.forEach((node, idx) => {
@@ -75,7 +127,7 @@ module.exports = {
 						})
 						break
 					case 'device':
-						$.get(`/api/statusOfDevice/${this.app.packageName}`).then((res) => {
+						$.get(`/api/statusOfDevice/${this.app.packageName}${query}`).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
 							res.forEach((node, idx) => {
@@ -99,7 +151,7 @@ module.exports = {
 						})
 						break
 					case 'os':
-						$.get(`/api/statusOfOs/${this.app.packageName}`).then((res) => {
+						$.get(`/api/statusOfOs/${this.app.packageName}${query}`).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
 							res.forEach((node, idx) => {
@@ -123,7 +175,7 @@ module.exports = {
 						})
 						break
 					case 'android':
-						$.get(`/api/statusOfActivity/${this.app.packageName}`).then((res) => {
+						$.get(`/api/statusOfActivity/${this.app.packageName}${query}`).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
 							res.forEach((node, idx) => {
@@ -188,10 +240,12 @@ module.exports = {
 
 				let me = this;
 				g.on('click', function() {
-					// if others clicked
+					// others clicked
 					if( nodes.length == 10 && nodes.indexOf(node) == 9 ) {
+						// others should check its selection explicitly
+						let selected = $(this).find('circle').hasClass('selected')
 						for( let i=9; i<me.nodes.length; i++ ) {
-							me.nodes[i].selected = ! node.selected
+							me.nodes[i].selected = ! selected
 						}
 					} else {
 						let n = me.nodes[nodes.indexOf(node)]
@@ -230,6 +284,7 @@ module.exports = {
 		},
 		seeAll(e) {
 			let isExpanded = $(this.$el).find('.content').hasClass('expanded')
+			this.expanded = ! isExpanded
 
 			if( ! isExpanded ) {
 				this.clear()

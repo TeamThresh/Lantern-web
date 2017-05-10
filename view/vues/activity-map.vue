@@ -92,6 +92,10 @@ module.exports = {
             var me = this;
 
             var work = function(err, data) {
+				if( err || data['msg'] == 'No data' ) {
+					svg.selectAll('*').remove()
+				}
+
                 if (data instanceof Array)
                     data = data[0];
 
@@ -118,6 +122,21 @@ module.exports = {
 						if( links[i].source == links[i].target ) {
 							links.splice(i, 1);
 							i--;
+							continue
+						}
+						// disconnected link should be removed
+						let sourceNodeExist = false
+						let targetNodeExist = false
+						nodes.forEach((n) => {
+							if( n.name == links[i].source ) {
+								sourceNodeExist = true
+							} else if( n.name == links[i].target) {
+								targetNodeExist = true
+							}
+						})
+						if( ! (sourceNodeExist && targetNodeExist) ) {
+							links.splice(i, 1)
+							i--
 						}
 					}
 					// the most linked node is the center of graph
@@ -207,8 +226,6 @@ module.exports = {
                     .enter().append("line")
                     .attr("class", "link")
 					.attr('stroke', function(d) {
-						if( nodes[d.targetIndex] == undefined )
-							console.log(d);
 						var value = Math.min(nodes[d.sourceIndex].value, nodes[d.targetIndex].value);
 						if( value == 1 )
 							return color[1];
