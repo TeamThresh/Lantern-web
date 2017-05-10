@@ -17,7 +17,8 @@ module.exports = {
 		return {
 			app: this.$root.app,
 			nodes: [],
-			expanded: false
+			expanded: false,
+			lock: false
 		}
 	},
 	watch: {
@@ -26,6 +27,11 @@ module.exports = {
 		},
 		'app.filters': {
 			handler: function(v, ov) {
+				// not mine check
+				if( this.lock ) {
+					return
+				}
+
 				this.fetchData().then(() => {
 					let filters = this.app.filters[this.title.toLowerCase()]
 					// select mark
@@ -53,6 +59,7 @@ module.exports = {
 			return nodes
 		},
 		filterUpdate() {
+			this.lock = true
 			let filters = this.app.filters[this.title.toLowerCase()]
 			this.nodes.forEach((node) => {
 				if( node.selected && filters.indexOf(node.name) < 0 ) {
@@ -84,6 +91,22 @@ module.exports = {
 				this.app.filters.android.forEach((d) => {
 					android += d + ','
 				})
+
+				// except filter for myself
+				// switch( this.title.toLowerCase() ) {
+				// 	case 'location':
+				// 		location = ''
+				// 		break
+				// 	case 'device':
+				// 		device = ''
+				// 		break
+				// 	case 'os':
+				// 		os = ''
+				// 		break
+				// 	case 'android':
+				// 		android = ''
+				// 		break
+				// }
 
 				let query = '?'
 				if( location != '' ) {
@@ -251,6 +274,7 @@ module.exports = {
 						let n = me.nodes[nodes.indexOf(node)]
 						n.selected = ! n.selected
 					}
+
 					$(this).find('circle').toggleClass('selected')
 
 					me.filterUpdate()
