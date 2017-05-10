@@ -15,7 +15,13 @@ module.exports = {
 	props: ['title'],
 	data() {
 		return {
-			nodes: []
+			nodes: [],
+			app: this.$root.app
+		}
+	},
+	watch: {
+		'app.packageName': function(v, ov) {
+			this.fetchData().then(() => this.draw(this.makeOthers(this.nodes)))
 		}
 	},
 	methods: {
@@ -31,6 +37,104 @@ module.exports = {
 			}
 			return nodes
 		},
+		fetchData() {
+			return new Promise((s, f) => {
+				switch( this.title.toLowerCase() ) {
+					case 'location':
+						$.get(`/api/statusOfLocation/${this.app.packageName}`).then((res) => {
+							res = res.reverse() // 서버에서 순서가 거꾸로온다
+							let max = Number.MIN_VALUE
+							res.forEach((node, idx) => {
+								max = node.usageCount > max ? node.usageCount : max
+								node.name = node.locationCode
+								let p = node.crashCount / node.usageCount
+								if( p == 0 ) {
+									node.colorValue = 3
+								} else if( p < 0.03 ) {
+									node.colorValue = 2
+								} else {
+									node.colorValue = 1
+								}
+							})
+							res.forEach((node, idx) => {
+								node.sizeValue = (node.usageCount / max) * 100
+								this.nodes.push(node)
+							})
+							s()
+						})
+						break
+					case 'device':
+						$.get(`/api/statusOfDevice/${this.app.packageName}`).then((res) => {
+							res = res.reverse() // 서버에서 순서가 거꾸로온다
+							let max = Number.MIN_VALUE
+							res.forEach((node, idx) => {
+								max = node.usageCount > max ? node.usageCount : max
+								node.name = node.deviceName
+								let p = node.crashCount / node.usageCount
+								if( p == 0 ) {
+									node.colorValue = 3
+								} else if( p < 0.03 ) {
+									node.colorValue = 2
+								} else {
+									node.colorValue = 1
+								}
+							})
+							res.forEach((node, idx) => {
+								node.sizeValue = (node.usageCount / max) * 100
+								this.nodes.push(node)
+							})
+							s()
+						})
+						break
+					case 'os':
+						$.get(`/api/statusOfOs/${this.app.packageName}`).then((res) => {
+							res = res.reverse() // 서버에서 순서가 거꾸로온다
+							let max = Number.MIN_VALUE
+							res.forEach((node, idx) => {
+								max = node.usageCount > max ? node.usageCount : max
+								node.name = node.osVersion
+								let p = node.crashCount / node.usageCount
+								if( p == 0 ) {
+									node.colorValue = 3
+								} else if( p < 0.03 ) {
+									node.colorValue = 2
+								} else {
+									node.colorValue = 1
+								}
+							})
+							res.forEach((node, idx) => {
+								node.sizeValue = (node.usageCount / max) * 100
+								this.nodes.push(node)
+							})
+							s()
+						})
+						break
+					case 'android':
+						$.get(`/api/statusOfActivity/${this.app.packageName}`).then((res) => {
+							res = res.reverse() // 서버에서 순서가 거꾸로온다
+							let max = Number.MIN_VALUE
+							res.forEach((node, idx) => {
+								max = node.usageCount > max ? node.usageCount : max
+								node.name = node.activityName
+								let p = node.crashCount / node.usageCount
+								if( p == 0 ) {
+									node.colorValue = 3
+								} else if( p < 0.03 ) {
+									node.colorValue = 2
+								} else {
+									node.colorValue = 1
+								}
+							})
+							res.forEach((node, idx) => {
+								node.sizeValue = (node.usageCount / max) * 100
+								this.nodes.push(node)
+							})
+							s()
+						})
+						break
+				}
+			})
+		},
 		draw(nodes) {
 			let svg = d3.select(this.$el).select('svg')
 			let width = $(svg.node()).width()
@@ -45,22 +149,29 @@ module.exports = {
 				let color = ''
 				switch( node.colorValue ) {
 					case 1:
-						color = 'good'
+						color = 'bad'
 						break
 					case 2:
 						color = 'soso'
 						break
 					case 3:
-						color = 'bad'
+						color = 'good'
 						break
 				}
 				let r = sizeScale(node.sizeValue)
 				let g = svg.append('g')
+
 				g.append('circle')
 					.attr('cx', cx).attr('cy', cy).attr('r', r)
 					.attr('class', () => node.selected ? `node ${color} selected` : `node ${color}`)
+
+				let name = node.name
+				if( name.length > 12 ) {
+					name = name.slice(0, 12) + '...'
+				}
 				g.append('text').attr('class', 'text')
-					.attr('x', cx).attr('y', cy + 30).text(node.name)
+					.attr('x', cx).attr('y', cy + 30).text(name)
+
 				let me = this;
 				g.on('click', function() {
 					// if others clicked
@@ -147,8 +258,6 @@ module.exports = {
 		}
 	},
 	mounted() {
-		this.nodes = this.createSampleData()
-		this.draw(this.makeOthers(this.nodes))
 	}
 }
 </script>
@@ -218,6 +327,8 @@ div.layer {
 			}
 
 			.node {
+				cursor: pointer;
+
 				&.good {
 					fill: #228ae6;
 				}
@@ -236,6 +347,7 @@ div.layer {
 			.text {
 				fill: white;
 				text-anchor: middle;
+				cursor: pointer;
 			}
 		}
 	}
