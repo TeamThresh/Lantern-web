@@ -25,7 +25,8 @@ module.exports = {
 				nodes.push({
 					name: 'asdfasdf',
 					sizeValue: Math.floor(Math.random() * 100) + 1,
-					colorValue: Math.floor(Math.random() * 3) + 1
+					colorValue: Math.floor(Math.random() * 3) + 1,
+					selected: false
 				})
 			}
 			return nodes
@@ -55,12 +56,23 @@ module.exports = {
 				}
 				let r = sizeScale(node.sizeValue)
 				let g = svg.append('g')
-				g.append('circle').attr('class', `node ${color}`)
+				g.append('circle')
 					.attr('cx', cx).attr('cy', cy).attr('r', r)
+					.attr('class', () => node.selected ? `node ${color} selected` : `node ${color}`)
 				g.append('text').attr('class', 'text')
 					.attr('x', cx).attr('y', cy + 30).text(node.name)
+				let me = this;
 				g.on('click', function() {
-					console.log(node)
+					// if others clicked
+					if( nodes.length == 10 && nodes.indexOf(node) == 9 ) {
+						for( let i=9; i<me.nodes.length; i++ ) {
+							me.nodes[i].selected = ! node.selected
+						}
+					} else {
+						let n = me.nodes[nodes.indexOf(node)]
+						n.selected = ! n.selected
+					}
+					$(this).find('circle').toggleClass('selected')
 				})
 			})
 		},
@@ -79,11 +91,12 @@ module.exports = {
 			let node = nodes2[9]
 			node.name = 'Others'
 
-			for( let i=10; i<nodes2.length; i++ ) {
-				node.sizeValue += nodes2[i].sizeValue
-				node.colorValue += nodes2[i].colorValue
+			for( let i=10; i<nodes.length; i++ ) {
+				node.sizeValue += nodes[i].sizeValue
 				node.sizeValue = node.sizeValue > 100 ? 100 : node.sizeValue
+				node.colorValue += nodes[i].colorValue
 				node.colorValue = node.colorValue > 3 ? 3 : node.colorValue
+				node.selected = node.selected || nodes[i].selected
 			}
 			nodes2[9] = node
 			return nodes2
@@ -213,6 +226,10 @@ div.layer {
 				}
 				&.bad {
 					fill: #d9480f;
+				}
+				&.selected {
+					stroke: white;
+					stroke-width: 3px;
 				}
 			}
 
