@@ -29,6 +29,7 @@ module.exports = {
 			handler: function(v, ov) {
 				// not mine check
 				if( this.lock ) {
+					this.lock = false
 					return
 				}
 
