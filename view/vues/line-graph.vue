@@ -45,7 +45,7 @@ module.exports = {
 			})
 
 			// calculate timeformat by the gap of y min and max
-			let delta = moment(this.y.max) - moment(this.y.min)
+			let delta = moment(this.x.max) - moment(this.x.min)
 			if( delta <= moment.duration(1, 'd') ) {
 				this.timeFormat = '%H:%M'
 			} else if( delta <= moment.duration(1, 'y') ) {
