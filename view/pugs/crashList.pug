@@ -3,12 +3,6 @@ extends layout.pug
 block title
 	span(style='color: #fff;') Crash List
 
-block desc
-	| shows all crash occured on your app
-
-block page-toolbar
-	//- activity-map-toolbar(ref='activityMapToolbar')
-
 block content
 	super-table(init-data='crash')
 block style

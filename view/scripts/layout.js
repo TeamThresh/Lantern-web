@@ -59,7 +59,7 @@ window.app = new Vue({
 				android: [],
 				startRange: '',
 				endRange: '',
-				fixedRange: ''
+				fixedRange: '7'
 			},
 			getFilterQuery: function() {
 				let location = ''
@@ -96,18 +96,23 @@ window.app = new Vue({
 					query += `&activity=${android}`
 				}
 				query += '&'
-				
+
 				return query
 			},
 			getRange: function() {
-				if( this.fixedRange != '' ) {
-					return this.fixedRange
-				} else {
-					return {
-						startRange: this.startRange,
-						endRange: this.endRange
-					}
+				let range = {
+					startRange: this.startRange,
+					endRange: this.endRange
 				}
+				switch( this.fixedRange ) {
+					case '':
+						break
+					case '7':
+						range.startRange = moment().subtract(7, 'd').valueOf()
+						range.endRange = moment().valueOf()
+						break
+				}
+				return range
 			}
 		}
 	},
