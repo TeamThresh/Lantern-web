@@ -17,7 +17,8 @@ module.exports = {
 			y: {
 				min: Number.MAX_VALUE,
 				max: Number.MIN_VALUE
-			}
+			},
+			timeFormat: ''
 		};
 	},
 	watch: {
@@ -42,6 +43,16 @@ module.exports = {
 				this.y.min = d.value < this.y.min ? d.value : this.y.min
 				this.y.max = d.value > this.y.max ? d.value : this.y.max
 			})
+
+			// calculate timeformat by the gap of y min and max
+			let delta = moment(this.y.max) - moment(this.y.min)
+			if( delta <= moment.duration(1, 'd') ) {
+				this.timeFormat = '%H:%M'
+			} else if( delta <= moment.duration(1, 'y') ) {
+				this.timeFormat = '%m-%d'
+			} else {
+				this.timeFormat = '%Y-%m'
+			}
 			this.draw()
 		}
 	},
@@ -52,7 +63,7 @@ module.exports = {
 			let height = $(svg.node()).height();
 			let xScale = d3.scaleTime().domain([this.x.min, this.x.max]).range([23, width - 10]);
 			let yScale = d3.scaleLinear().domain([0, this.y.max]).range([height - 15, 10]);
-			let xAxis = d3.axisBottom(xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat('%H:%M'));
+			let xAxis = d3.axisBottom(xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat(this.timeFormat));
 			let yAxis = d3.axisLeft(yScale).ticks(2).tickSize(0);
 
 			svg.append('g').attr('class', 'x-axis').attr('transform', `translate(0, ${height - 13})`).call(xAxis)
