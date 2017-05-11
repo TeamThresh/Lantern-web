@@ -4,20 +4,41 @@ div.line-graph
 
 <script>
 module.exports = {
+	props: ['initData'],
 	data: function() {
 		return {
-			data: []
+			data: [],
+			x: {
+				min: moment(8640000000000000)._d,
+				max: moment(0)._d
+			},
+			y: {
+				min: Number.MAX_VALUE,
+				max: Number.MIN_VALUE
+			}
 		};
+	},
+	watch: {
+		initData: function() {
+			this.data = this.initData
+			// update data's min, max of each x, y
+			this.data.forEach(d => {
+				this.x.min = d.date < this.x.min ? d.date : this.x.min
+				this.x.max = d.date > this.x.max ? d.date : this.x.max
+				this.y.min = d.value < this.y.min ? d.value : this.y.min
+				this.y.max = d.value > this.y.max ? d.value : this.y.max
+				console.log(d.date, d.value)
+			})
+			this.draw()
+		}
 	},
 	methods: {
 		draw: function() {
-			this.data = this.createSampleData();
-
 			let svg = d3.select(this.$el).append('svg');
 			let width = $(svg.node()).width();
 			let height = $(svg.node()).height();
-			let xScale = d3.scaleTime().domain([this.data[0].date, this.data[this.data.length - 1].date]).range([23, width - 10]);
-			let yScale = d3.scaleLinear().domain([0, 100]).range([height - 15, 10]);
+			let xScale = d3.scaleTime().domain([this.x.min, this.x.max]).range([23, width - 10]);
+			let yScale = d3.scaleLinear().domain([0, this.y.max]).range([height - 15, 10]);
 			let xAxis = d3.axisBottom(xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat('%H:%M'));
 			let yAxis = d3.axisLeft(yScale).ticks(1).tickSize(0);
 			svg.append('g').attr('class', 'x-axis').attr('transform', `translate(0, ${height - 13})`).call(xAxis)
@@ -34,16 +55,16 @@ module.exports = {
 				.attr('stroke-dasharray', '5, 5')
 				.attr('class', 'guide');
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(this.data[0].date)).attr('x2', xScale(this.data[this.data.length - 1].date))
+				.attr('x1', xScale(this.x.min)).attr('x2', xScale(this.x.max))
 				.attr('y1', yScale(0)).attr('y2', yScale(0));
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(this.data[0].date)).attr('x2', xScale(this.data[this.data.length - 1].date))
-				.attr('y1', yScale(50)).attr('y2', yScale(50));
+				.attr('x1', xScale(this.x.min)).attr('x2', xScale(this.x.max))
+				.attr('y1', yScale(this.y.max / 2)).attr('y2', yScale(this.y.max / 2));
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(this.data[0].date)).attr('x2', xScale(this.data[this.data.length - 1].date))
-				.attr('y1', yScale(100)).attr('y2', yScale(100));
+				.attr('x1', xScale(this.x.min)).attr('x2', xScale(this.x.max))
+				.attr('y1', yScale(this.y.max)).attr('y2', yScale(this.y.max));
 
-			let line = d3.line().curve(d3.curveCatmullRom.alpha(1))
+			let line = d3.line()//.curve(d3.curveCatmullRomOpen)
 				.x((d) => xScale(d.date)).y((d) => yScale(d.value));
 			svg.append('path').data([this.data]).attr('d', line).attr('stroke', '#69db7c').attr('fill', 'none');
 		},
@@ -60,7 +81,6 @@ module.exports = {
 		}
 	},
 	mounted: function() {
-		this.draw();
 	}
 }
 </script>

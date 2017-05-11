@@ -38,6 +38,7 @@ Vue.component('filter-bar', require('../vues/filter-bar.vue'));
 Vue.component('app-status', require('../vues/app-status.vue'));
 Vue.component('filter-layer', require('../vues/filter-layer.vue'));
 Vue.component('filter-group', require('../vues/filter-group.vue'));
+Vue.component('user-connection-graph', require('../vues/user-connection-graph.vue'));
 
 /**
  * apply Vue app
@@ -55,7 +56,58 @@ window.app = new Vue({
 				location: [],
 				device: [],
 				os: [],
-				android: []
+				android: [],
+				startRange: '',
+				endRange: '',
+				fixedRange: ''
+			},
+			getFilterQuery: function() {
+				let location = ''
+				this.filters.location.forEach((l) => {
+					location += l + ','
+				})
+
+				let device = ''
+				this.filters.device.forEach((d) => {
+					device += d + ','
+				})
+
+				let os = ''
+				this.filters.os.forEach((d) => {
+					os += d + ','
+				})
+
+				let android = ''
+				this.filters.android.forEach((d) => {
+					android += d + ','
+				})
+
+				let query = '?'
+				if( location != '' ) {
+					query += `&location=${location}`
+				}
+				if( device != '' ) {
+					query += `&device=${device}`
+				}
+				if( os != '' ) {
+					query += `&os=${os}`
+				}
+				if( android != '' ) {
+					query += `&activity=${android}`
+				}
+				query += '&'
+				
+				return query
+			},
+			getRange: function() {
+				if( this.fixedRange != '' ) {
+					return this.fixedRange
+				} else {
+					return {
+						startRange: this.startRange,
+						endRange: this.endRange
+					}
+				}
 			}
 		}
 	},

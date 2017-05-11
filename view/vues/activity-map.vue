@@ -348,39 +348,7 @@ module.exports = {
                 }
             };
 
-			let location = ''
-			this.app.filters.location.forEach((l) => {
-				location += l + ','
-			})
-
-			let device = ''
-			this.app.filters.device.forEach((d) => {
-				device += d + ','
-			})
-
-			let os = ''
-			this.app.filters.os.forEach((d) => {
-				os += d + ','
-			})
-
-			let android = ''
-			this.app.filters.android.forEach((d) => {
-				android += d + ','
-			})
-
-			let query = '?'
-			if( location != '' ) {
-				query += `&location=${location}`
-			}
-			if( device != '' ) {
-				query += `&device=${device}`
-			}
-			if( os != '' ) {
-				query += `&os=${os}`
-			}
-			if( android != '' ) {
-				query += `&activity=${android}`
-			}
+			let query = me.app.getFilterQuery()
 
             d3.json('/api/nodesAndLinks/' + me.app.packageName + query, work);
         },

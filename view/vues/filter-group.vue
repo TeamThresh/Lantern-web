@@ -2,7 +2,7 @@
 div.filter-group
 	div.title Filter Group
 	div.input
-		input.form-control(type=text placeholder='...filter name' v-model='tmpGroupName')
+		input.form-control(type=text placeholder='...filter name' v-model='tmpGroupName' maxlength='50')
 		button.btn.btn-success(@click='createGroup') SAVE
 	div.groups
 		span.group.hvr-bounce-in(v-for='group in groups') {{ group.name }}
@@ -13,7 +13,8 @@ module.exports = {
 	data() {
 		return {
 			groups: [],
-			tmpGroupName: ''
+			tmpGroupName: '',
+			app: this.$root.app
 		}
 	},
 	methods: {
@@ -22,16 +23,20 @@ module.exports = {
 			let groups = []
 			for( let i=0; i<max; i++ ) {
 				groups.push({
-					hash: 'ad8f7ad8f7ad78fa',
-					name: `group${i + 1}`
+					name: `group${i + 1}`,
+					filters: {
+						location: ['asd','asdf']
+					}
 				})
 			}
 			return groups
 		},
 		createGroup() {
 			this.groups.push({
-				hash: 'tmp',
-				name: this.tmpGroupName
+				name: this.tmpGroupName,
+				filters: {
+					location: ['asdf', 'asdf']
+				}
 			})
 			this.tmpGroupName = ''
 		}
