@@ -14,7 +14,6 @@ module.exports = {
             rawData: [],
             fetchedPackageName: '',
             status: '-',
-			type: 'crash',
 			app: this.$root.app
         };
     },
@@ -27,7 +26,8 @@ module.exports = {
 				this.draw()
 			},
 			deep: true
-		}
+		},
+		'app.valueType': 'draw'
 	},
     methods: {
 		drawIndex: function() {
@@ -169,36 +169,8 @@ module.exports = {
 					// usage to be percentage
 					// and crash to be value
 					nodes.forEach(function(n) {
-						switch( me.type ) {
-							case 'crash':
-								var crashPercentage = n.crashCount / n.usageCount;
-								if (crashPercentage == 0)
-									n.value = 3;
-								else if (crashPercentage < 0.03)
-									n.value = 2;
-								else
-									n.value = 1;
-								break;
-							case 'resource':
-								if( n.cpuUsage >= 40 || n.memoryUsage >= 40 ) {
-									n.value = 1;
-								} else if( n.cpuUsage >= 20 || n.memoryUsage >= 20 ) {
-									n.value = 2;
-								} else {
-									n.value = 3;
-								}
-								break;
-							case 'network':
-								let networkPercentage = n.networkCount / n.usageCount;
-								if( networkPercentage == 0 ) {
-									n.value = 3;
-								} else if( networkPercentage < 0.03 ) {
-									n.value = 2;
-								} else {
-									n.value = 3;
-								}
-								break;
-						}
+						me.app.calculateColorValue(n)
+						n.value = n[`${me.app.valueType}ColorValue`]
 						n.usage = n.usageCount / usageMax * 100;
 						n.usage = Math.ceil(n.usage);
 					});

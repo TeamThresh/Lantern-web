@@ -9,13 +9,13 @@ div.filter-bar
 			option 4 Weeks
 			option 1 Month
 			option 3 Months
-		a.type-filter.btn.grey-mint.active
+		a.type-filter.btn.grey-mint(@click='app.valueType = "crash"', :class='{active: app.valueType == "crash"}')
 			| Crash
 			i.icon-wrench
-		a.type-filter.btn.grey-mint
+		a.type-filter.btn.grey-mint(@click='app.valueType = "resource"', :class='{active: app.valueType == "resource"}')
 			| Resource
 			i.icon-layers
-		a.type-filter.btn.grey-mint
+		a.type-filter.btn.grey-mint(@click='app.valueType = "network"', :class='{active: app.valueType == "network"}')
 			| Network
 			i.icon-feed
 	filter-layer(title='Android')
@@ -31,8 +31,12 @@ div.filter-bar
 
 <script>
 module.exports = {
+	data() {
+		return {
+			app: this.$root.app
+		}
+	},
 	methods: {
-
 	},
 	mounted() {
 		$(this.$el).find('.selectpicker').selectpicker({

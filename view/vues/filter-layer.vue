@@ -17,7 +17,8 @@ module.exports = {
 		return {
 			app: this.$root.app,
 			nodes: [],
-			expanded: false
+			expanded: false,
+			nameLimit: 8
 		}
 	},
 	watch: {
@@ -37,6 +38,10 @@ module.exports = {
 				})
 			},
 			deep: true
+		},
+		'app.valueType': function(v, ov) {
+			this.clear()
+			this.draw(this.expanded ? this.nodes : this.makeOthers(this.nodes))
 		}
 	},
 	methods: {
@@ -64,40 +69,7 @@ module.exports = {
 		},
 		fetchData() {
 			return new Promise((s, f) => {
-				// filter make
-				let location = ''
-				this.app.filters.location.forEach((l) => {
-					location += l + ','
-				})
-
-				let device = ''
-				this.app.filters.device.forEach((d) => {
-					device += d + ','
-				})
-
-				let os = ''
-				this.app.filters.os.forEach((d) => {
-					os += d + ','
-				})
-
-				let android = ''
-				this.app.filters.android.forEach((d) => {
-					android += d + ','
-				})
-
-				let query = '?'
-				if( location != '' ) {
-					query += `&location=${location}`
-				}
-				if( device != '' ) {
-					query += `&device=${device}`
-				}
-				if( os != '' ) {
-					query += `&os=${os}`
-				}
-				if( android != '' ) {
-					query += `&activity=${android}`
-				}
+				let query = this.app.getFilterQuery()
 
 				// nodes clear
 				this.nodes = []
@@ -109,14 +81,7 @@ module.exports = {
 							res.forEach((node, idx) => {
 								max = node.usageCount > max ? node.usageCount : max
 								node.name = node.locationCode
-								let p = node.crashCount / node.usageCount
-								if( p == 0 ) {
-									node.colorValue = 3
-								} else if( p < 0.03 ) {
-									node.colorValue = 2
-								} else {
-									node.colorValue = 1
-								}
+								this.app.calculateColorValue(node)
 								node.selected = false
 							})
 							res.forEach((node, idx) => {
@@ -133,14 +98,7 @@ module.exports = {
 							res.forEach((node, idx) => {
 								max = node.usageCount > max ? node.usageCount : max
 								node.name = node.deviceName
-								let p = node.crashCount / node.usageCount
-								if( p == 0 ) {
-									node.colorValue = 3
-								} else if( p < 0.03 ) {
-									node.colorValue = 2
-								} else {
-									node.colorValue = 1
-								}
+								this.app.calculateColorValue(node)
 								node.selected = false
 							})
 							res.forEach((node, idx) => {
@@ -157,14 +115,7 @@ module.exports = {
 							res.forEach((node, idx) => {
 								max = node.usageCount > max ? node.usageCount : max
 								node.name = node.osVersion
-								let p = node.crashCount / node.usageCount
-								if( p == 0 ) {
-									node.colorValue = 3
-								} else if( p < 0.03 ) {
-									node.colorValue = 2
-								} else {
-									node.colorValue = 1
-								}
+								this.app.calculateColorValue(node)
 								node.selected = false
 							})
 							res.forEach((node, idx) => {
@@ -181,14 +132,7 @@ module.exports = {
 							res.forEach((node, idx) => {
 								max = node.usageCount > max ? node.usageCount : max
 								node.name = node.activityName
-								let p = node.crashCount / node.usageCount
-								if( p == 0 ) {
-									node.colorValue = 3
-								} else if( p < 0.03 ) {
-									node.colorValue = 2
-								} else {
-									node.colorValue = 1
-								}
+								this.app.calculateColorValue(node)
 								node.selected = false
 							})
 							res.forEach((node, idx) => {
@@ -206,14 +150,14 @@ module.exports = {
 			let width = $(svg.node()).width()
 			let height = $(svg.node()).height()
 			let nodeWidth = width / 5
-			let nodeHeight = height / 2
+			let nodeHeight = this.expanded ? height / 4 : height / 2
 			let sizeScale = d3.scaleLinear().domain([1, 100]).range([3, 15])
 
 			nodes.forEach((node, idx) => {
 				let cx = (idx % 5) * nodeWidth + nodeWidth / 2
 				let cy = Math.floor(idx / 5) * nodeHeight + nodeHeight / 2 - 10
 				let color = ''
-				switch( node.colorValue ) {
+				switch( node[`${this.app.valueType}ColorValue`] ) {
 					case 1:
 						color = 'bad'
 						break
@@ -232,8 +176,8 @@ module.exports = {
 					.attr('class', () => node.selected ? `node ${color} selected` : `node ${color}`)
 
 				let name = node.name
-				if( name.length > 12 ) {
-					name = name.slice(0, 12) + '...'
+				if( name.length > this.nameLimit ) {
+					name = name.slice(0, this.nameLimit) + '...'
 				}
 				g.append('text').attr('class', 'text')
 					.attr('x', cx).attr('y', cy + 30).text(name)
@@ -287,11 +231,6 @@ module.exports = {
 			let isExpanded = $(this.$el).find('.content').hasClass('expanded')
 			this.expanded = ! isExpanded
 
-			if( ! isExpanded ) {
-				this.clear()
-				this.draw(this.nodes)
-			}
-
 			$('div.layer').toArray().forEach((div, idx) => {
 				let content = $(div).find('.content')
 				let dim = $(div).find('.dim')
@@ -322,9 +261,10 @@ module.exports = {
 				}
 			})
 
-			// svg가 좁아진 이후에 그려야한다. 자동으로 height width를 계산하기 때문
-			if( isExpanded ) {
-				this.clear()
+			this.clear()
+			if( ! isExpanded ) {
+				this.draw(this.nodes)
+			} else {
 				this.draw(this.makeOthers(this.nodes))
 			}
 		}

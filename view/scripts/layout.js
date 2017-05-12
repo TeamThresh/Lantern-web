@@ -52,6 +52,7 @@ window.app = new Vue({
 			packageName: '',
 			activityName: '',
 			resourceType: '',
+			valueType: 'crash',
 			filters: {
 				location: [],
 				device: [],
@@ -113,6 +114,33 @@ window.app = new Vue({
 						break
 				}
 				return range
+			},
+			calculateColorValue: function(node) {
+				let p = node.crashCount / node.usageCount
+				if( p == 0 ) {
+					node.crashColorValue = 3
+				} else if( p < 0.03 ) {
+					node.crashColorValue = 2
+				} else {
+					node.crashColorValue = 1
+				}
+
+				if( node.cpuCount >= 40 || node.memoryCount >= 40 ) {
+					node.resourceColorValue = 1
+				} else if( node.cpuCount >= 20 || node.memoryCount >= 20 ) {
+					node.resourceColorValue = 2
+				} else {
+					node.resourceColorValue = 3
+				}
+
+				p = node.networkCount / node.usageCount
+				if( p == 0 ) {
+					node.networkColorValue = 3
+				} else if( p < 0.03 ) {
+					node.networkColorValue = 2
+				} else {
+					node.networkColorValue = 1
+				}
 			}
 		}
 	},
