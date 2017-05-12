@@ -151,3 +151,13 @@ window.app = new Vue({
         });
 	}
 });
+
+window.eunchan = function() {
+	let i = 0;
+	let id = setInterval(function() {
+		$($('.node')[i++]).addClass('animated hinge shake')
+		if( i == $('.node').length ) {
+			clearInterval(id)
+		}
+	}, 100)
+}

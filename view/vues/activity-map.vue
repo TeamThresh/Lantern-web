@@ -234,7 +234,7 @@ module.exports = {
                             return 0.5;
                     })
 					.style('cursor', 'pointer')
-					.on('click', function(d) { location.href = '/activitySummary/' + me.app.packageName + '/' + d.name; });
+					.on('click', function(d) { location.href = '/activitySummary/' + me.app.packageName + '/' + d.name; })
 
                 usageText = usageText.data(nodes).enter()
                     .append('text')
@@ -255,7 +255,8 @@ module.exports = {
                     })
 					.call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended))
 					.style('cursor', 'pointer')
-					.on('click', function(d) { location.href = '/activitySummary/' + me.app.packageName + '/' + d.name; });
+					.on('click', function(d) { location.href = '/activitySummary/' + me.app.packageName + '/' + d.name; })
+
 
                 text = text.data(nodes)
                     .enter().append('text')
@@ -275,7 +276,8 @@ module.exports = {
 							return '#fff';
 						else
 							return '#ccc';
-					});
+					})
+
 
 				simulation.nodes(nodes).on('tick', tick);
 				if( links.length > 0 )

@@ -75,6 +75,7 @@
 						<li><a href="/">Dashboard</a></li>
 						<li><a href="/crashList">Crash List</a></li>
 						<li><a href="/">Report</a></li>
+						<li><a href="javascript:eunchan();">Machine Gun</a></li>
 					</ul>
 				</div>
                 <!-- BEGIN TOP NAVIGATION MENU -->
