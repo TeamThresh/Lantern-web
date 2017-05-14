@@ -5,30 +5,51 @@ div.one-depth-user-flow
 
 <script>
 module.exports = {
-	mounted: function() {
-		this.draw();
-	},
 	data: function() {
 		return {
 			data:{
-				"nodes": [
-					{"name":"Main Activity"},
-					{"name":"Preview Activity"},
-					{"name":"Setting Activity"},
-					{"name":"Crashed"},
-					{"name":"Exit"}
-				],
-				"links": [
-					{"source":0,"target":1,"value":2},
-					{"source":0,"target":2,"value":5},
-					{"source":0,"target":3,"value":1},
-					{"source":0,"target":4,"value":1}
-				]
-			}
+			},
+			nodes: [],
+			links: [],
+			app: this.$root.app
 		};
 	},
+	watch: {
+		'app.packageName'() {
+			this.fetch()
+		}
+	},
 	methods: {
-		draw: function() {
+		fetch() {
+			$.get(`/api/one-depth-userflow/${this.app.packageName}/${this.app.activityName}`).then((res) => {
+				if( ! res instanceof Object ) {
+					return
+				}
+				if( ! res.hasOwnProperty('crash') ) {
+					res.crash = 0
+				}
+				if( ! res.hasOwnProperty('exit') ) {
+					res.exit = 0
+				}
+				this.nodes = [{name: this.app.activityName}]
+				this.links = []
+				Object.keys(res).forEach(name => {
+					this.nodes.push({name: name})
+					this.links.push({
+						source: 0,
+						target: this.nodes.length - 1,
+						value: res[name]
+					})
+				})
+				this.data = {nodes: this.nodes, links: this.links}
+				this.clear()
+				this.draw(this.data)
+			})
+		},
+		clear() {
+			$(this.$el).find('svg *').remove()
+		},
+		draw: function(data) {
 			var svg = d3.select('div.one-depth-user-flow > svg');
 			var units = "Widgets";
 
@@ -57,7 +78,7 @@ module.exports = {
 			var path = sankey.link();
 
 			// load the data
-			var graph = this.data;
+			var graph = data
 			sankey.nodes(graph.nodes)
 				.links(graph.links)
 				.layout(32);
@@ -72,11 +93,11 @@ module.exports = {
 				.sort(function(a, b) { return b.dy - a.dy; });
 
 			// add the link titles
-			link.append("title")
+			link.append("text")
 				.text(function(d) {
 					return d.source.name + " → " +
 						d.target.name + "\n" + format(d.value);
-				});
+				})
 
 			// add in the nodes
 			var node = svg.append("g").selectAll(".node")
@@ -121,6 +142,7 @@ module.exports = {
 					return d.dy / 2;
 				})
 				.attr("dy", ".35em")
+				.attr('fill', 'white')
 				.attr("text-anchor", "end")
 				.attr("transform", null)
 				.text(function(d) {
@@ -140,6 +162,9 @@ module.exports = {
 				sankey.relayout();
 				link.attr("d", path);
 			}
+		},
+		mounted() {
+
 		}
 	}
 }

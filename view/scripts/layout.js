@@ -143,11 +143,22 @@ window.app = new Vue({
 			}
 		}
 	},
-	created() {
-		$.get('/api/packageNames', (data) => {
-            this.app.packageNames = data.packageNames;
-			this.app.packageName = this.app.packageNames[0];
-        });
+	mounted() {
+		let pathNames = location.pathname.split('/')
+		switch( pathNames[1] ) {
+			case '': // dashboard
+				$.get('/api/packageNames', (data) => {
+					this.app.packageNames = data.packageNames;
+					this.app.packageName = this.app.packageNames[0];
+				});
+				break
+			case 'activityDetail':
+				this.app.resourceType = pathNames[4]
+			case 'activitySummary':
+				this.app.packageName = pathNames[2]
+				this.app.activityName = pathNames[3]
+				break
+		}
 	}
 });
 
