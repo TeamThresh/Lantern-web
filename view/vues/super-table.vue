@@ -11,22 +11,57 @@ div.table-scrollable
 
 <script>
 module.exports = {
-	props: ['initData'],
+	props: ['type'],
 	data: function() {
 		return {
-			data: {},
 			head: [],
-			body: []
+			body: [],
+			app: this.$root.app,
+			fetchUrl: ''
 		};
 	},
-	// watch: {
-	// 	'data': function(d) {
-	// 		// this.head = d.head;
-	// 		// this.body = d.body;
-	// 		console.log(d);
-	// 	}
-	// },
+	watch: {
+		'app.packageName'() {
+			this.fetch()
+		}
+	},
 	methods: {
+		fetch() {
+			switch( this.type ) {
+				case 'topError':
+					this.fetchUrl = 'topError'
+					break
+				case 'network':
+					this.fetchUrl = 'network'
+					break
+				case 'crash':
+					this.fetchUrl = 'crash'
+					break
+			}
+			let url = `/api/${this.fetchUrl}/${this.app.packageName}/${this.app.activityName}`
+			if( this.fetchUrl == 'topError' ) {
+				url = `/api/${this.fetchUrl}/${this.app.packageName}${this.app.getFilterQuery()}`
+			}
+			$.get(url).then(res => {
+				if( ! (res instanceof Object && Object.keys(res).length == 1) ) {
+					return
+				}
+				let data = res[Object.keys(res)[0]].reverse()
+				data.forEach(d => {
+					let row = []
+					Object.keys(d).forEach(h => {
+						if( this.head.indexOf(h) < 0 ) {
+							this.head.push(h)
+						}
+						row.push(d[h])
+					})
+					this.body.push(row)
+				})
+			})
+		},
+		clear() {
+
+		},
 		transformData: function(data) {
 			/**
 			 * data should be formed like one of below
@@ -100,16 +135,6 @@ module.exports = {
 		}
 	},
 	mounted: function() {
-		var me = this;
-		if( me.initData ) {
-			if( me.initData == 'crash' ) {
-				this.head = ['rank', 'count', 'name'];
-				this.body = [];
-				for( var i=0; i<100; i++ ) {
-					this.body.push([i + 1, Math.round(Math.random() * 255), this.createRandomCrashName(Math.floor(Math.random() * 20) + 30)]);
-				}
-			}
-		}
 	}
 }
 </script>

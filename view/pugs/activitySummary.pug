@@ -25,22 +25,21 @@ block content
 				one-depth-user-flow
 		div.col-md-6
 			card(title='UI Rendering Elapsed Time' package-name=packageName activity-name=activityName resource-type='ui')
-				dist-graph(ref='ui')
+				dist-graph(type='rendering')
 	div.row
 		div.col-md-6
 			card(title='CPU Usage' package-name=packageName activity-name=activityName resource-type='cpu')
-				dist-graph
+				dist-graph(type='cpu')
 		div.col-md-6
 			card(title='Memory Usage' package-name=packageName activity-name=activityName resource-type='memory')
-				dist-graph
+				dist-graph(type='memory')
 	div.row
 		div.col-md-6
 			card(title='Network Outband Call' package-name=packageName activity-name=activityName resource-type='network')
-				super-table(:init-data='{head:["domain","count","success","responsetime"],body:[["naver.com","196","96%","19ms"],["eunchan.kr","122","90%","202ms"],["leagueoflegend.com","101","98%","112ms"],["naver.com","196","96%","19ms"],["eunchan.kr","122","90%","202ms"],["leagueoflegend.com","101","98%","112ms"],["naver.com","196","96%","19ms"],["eunchan.kr","122","90%","202ms"],["leagueoflegend.com","101","98%","112ms"],["naver.com","196","96%","19ms"],["eunchan.kr","122","90%","202ms"],["leagueoflegend.com","101","98%","112ms"]]}')
+				super-table(type='network')
 		div.col-md-6
 			card(title='Crash List' package-name=packageName activity-name=activityName resource-type='crash')
-				//- super-table(:init-data='{head:["crash","count"],body:[["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"],["dsfjasdiof.asjdfoias.NullPointerException","123"],["dsfjasdiof.asjdfoias.OutOfRangeException","13"],["dsfjasdiof.asjdfoias.AmazingYouAgain?","93"],["dsfjasdiof.asjdfoias.StopGeneratingMeException","12"],["dsfjasdiof.asjdfoias.YouAreTheWorstProgrammerException","99"]]}')
-				super-table
+				super-table(type='crash')
 block style
 	style.
 		body {

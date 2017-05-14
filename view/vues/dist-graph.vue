@@ -5,12 +5,52 @@ div.dist-graph
 
 <script>
 module.exports = {
+	props: ['type'],
 	data: function() {
 		return {
-			data: []
+			data: [],
+			app: this.$root.app,
+			fetchUrl: '',
+			linkUrl: '',
+			timeFormat: ''
 		};
 	},
+	watch: {
+		'app.packageName'() {
+			this.fetch()
+		}
+	},
 	methods: {
+		fetch() {
+			$.get(`/api/${this.fetchUrl}/${this.app.packageName}/${this.app.activityName}`).then(res => {
+				this.clear()
+				if( ! (res instanceof Object && res.hasOwnProperty('data')) ) {
+					return
+				}
+				this.data = []
+				res.data.forEach(d => {
+					this.data.push({
+						date: moment(d.timestamp),
+						value: d.value
+					})
+				})
+
+				// calculate timeformat by the gap of y min and max
+				let delta = this.data[this.data.length - 1].date - this.data[0].date
+				if( delta <= moment.duration(1, 'd') ) {
+					this.timeFormat = '%H:%M'
+				} else if( delta <= moment.duration(1, 'y') ) {
+					this.timeFormat = '%m-%d'
+				} else {
+					this.timeFormat = '%Y-%m'
+				}
+
+				this.draw()
+			})
+		},
+		clear() {
+			$(this.$el).find('svg *').remove()
+		},
 		getColor: function(value) {
 			var color = {
 				0: '#fff',
@@ -112,7 +152,7 @@ module.exports = {
 					var remainder = widthInt % (boxWidth + boxPadding);
 					if( remainder < min ) {
 						min = remainder;
-						minIndex = i;
+						minIndex = i	;
 					}
 				});
 				return range[minIndex];
@@ -120,8 +160,8 @@ module.exports = {
 			var boxHeight = 8;
 			var xScale = d3.scaleQuantize()
 				.domain((function() {
-					var date2 = moment();
-					var date1 = moment(date2 - moment.duration(1, 'days'));
+					var date2 = me.data[me.data.length - 1].date
+					var date1 = me.data[0].date;
 					return [date1, date2];
 				})())
 				.range((function() {
@@ -153,7 +193,7 @@ module.exports = {
 				.domain([0, 23])
 				.range([1, 2, 3]);
 
-			me.data = me.getRandomSapleData(xScale.domain()[0], xScale.domain()[1]);
+			// me.data = me.getRandomSapleData(xScale.domain()[0], xScale.domain()[1]);
 			me.data = me.sampling(me.data, xScale, yScale);
 
 			$.each(me.data, function(index, data) {
@@ -175,10 +215,8 @@ module.exports = {
 
 			// axis
 			var xAxis = d3.axisBottom(xScale)
-				.tickFormat(function(d) {
-					return moment(d).format('HH:mm');
-				})
-				.ticks(xScale.range().length / 3)
+				.tickFormat(d3.timeFormat(this.timeFormat))
+				.ticks(xScale.range().length / 4)
 				.tickPadding(0);
 			svg.append('g')
 				.attr('class', 'x-axis')
@@ -198,7 +236,18 @@ module.exports = {
 		}
 	},
 	mounted: function() {
-		this.draw();
+		// basic setting according to its type
+		switch( this.type ) {
+			case 'rendering':
+				this.fetchUrl = 'rendering'
+				break
+			case 'cpu':
+				this.fetchUrl = 'cpu'
+				break
+			case 'memory':
+				this.fetchUrl = 'memory'
+				break
+		}
 	}
 }
 </script>
