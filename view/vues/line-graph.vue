@@ -23,6 +23,7 @@ module.exports = {
 	},
 	watch: {
 		initData: function() {
+			window.app.debug && console.log('line-graph', 'initData watch handler', this.initData)
 			this.data = this.initData
 			// empty
 			if( this.data.length == 0 ) {
@@ -65,6 +66,8 @@ module.exports = {
 			let yScale = d3.scaleLinear().domain([0, this.y.max]).range([height - 15, 10]);
 			let xAxis = d3.axisBottom(xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat(this.timeFormat));
 			let yAxis = d3.axisLeft(yScale).ticks(2).tickSize(0);
+
+			svg.selectAll('*').remove()
 
 			svg.append('g').attr('class', 'x-axis').attr('transform', `translate(0, ${height - 13})`).call(xAxis)
 				.selectAll('line').remove();

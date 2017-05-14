@@ -183,7 +183,7 @@ module.exports = {
                 svg.selectAll('*').remove();
 
 				// debug log
-                console.log(me.app.packageName, nodes, links);
+                console.log('activity-map', me.app.packageName, nodes, links);
 
 				if( nodes === undefined || nodes.length == 0 ) {
 					return;

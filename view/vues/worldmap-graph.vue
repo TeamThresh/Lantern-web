@@ -11,13 +11,26 @@ module.exports = {
 		};
 	},
 	watch: {
-		'app.packageName': function(packageName) {
-			$.get(`/api/location/${packageName}`).then((res) => {
-				this.draw(res.location);
-			});
+		'app.packageName': 'fetch',
+		'app.filters': {
+			handler() {
+				this.fetch()
+			},
+			deep: true
 		}
 	},
 	methods: {
+		fetch() {
+			$.get(`/api/location/${this.app.packageName}${this.app.getFilterQuery()}`).then((res) => {
+				console.log('wordmap-graph', res)
+				if( res instanceof Array && res.length == 0 ) {
+					res = {
+						location: []
+					}
+				}
+				this.draw(res.location);
+			});
+		},
 		draw: function(data) {
 			var gdpData = {};
 			for( d of data ) {
@@ -36,6 +49,8 @@ module.exports = {
 			}
 
 			let colors = gdpData;
+
+			$(this.$el).find('*').remove()
 
 			$(this.$el).vectorMap({
 			    map: 'world_en',

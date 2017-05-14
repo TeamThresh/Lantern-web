@@ -1,21 +1,27 @@
 extends layout.pug
 
-block title
-	span.font-white(style='font-weight: 300;') Activity Map
-
 block content
-	div.col-xs-12.col-sm-12
-		activity-map(ref='activityMap')
-	div.col-xs-12.col-sm-12
-		div.m-grid.m-grid-row
-			div.m-grid-col.m-grid-col-xs-3.a
-				user-connection-graph
-			div.m-grid-col.m-grid-col-xs-4.a
-				card(title='World Outbound Call' style='height: 378px;')
-					worldmap-graph
-			div.m-grid-col.m-grid-col-xs-5.a
-				card(title='Top Error' style='height: 378px;')
-					top-crash
+	div.row
+		div.col-xs-12.col-sm-4
+			app-status
+			div(style='padding: 5px 0 5px 0;')
+			filter-bar(style='height: 818px;')
+		div.col-xs-12.col-sm-8
+			h4.title
+				span.font-white(style='font-weight: 300;') Activity Map
+			div.row
+				div.col-xs-12.col-sm-12
+					activity-map(ref='activityMap')
+				div.col-xs-12.col-sm-12
+					div.m-grid.m-grid-row
+						div.m-grid-col.m-grid-col-xs-3.a
+							user-connection-graph
+						div.m-grid-col.m-grid-col-xs-4.a
+							card(title='World Outbound Call' style='height: 385px;')
+								worldmap-graph
+						div.m-grid-col.m-grid-col-xs-5.a
+							card(title='Top Error' style='height: 385px;')
+								top-crash
 block style
 	style.
 		.page-content > div {
@@ -24,5 +30,8 @@ block style
 		}
 		.a {
 			padding: 0 7.5px;
+		}
+		.a > div {
+			margin: 0 !important;
 		}
 prepend script

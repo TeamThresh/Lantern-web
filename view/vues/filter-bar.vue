@@ -1,14 +1,14 @@
 <template lang="pug">
 div.filter-bar
 	div.menu
-		select.selectpicker
-			option Today
-			option 3 Days
-			option 7 Days
-			option 2 Weeks
-			option 4 Weeks
-			option 1 Month
-			option 3 Months
+		select.selectpicker(v-model='app.filters.fixedRange')
+			option(value=1) Today
+			option(value=3) 3 Days
+			option(value=7) 7 Days
+			option(value=14) 2 Weeks
+			option(value=28) 4 Weeks
+			option(value=30) 1 Month
+			option(value=90) 3 Months
 		a.type-filter.btn.grey-mint(@click='app.valueType = "crash"', :class='{active: app.valueType == "crash"}')
 			| Crash
 			i.icon-wrench
@@ -36,6 +36,8 @@ module.exports = {
 			app: this.$root.app
 		}
 	},
+	watch: {
+	},
 	methods: {
 	},
 	mounted() {
@@ -56,7 +58,7 @@ div.filter-bar {
 		padding: 10px 10px 10px 10px;
 
 		div.bootstrap-select {
-			width: 80px !important;
+			width: 120px !important;
 
 			button {
 				border: 1px solid #787878;

@@ -83,6 +83,8 @@ window.app = new Vue({
 					android += d + ','
 				})
 
+				let range = this.getRange()
+
 				let query = '?'
 				if( location != '' ) {
 					query += `&location=${location}`
@@ -96,6 +98,7 @@ window.app = new Vue({
 				if( android != '' ) {
 					query += `&activity=${android}`
 				}
+				query += `&startRange=${range.startRange}&endRange=${range.endRange}`
 				query += '&'
 
 				return query
@@ -105,13 +108,9 @@ window.app = new Vue({
 					startRange: this.startRange,
 					endRange: this.endRange
 				}
-				switch( this.fixedRange ) {
-					case '':
-						break
-					case '7':
-						range.startRange = moment().subtract(7, 'd').valueOf()
-						range.endRange = moment().valueOf()
-						break
+				if( this.filters.fixedRange.length > 0 ) {
+					range.startRange = moment().subtract(this.filters.fixedRange, 'd').hour(0).minute(0).second(0).millisecond(0).valueOf()
+					range.endRange = moment().valueOf()
 				}
 				return range
 			},
@@ -153,10 +152,12 @@ window.app = new Vue({
 });
 
 window.eunchan = function() {
-	let i = 0;
+	let arr = $('.node')
 	let id = setInterval(function() {
-		$($('.node')[i++]).addClass('animated hinge shake')
-		if( i == $('.node').length ) {
+		if( arr.length > 0 ) {
+			let circle = arr.splice(Math.floor(Math.random() * arr.length), 1)
+			$(circle).addClass('animated hinge')
+		} else {
 			clearInterval(id)
 		}
 	}, 100)

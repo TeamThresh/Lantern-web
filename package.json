@@ -49,6 +49,7 @@
     "underscore": "^1.8.3",
     "vue": "^2.1.10",
     "vue-resource": "^1.2.0",
+    "vue-router": "^2.5.3",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.5"
   }

@@ -38,6 +38,8 @@ html(lang='en')
 		link(href='https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.1.1/css/hover-min.css' rel='stylesheet' type='text/css')
 		//- animate.css
 		link(href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css' rel='stylesheet' type='text/css')
+		//- pace.js
+		link(href='/assets/pace/pace2.css' rel='stylesheet' type='text/css')
 		link(rel='shortcut icon', href='favicon.ico')
 		style.
 			.page-header.navbar {
@@ -74,15 +76,7 @@ html(lang='en')
 			div.page-container
 				div.container-fluid
 					br
-					div.row
-						div.col-xs-12.col-sm-4
-							app-status
-							div(style='padding: 5px 0 5px 0;')
-							filter-bar
-						div.col-xs-12.col-sm-8
-							h4.title
-								block title
-							block content
+					block content
 			right-header
 			bottom-header
 		//- BEGIN CORE PLUGINS
@@ -120,6 +114,8 @@ html(lang='en')
 		script(src='/assets/theme2/global/plugins/jstree/dist/jstree.min.js')
 		//- bootstrap select
 		script(src='/assets/theme2/global/plugins/bootstrap-select/js/bootstrap-select.min.js')
+		//- pace.js
+		script(src='/assets/theme2/global/plugins/pace/pace.min.js')
 		//- bundle
 		script(src='/assets/bundles/layout.js')
 		block script

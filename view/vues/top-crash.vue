@@ -10,8 +10,17 @@ module.exports = {
 		}
 	},
 	watch: {
-		'app.packageName': function(d) {
-			$.get(`/api/topError/${this.app.packageName}`).then((res) => {
+		'app.packageName': 'fetch',
+		'app.filters': {
+			handler() {
+				this.fetch()
+			},
+			deep: true
+		}
+	},
+	methods: {
+		fetch() {
+			$.get(`/api/topError/${this.app.packageName}${this.app.getFilterQuery()}`).then((res) => {
 				let head = ['rank', 'count', 'name'];
 				let body = [];
 				res.error_rank.forEach((d, idx) => {
