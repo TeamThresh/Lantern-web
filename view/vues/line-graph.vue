@@ -23,7 +23,7 @@ module.exports = {
 	},
 	watch: {
 		initData: function() {
-			window.app.debug && console.log('line-graph', 'initData watch handler', this.initData)
+			// window.app.debug && console.log('line-graph', 'initData watch handler', this.initData)
 			this.data = this.initData
 			// empty
 			if( this.data.length == 0 ) {
@@ -46,8 +46,9 @@ module.exports = {
 			})
 
 			// calculate timeformat by the gap of y min and max
-			let delta = moment(this.x.max) - moment(this.x.min)
-			if( delta <= moment.duration(1, 'd') ) {
+			let date = this.app.getRange()
+			let delta = moment(date.endRange) - moment(date.startRange)
+			if( delta <= moment.duration(2, 'd') ) {
 				this.timeFormat = '%H:%M'
 			} else if( delta <= moment.duration(1, 'y') ) {
 				this.timeFormat = '%m-%d'
@@ -62,7 +63,8 @@ module.exports = {
 			let svg = d3.select(this.$el).select('svg');
 			let width = $(svg.node()).width();
 			let height = $(svg.node()).height();
-			let xScale = d3.scaleTime().domain([this.x.min, this.x.max]).range([23, width - 10]);
+			let date = this.app.getRange()
+			let xScale = d3.scaleTime().domain([date.startRange, date.endRange]).range([23, width - 10]);
 			let yScale = d3.scaleLinear().domain([0, this.y.max]).range([height - 15, 10]);
 			let xAxis = d3.axisBottom(xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat(this.timeFormat));
 			let yAxis = d3.axisLeft(yScale).ticks(2).tickSize(0);
@@ -84,13 +86,13 @@ module.exports = {
 				.attr('stroke-dasharray', '5, 5')
 				.attr('class', 'guide');
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(this.x.min)).attr('x2', xScale(this.x.max))
+				.attr('x1', xScale(date.startRange)).attr('x2', xScale(date.endRange))
 				.attr('y1', yScale(0)).attr('y2', yScale(0));
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(this.x.min)).attr('x2', xScale(this.x.max))
+				.attr('x1', xScale(date.startRange)).attr('x2', xScale(date.endRange))
 				.attr('y1', yScale(this.y.max / 2)).attr('y2', yScale(this.y.max / 2));
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(this.x.min)).attr('x2', xScale(this.x.max))
+				.attr('x1', xScale(date.startRange)).attr('x2', xScale(date.endRange))
 				.attr('y1', yScale(this.y.max)).attr('y2', yScale(this.y.max));
 
 			let line = d3.line()

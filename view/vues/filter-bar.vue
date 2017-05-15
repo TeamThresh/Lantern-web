@@ -2,7 +2,7 @@
 div.filter-bar
 	div.menu
 		select.selectpicker(v-model='app.filters.fixedRange')
-			option(value=1) Today
+			option(value=0) Today
 			option(value=3) 3 Days
 			option(value=7) 7 Days
 			option(value=14) 2 Weeks
@@ -18,6 +18,7 @@ div.filter-bar
 		a.type-filter.btn.grey-mint(@click='app.valueType = "network"', :class='{active: app.valueType == "network"}')
 			| Network
 			i.icon-feed
+		a.type-filter.btn.red(@click='clearFilters()') Clear Filters
 	filter-layer(title='Android')
 		i.fa.fa-android(slot='icon')
 	filter-layer(title='OS')
@@ -39,6 +40,18 @@ module.exports = {
 	watch: {
 	},
 	methods: {
+		clearFilters() {
+			this.app.filters = {
+				location: [],
+				device: [],
+				os: [],
+				android: [],
+				startRange: '',
+				endRange: '',
+				fixedRange: '7'
+			}
+			$('.selectpicker').selectpicker('val', this.app.filters.fixedRange)
+		}
 	},
 	mounted() {
 		$(this.$el).find('.selectpicker').selectpicker({

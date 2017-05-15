@@ -23,6 +23,12 @@ module.exports = {
 	watch: {
 		'app.packageName'() {
 			this.fetch()
+		},
+		'app.filters': {
+			handler() {
+				this.fetch()
+			},
+			deep: true
 		}
 	},
 	methods: {
@@ -44,6 +50,7 @@ module.exports = {
 			}
 			$.get(url).then(res => {
 				if( ! (res instanceof Object && Object.keys(res).length == 1) ) {
+					this.clear()
 					return
 				}
 				let data = res[Object.keys(res)[0]].reverse()
@@ -60,7 +67,8 @@ module.exports = {
 			})
 		},
 		clear() {
-
+			// this.head = []
+			this.body = []
 		},
 		transformData: function(data) {
 			/**

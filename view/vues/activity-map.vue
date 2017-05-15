@@ -92,14 +92,13 @@ module.exports = {
             var me = this;
 
             var work = function(err, data) {
-				if( err || data['msg'] == 'No data' ) {
+				// window.app.debug && console.log('activity-map', data)
+				if( err || data['msg'] == 'No data' || data.length == 0 ) {
 					svg.selectAll('*').remove()
+					return
 				}
 
-                if (data instanceof Array)
-                    data = data[0];
-
-				if( data ) {
+				if( data.nodes.length > 0 ) {
 					me.rawData = data;
 					me.fetchedPackageName = me.app.packageName;
 					nodes = data.nodes;
@@ -185,7 +184,7 @@ module.exports = {
 				// debug log
                 console.log('activity-map', me.app.packageName, nodes, links);
 
-				if( nodes === undefined || nodes.length == 0 ) {
+				if( nodes === undefined || nodes.length == 0 || data.length == 0 ) {
 					return;
 				}
 

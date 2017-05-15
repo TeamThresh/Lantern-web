@@ -22,7 +22,6 @@ module.exports = {
 	methods: {
 		fetch() {
 			$.get(`/api/location/${this.app.packageName}${this.app.getFilterQuery()}`).then((res) => {
-				console.log('wordmap-graph', res)
 				if( res instanceof Array && res.length == 0 ) {
 					res = {
 						location: []

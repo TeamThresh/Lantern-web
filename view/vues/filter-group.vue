@@ -5,7 +5,7 @@ div.filter-group
 		input.form-control(type=text placeholder='...filter name' v-model='tmpGroupName' maxlength='50')
 		button.btn.btn-success(@click='createGroup') SAVE
 	div.groups
-		span.group.hvr-bounce-in(v-for='group in groups') {{ group.name }}
+		span.group.hvr-bounce-in(v-for='group in app.filterGroups') {{ group.name }}
 </template>
 
 <script>
@@ -16,6 +16,8 @@ module.exports = {
 			tmpGroupName: '',
 			app: this.$root.app
 		}
+	},
+	watch: {
 	},
 	methods: {
 		createSampleGroups() {
@@ -32,17 +34,10 @@ module.exports = {
 			return groups
 		},
 		createGroup() {
-			this.groups.push({
-				name: this.tmpGroupName,
-				filters: {
-					location: ['asdf', 'asdf']
-				}
-			})
-			this.tmpGroupName = ''
+			// $.post(`/api/group/${this.app.packageName}/${this.tmpGroupName}`)
 		}
 	},
 	mounted() {
-		this.groups = this.createSampleGroups()
 	}
 }
 </script>

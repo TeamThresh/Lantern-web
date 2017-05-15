@@ -8,20 +8,6 @@ div.panel-group.accordion#callStackAccordion
 			div.panel-body
 				h1 thread1
 				div.jstree.jstree-default.jstree-1
-					ul.jstree-container-ul.jstree-children
-						li.jstree-node#root
-							i.jstree-icon.jstree-ocl
-							a.jstree-anchor stacktrace1
-							ul.jstree-children
-								li.jstree-node.jstree-leaf
-									i.jstree-icon.jstree-ocl
-									a.jstree-anchor stacktrace2
-								li.jstree-node.jstree-leaf.jstree-last
-									i.jstree-icon.jstree-ocl
-									a.jstree-anchor stacktrace3
-						li.jstree-node.jstree-leaf.jstree-last
-							i.jstree-icon.jstree-ocl
-							a.jstree-anchor stacktrace4
 	div.panel.panel-default
 		div.panel-heading
 			div.panel-title
@@ -36,7 +22,16 @@ module.exports = {
 	props: [],
 	data() {
 		return {
-			app: this.$root.app
+			app: this.$root.app,
+			data: [
+				{text: 'Zygote', type: 'android', children: [
+					{text: 'Method.handler', type: 'android'},
+					{text: 'DB Access', type: 'db'}
+				]},
+				{text: 'Lantern.collect()', type: 'android', children: [
+					{text: 'connectToServer()', type:'network'}
+				]}
+			]
 		}
 	},
 	watch: {
@@ -46,7 +41,29 @@ module.exports = {
 
 	},
 	mounted() {
-		$(this.$el).find('.jstree-1').jstree()
+		$(this.$el).find('.jstree-1').jstree({
+			core: {
+				themes: {
+					variant: 'large'
+				},
+				data: this.data
+			},
+			types: {
+				default: {
+					icon: 'fa fa-window-maximize'
+				},
+				android: {
+					icon: 'fa fa-android'
+				},
+				db: {
+					icon: 'fa fa-database'
+				},
+				network: {
+					icon: 'fa fa-exchange'
+				}
+			},
+			plugins: ['wholerow', 'types']
+		})
 	}
 }
 </script>

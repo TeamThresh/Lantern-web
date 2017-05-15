@@ -7,6 +7,8 @@ window.Vue = require('vue/dist/vue.common.js');
 // jQuery
 // window.$ = require('jquery');
 // window.jQuery = window.$;
+import VueCookie from 'vue-cookie'
+Vue.use(VueCookie)
 
 /**
  * load Vue Components
@@ -63,6 +65,7 @@ window.app = new Vue({
 				endRange: '',
 				fixedRange: '7'
 			},
+			filterGroups: [],
 			getFilterQuery: function() {
 				let location = ''
 				this.filters.location.forEach((l) => {
@@ -144,22 +147,57 @@ window.app = new Vue({
 			}
 		}
 	},
-	mounted() {
-		let pathNames = location.pathname.split('/')
-		switch( pathNames[1] ) {
-			case '': // dashboard
-				$.get('/api/packageNames', (data) => {
-					this.app.packageNames = data.packageNames;
-					this.app.packageName = this.app.packageNames[0];
-				});
-				break
-			case 'activityDetail':
-				this.app.resourceType = pathNames[4]
-			case 'activitySummary':
-				this.app.packageName = pathNames[2]
-				this.app.activityName = pathNames[3]
-				break
+	watch: {
+		'app.filters': {
+			handler() {
+				this.$cookie.set('filters', JSON.stringify(this.app.filters))
+			},
+			deep: true
 		}
+	},
+	created() {
+		// get filters from cookie
+		if( this.$cookie.get('filters') != null ) {
+			this.app.filters = JSON.parse(this.$cookie.get('filters'))
+		}
+	},
+	mounted() {
+		let p = new Promise((s, f) => {
+			s()
+		})
+		p = p.then(() => {
+			return new Promise((s, f) => {
+				let pathNames = location.pathname.split('/')
+				switch( pathNames[1] ) {
+					case '': // dashboard
+						$.get('/api/packageNames', (data) => {
+							this.app.packageNames = data.packageNames;
+							this.app.packageName = this.app.packageNames[0];
+							s()
+						});
+						break
+					case 'activityDetail':
+						this.app.resourceType = pathNames[4]
+					case 'activitySummary':
+						this.app.packageName = pathNames[2]
+						this.app.activityName = pathNames[3]
+						s()
+						break
+				}
+			})
+		})
+		// get groups
+		p = p.then(() => {
+			return new Promise((s, f) => {
+				$.get(`/api/group/${this.app.packageName}`).then(res => {
+					if( ! (res instanceof Array && res.length > 0) ) {
+						return s()
+					}
+					res.forEach(g => this.app.filterGroups.push(g))
+					return s()
+				})
+			})
+		})
 	}
 });
 
