@@ -39,6 +39,7 @@ Vue.component('app-status', require('../vues/app-status.vue'));
 Vue.component('filter-layer', require('../vues/filter-layer.vue'));
 Vue.component('filter-group', require('../vues/filter-group.vue'));
 Vue.component('user-connection-graph', require('../vues/user-connection-graph.vue'));
+Vue.component('stack-trace-tree', require('../vues/stack-trace-tree.vue'));
 
 /**
  * apply Vue app

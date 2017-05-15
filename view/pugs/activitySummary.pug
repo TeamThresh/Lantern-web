@@ -18,21 +18,24 @@ block content
 	div.row
 		div.col-xs-12
 			h4.title
-				span(style='color: #fff;') Activity Summary #{packageName} -> #{activityName}
+				span(style='color: #fff;') Activity Summary of #{packageName}'s #{activityName}
 	div.row
 		div.col-md-6
 			card(title='One-depth User Flow' package-name=packageName activity-name=activityName resource-type='userflow')
 				one-depth-user-flow
 		div.col-md-6
-			card(title='UI Rendering Elapsed Time' package-name=packageName activity-name=activityName resource-type='ui')
-				dist-graph(type='rendering')
+			a(href='/activityDetail/' + packageName + '/' + activityName + '/rendering')
+				card(title='UI Rendering Elapsed Time' package-name=packageName activity-name=activityName resource-type='ui')
+					dist-graph(type='rendering')
 	div.row
 		div.col-md-6
-			card(title='CPU Usage' package-name=packageName activity-name=activityName resource-type='cpu')
-				dist-graph(type='cpu')
+			a(href='/activityDetail/' + packageName + '/' + activityName + '/cpu')
+				card(title='CPU Usage' package-name=packageName activity-name=activityName resource-type='cpu')
+					dist-graph(type='cpu')
 		div.col-md-6
-			card(title='Memory Usage' package-name=packageName activity-name=activityName resource-type='memory')
-				dist-graph(type='memory')
+			a(href='/activityDetail/' + packageName + '/' + activityName + '/network')
+				card(title='Memory Usage' package-name=packageName activity-name=activityName resource-type='memory')
+					dist-graph(type='memory')
 	div.row
 		div.col-md-6
 			card(title='Network Outband Call' package-name=packageName activity-name=activityName resource-type='network')

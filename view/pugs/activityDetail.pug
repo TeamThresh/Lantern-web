@@ -1,60 +1,29 @@
 extends layout.pug
 
-block title
-	span(style='color: #fff;') Activity Detail #{resourceType}
-
 block content
 	div.row
+		div.col-xs-12
+			h4.title
+				span(style='color: #fff;') Activity Detail #{resourceType} of #{packageName}'s #{activityName}
+	div.row
 		div.col-lg-5.col-sm-12
-			portlet(title=resourceType + ' 사용량')
-				dist-graph
+			card(title=resourceType)
+				dist-graph(type=resourceType)
 		div.col-lg-7.col-sm-12
-			portlet(simple="true")
+			card
 				div.tabbable-line
 					ul.nav.nav-tabs
 						li.active
-							a(href='#tabCallStack' data-toggle='tab') Call Stack
+							a.font-white(href='#tabCallStack' data-toggle='tab') Call Stack
 						li
-							a(href='#tabOs' data-toggle='tab') OS
+							a.font-white(href='#tabOs' data-toggle='tab') OS
 					div.tab-content
 						div.tab-pane.active#tabCallStack
-							div.panel-group.accordion#callStackAccordion
-								div.panel.panel-default
-									div.panel-heading
-										div.panel-title
-											a.accordion-toggle(href='#thread1' data-toggle='collapse') thread1
-									div.panel-collapse.collapse#thread1
-										div.panel-body
-											h1 thread1
-											div.jstree.jstree-default.jstree-1
-												ul.jstree-container-ul.jstree-children
-													li.jstree-node#root
-														i.jstree-icon.jstree-ocl
-														a.jstree-anchor stacktrace1
-														ul.jstree-children
-															li.jstree-node.jstree-leaf
-																i.jstree-icon.jstree-ocl
-																a.jstree-anchor stacktrace2
-															li.jstree-node.jstree-leaf.jstree-last
-																i.jstree-icon.jstree-ocl
-																a.jstree-anchor stacktrace3
-													li.jstree-node.jstree-leaf.jstree-last
-														i.jstree-icon.jstree-ocl
-														a.jstree-anchor stacktrace4
-								div.panel.panel-default
-									div.panel-heading
-										div.panel-title
-											a.accordion-toggle(href='#thread2' data-toggle='collapse') thread2
-									div.panel-collapse.collapse#thread2
-										div.panel-body
-											h1 thread2
+							stack-trace-tree
 						div.tab-pane#tabOs
-							h1 OS
+							h1.font-white OS
 		
 block style
 		
 prepend script
 	script.
-		$(function() {
-			$('.jstree-1').jstree();
-		});

@@ -1,0 +1,55 @@
+<template lang="pug">
+div.panel-group.accordion#callStackAccordion
+	div.panel.panel-default
+		div.panel-heading
+			div.panel-title
+				a.accordion-toggle(href='#thread1' data-toggle='collapse') thread1
+		div.panel-collapse.collapse#thread1
+			div.panel-body
+				h1 thread1
+				div.jstree.jstree-default.jstree-1
+					ul.jstree-container-ul.jstree-children
+						li.jstree-node#root
+							i.jstree-icon.jstree-ocl
+							a.jstree-anchor stacktrace1
+							ul.jstree-children
+								li.jstree-node.jstree-leaf
+									i.jstree-icon.jstree-ocl
+									a.jstree-anchor stacktrace2
+								li.jstree-node.jstree-leaf.jstree-last
+									i.jstree-icon.jstree-ocl
+									a.jstree-anchor stacktrace3
+						li.jstree-node.jstree-leaf.jstree-last
+							i.jstree-icon.jstree-ocl
+							a.jstree-anchor stacktrace4
+	div.panel.panel-default
+		div.panel-heading
+			div.panel-title
+				a.accordion-toggle(href='#thread2' data-toggle='collapse') thread2
+		div.panel-collapse.collapse#thread2
+			div.panel-body
+				h1 thread2
+</template>
+
+<script>
+module.exports = {
+	props: [],
+	data() {
+		return {
+			app: this.$root.app
+		}
+	},
+	watch: {
+
+	},
+	methods: {
+
+	},
+	mounted() {
+		$(this.$el).find('.jstree-1').jstree()
+	}
+}
+</script>
+
+<style lang="sass">
+</style>
