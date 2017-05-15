@@ -73,7 +73,7 @@
 				<div class="hor-menu">
 					<ul class="nav navbar-nav pull-left">
 						<li><a href="/">Dashboard</a></li>
-						<li><a href="/crashList">Crash List</a></li>
+						<li><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
 						<li><a href="/">Report</a></li>
 						<li><a href="javascript:eunchan();">Machine Gun</a></li>
 					</ul>
@@ -432,6 +432,11 @@
 
 <script>
     module.exports = {
+        data() {
+            return {
+                app: this.$root.app
+            }
+        }
 
     }
 </script>

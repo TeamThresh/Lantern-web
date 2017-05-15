@@ -179,8 +179,9 @@ window.app = new Vue({
 					case 'activityDetail':
 						this.app.resourceType = pathNames[4]
 					case 'activitySummary':
-						this.app.packageName = pathNames[2]
 						this.app.activityName = pathNames[3]
+					case 'crashList':
+						this.app.packageName = pathNames[2]
 						s()
 						break
 				}

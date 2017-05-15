@@ -26,9 +26,9 @@ router.get('/activityDetail/:packageName/:activityName/:resourceType', function(
 	});
 });
 
-router.get('/crashList', (req, res, next) => {
+router.get('/crashList/:packageName', (req, res, next) => {
 	res.render('../view/pugs/crashList.pug', {
-
+		packageName: req.params.packageName
 	});
 });
 

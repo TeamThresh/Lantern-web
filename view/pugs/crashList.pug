@@ -1,10 +1,13 @@
 extends layout.pug
 
-block title
-	span(style='color: #fff;') Crash List
-
 block content
-	super-table(init-data='crash')
+	div.row
+		div.col-xs-12
+			h4.title
+				span(style='color: #fff;') Crash List
+	div.row
+		div.col-xs-12
+			super-table(type='topError')
 block style
 	style.
 		.page-content > div {

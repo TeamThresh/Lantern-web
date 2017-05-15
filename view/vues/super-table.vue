@@ -49,8 +49,8 @@ module.exports = {
 				url = `/api/${this.fetchUrl}/${this.app.packageName}${this.app.getFilterQuery()}`
 			}
 			$.get(url).then(res => {
+				this.clear()
 				if( ! (res instanceof Object && Object.keys(res).length == 1) ) {
-					this.clear()
 					return
 				}
 				let data = res[Object.keys(res)[0]].reverse()
@@ -67,7 +67,7 @@ module.exports = {
 			})
 		},
 		clear() {
-			// this.head = []
+			this.head = []
 			this.body = []
 		},
 		transformData: function(data) {
