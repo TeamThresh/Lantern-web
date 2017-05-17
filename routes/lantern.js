@@ -32,4 +32,9 @@ router.get('/crashList/:packageName', (req, res, next) => {
 	});
 });
 
+// login
+router.get('/login', (req, res, next) => {
+	res.render('../view/pugs/login.pug')
+})
+
 module.exports = router;
