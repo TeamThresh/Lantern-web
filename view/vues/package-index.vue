@@ -6,7 +6,7 @@
 		.list-count.pull-right.bg-yellow-saffron {{app.packageNames.length}}
 	.mt-list-container.list-news.ext-2
 		ul
-			li.mt-list-item(v-for='package in packages', @click='location.href = `/dashboard/${package.package}`')
+			li.mt-list-item(v-for='package in packages', @click='move(package.package)')
 				.list-icon-container
 					i.fa.fa-angle-right
 				.list-thumb
@@ -68,8 +68,8 @@ module.exports = {
 
 	},
 	methods: {
-		click(pack) {
-			console.log(pack)
+		move(packageName) {
+			window.location.href = `/dashboard/${packageName}`
 		}
 	},
 	mounted() {
