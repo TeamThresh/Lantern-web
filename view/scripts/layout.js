@@ -170,11 +170,18 @@ window.app = new Vue({
 	},
 	mounted() {
 		let p = new Promise((s, f) => {
-			// login check (just cookie existance)
+			// login check
 			if( this.$cookie.get('LANTERNSESSIONID') == null ) {
 				this.redirectToLogin()
 			} else {
-				s()
+				$.get({url: '/api/packageNames',
+					success: (res) => {
+						s()
+					},
+					error: (res) => {
+						this.redirectToLogin()
+					}
+				})
 			}
 		})
 		p = p.then(() => {
@@ -188,9 +195,6 @@ window.app = new Vue({
 								this.app.packageNames = data.packageNames;
 								this.app.packageName = this.app.packageNames[0];
 								s()
-							},
-							error: (res) => {
-								this.redirectToLogin()
 							}
 						});
 						break

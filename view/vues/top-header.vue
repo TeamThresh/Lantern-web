@@ -413,6 +413,12 @@
                             </ul>
                         </li>
                         <!-- END USER LOGIN DROPDOWN -->
+                        <li>
+                            <a href='#' @click="logout" style='color: #c6cfda;'>
+                                <i class="icon-key"></i>
+                                Log Out
+                            </a>
+                        </li>
                         <!-- BEGIN QUICK SIDEBAR TOGGLER -->
                         <li class="dropdown dropdown-extended quick-sidebar-toggler">
                             <span class="sr-only">Toggle Quick Sidebar</span>
@@ -436,8 +442,13 @@
             return {
                 app: this.$root.app
             }
+        },
+        methods: {
+            logout() {
+                this.$cookie.delete('LANTERNSESSIONID')
+                location.href = '/'
+            }
         }
-
     }
 </script>
 
