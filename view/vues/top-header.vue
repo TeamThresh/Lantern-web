@@ -72,7 +72,8 @@
                 <!-- END HEADER SEARCH BOX -->
 				<div class="hor-menu">
 					<ul class="nav navbar-nav pull-left">
-						<li><a href="/">Dashboard</a></li>
+						<li><a href="/index">Index</a></li>
+						<li><a :href="`/dashboard/${app.packageName}`">Dashboard</a></li>
 						<li><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
 						<li><a href="/">Report</a></li>
 						<li><a href="javascript:eunchan();">Machine Gun</a></li>
@@ -377,7 +378,7 @@
                         <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                         <li class="dropdown dropdown-user dropdown-dark">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <span class="username username-hide-on-mobile"> Eunchan Lee </span>
+                                <span class="username username-hide-on-mobile"> {{app.user.nickname}} </span>
                                 <!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
                                 <img alt="" class="img-circle" src="/assets/theme2/layouts/layout4/img/avatar9.jpg" /> </a>
                             <ul class="dropdown-menu dropdown-menu-default">

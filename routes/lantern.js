@@ -7,13 +7,17 @@ const SESSION_NAME = 'LANTERNSESSIONID';
 
 router.get('/', function(req, res, next) {
 	if( req.cookies[SESSION_NAME] ) {
-		res.redirect('/dashboard');
+		res.redirect('/index');
 	} else {
 		res.redirect('/login');
 	}
 });
 
-router.get('/dashboard', function(req, res, next) {
+router.get('/index', (req, res, next) => {
+	res.render('../view/pugs/index.pug')
+})
+
+router.get('/dashboard/:packageName', function(req, res, next) {
 	res.render('../view/pugs/dashboard.pug');
 });
 
