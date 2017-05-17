@@ -224,7 +224,7 @@ html(lang='en')
 		script(src='/assets/theme2/global/plugins/select2/js/select2.full.min.js')
 		script(src='/assets/theme2/pages/scripts/login.js')
 		//- bundle
-		script(src='/assets/bundles/layout.js')
+		//- script(src='/assets/bundles/layout.js')
 		block script
 		script.
 			window.login = function() {
@@ -232,19 +232,37 @@ html(lang='en')
 					username: $('input[name=email]', $('.login-form')).val(),
 					password: $('input[name=password]', $('.login-form')).val()
 				}
-				console.log(data);
+				$.post({url: '/api/user/' + data.username,
+					data: data,
+					success: function(res) {
+						location.href = '/';
+					},
+					error: function(res) {
+						alert('로그인에 실패하였습니다');
+					}
+				});
 			}
 			window.forget = function() {
 				var data = {
 					username: $('input[name=email]', $('.forget-form')).val()
 				}
-				console.log(data)
+				alert('직접 연락 부탁드립니다');
 			}
 			window.register = function() {
 				var data = {
 					username: $('input[name=email]', $('.register-form')).val(),
-					password: $('input[name=password]', $('.register-form')).val()
+					password: $('input[name=password]', $('.register-form')).val(),
+					nickname: $('input[name=fullname]', $('.register-form')).val()
 				}
-				console.log(data);
+				$.post({url: '/api/user',
+					data: data,
+					success: function(res) {
+						alert('성공적으로 가입되셨습니다');
+						location.href = '/';
+					},
+					error: function(res) {
+						alert('회원가입 도중 오류가 발생하였습니다');
+					}
+				});
 			}
 		//- END CUSTOM SCRIPTS

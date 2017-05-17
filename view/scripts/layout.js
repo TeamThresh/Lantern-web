@@ -155,6 +155,13 @@ window.app = new Vue({
 			deep: true
 		}
 	},
+	methods: {
+		redirectToLogin() {
+			this.$cookie.delete('LANTERNSESSIONID')
+			alert('로그인이 필요합니다!')
+			location.href = '/'
+		}
+	},
 	created() {
 		// get filters from cookie
 		if( this.$cookie.get('filters') != null ) {
@@ -163,17 +170,28 @@ window.app = new Vue({
 	},
 	mounted() {
 		let p = new Promise((s, f) => {
-			s()
+			// login check (just cookie existance)
+			if( this.$cookie.get('LANTERNSESSIONID') == null ) {
+				this.redirectToLogin()
+			} else {
+				s()
+			}
 		})
 		p = p.then(() => {
 			return new Promise((s, f) => {
 				let pathNames = location.pathname.split('/')
 				switch( pathNames[1] ) {
 					case '': // dashboard
-						$.get('/api/packageNames', (data) => {
-							this.app.packageNames = data.packageNames;
-							this.app.packageName = this.app.packageNames[0];
-							s()
+					case 'dashboard':
+						$.get({url: '/api/packageNames',
+							success: (data) => {
+								this.app.packageNames = data.packageNames;
+								this.app.packageName = this.app.packageNames[0];
+								s()
+							},
+							error: (res) => {
+								this.redirectToLogin()
+							}
 						});
 						break
 					case 'activityDetail':

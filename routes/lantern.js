@@ -3,8 +3,14 @@ var router = express.Router();
 var db = require('../db/db');
 var analyzer = require('../../Lantern-analyzer/analyzer');
 
+const SESSION_NAME = 'LANTERNSESSIONID';
+
 router.get('/', function(req, res, next) {
-	res.redirect('/dashboard');
+	if( req.cookies[SESSION_NAME] ) {
+		res.redirect('/dashboard');
+	} else {
+		res.redirect('/login');
+	}
 });
 
 router.get('/dashboard', function(req, res, next) {
@@ -34,7 +40,11 @@ router.get('/crashList/:packageName', (req, res, next) => {
 
 // login
 router.get('/login', (req, res, next) => {
-	res.render('../view/pugs/login.pug')
+	if( req.cookies[SESSION_NAME] ) {
+		res.redirect('/dashboard')
+	} else {
+		res.render('../view/pugs/login.pug')
+	}
 })
 
 module.exports = router;
