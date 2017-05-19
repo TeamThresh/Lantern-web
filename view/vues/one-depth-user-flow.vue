@@ -21,7 +21,7 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
-			$.get(`/api/one-depth-userflow/${this.app.packageName}/${this.app.activityName}`).then((res) => {
+			$.get(`/api/one-depth-userflow/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}`).then((res) => {
 				if( ! res instanceof Object ) {
 					return
 				}
@@ -31,16 +31,51 @@ module.exports = {
 				if( ! res.hasOwnProperty('exit') ) {
 					res.exit = 0
 				}
+
+				let arr = []
+				Object.keys(res).forEach(name => {
+					arr.push({
+						name: name,
+						value: parseInt(res[name])
+					})
+				})
+
+				arr = arr.sort((a, b) => a.value > b.value ? -1 : 1)
+				arr = arr.splice(0, 5)
+
+				let isExit = false
+				let isCrash = false
+				arr.forEach(d => {
+					if( d.name == 'exit' ) {
+						isExit = true
+					} else if( d.name == 'crash' ) {
+						isCrash = true
+					}
+				})
+				if( ! isExit ) {
+					arr.push({
+						name: 'exit',
+						value: res.exit
+					})
+				}
+				if( ! isCrash ) {
+					arr.push({
+						name: 'crash',
+						value: res.crash
+					})
+				}
+
 				this.nodes = [{name: this.app.activityName}]
 				this.links = []
-				Object.keys(res).forEach(name => {
-					this.nodes.push({name: name})
+				arr.forEach(d => {
+					this.nodes.push({name: d.name})
 					this.links.push({
 						source: 0,
 						target: this.nodes.length - 1,
-						value: res[name]
+						value: d.value
 					})
 				})
+
 				this.data = {nodes: this.nodes, links: this.links}
 				this.clear()
 				this.draw(this.data)

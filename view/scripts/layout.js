@@ -69,6 +69,8 @@ window.app = new Vue({
 			},
 			filterGroups: [],
 			user: {nickname: '', email: ''},
+			startUsage: 0,
+			endUsage: 100,
 			getFilterQuery: function() {
 				let location = ''
 				this.filters.location.forEach((l) => {

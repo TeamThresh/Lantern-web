@@ -1,6 +1,6 @@
 <template lang="pug">
 div.table-scrollable
-	table.table.table-striped
+	table.table.table-striped(:class='{light: light}')
 		thead
 			tr
 				th.text-center(v-for='name in head') {{name}}
@@ -11,7 +11,7 @@ div.table-scrollable
 
 <script>
 module.exports = {
-	props: ['type'],
+	props: ['type', 'light'],
 	data: function() {
 		return {
 			head: [],
@@ -29,7 +29,9 @@ module.exports = {
 				this.fetch()
 			},
 			deep: true
-		}
+		},
+		'app.startUsage': 'fetch',
+		'app.endUsage': 'fetch'
 	},
 	methods: {
 		fetch() {
@@ -44,7 +46,7 @@ module.exports = {
 					url = `/api/crashCount/${this.app.packageName}${this.app.getFilterQuery()}${url}`
 					break
 				case 'userList':
-					url = `/api/userList/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}`
+					url = `/api/userList/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}&startUsage=${this.app.startUsage}&endUsage=${this.app.endUsage}`
 					break
 			}
 			$.get(url).then(res => {
@@ -146,8 +148,8 @@ module.exports = {
 <style scoped lang="sass">
 	table.table {
 		background-color: transparent;
-		color: black;
 		border: none;
+		color: black;
 	}
 
 	tr {
@@ -169,5 +171,15 @@ module.exports = {
 		color: black;
 		font-size: 12px;
 		font-weight: bold;
+	}
+
+	table.table.light {
+		color: white;
+
+		th {
+			border: 1px solid #2e3139 !important;
+			background-color: #585f72;
+			color: white !important;
+		}
 	}
 </style>
