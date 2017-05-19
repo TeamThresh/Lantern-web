@@ -1,47 +1,33 @@
 extends layout.pug
 
 block content
-	//- div.row.hide
-	//- 	div.col-md-6.col-lg-3
-	//- 		card(title='Activity Summary')
-	//- 			div(style='width: 100%; height: 300px')
-	//- 				radar-chart
-	//- 	div.col-md-6.col-lg-9
-	//- 		card(title='Activity Description')
-	//- 			div.scroller
-	//- 				p(style='height: 280px;')
-	//- 					| nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.
-	//- 					br
-	//- 					| nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.
-	//- 					br
-	//- 					| nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.
 	div.row
 		div.col-xs-12
 			h4.title
-				span(style='color: #fff;') Activity Summary of #{packageName}'s #{activityName}
+				span Activity Summary of #{packageName}'s #{activityName}
 	div.row
 		div.col-md-6
-			card(title='One-depth User Flow' package-name=packageName activity-name=activityName resource-type='userflow')
+			portlet(title='One-depth User Flow')
 				one-depth-user-flow
 		div.col-md-6
 			a(href='/activityDetail/' + packageName + '/' + activityName + '/rendering')
-				card(title='UI Rendering Elapsed Time' package-name=packageName activity-name=activityName resource-type='ui')
+				portlet(title='UI Rendering Elapsed Time')
 					dist-graph(type='rendering')
 	div.row
 		div.col-md-6
 			a(href='/activityDetail/' + packageName + '/' + activityName + '/cpu')
-				card(title='CPU Usage' package-name=packageName activity-name=activityName resource-type='cpu')
+				portlet(title='CPU Usage')
 					dist-graph(type='cpu')
 		div.col-md-6
 			a(href='/activityDetail/' + packageName + '/' + activityName + '/network')
-				card(title='Memory Usage' package-name=packageName activity-name=activityName resource-type='memory')
+				portlet(title='Memory Usage')
 					dist-graph(type='memory')
 	div.row
 		div.col-md-6
-			card(title='Network Outband Call' package-name=packageName activity-name=activityName resource-type='network')
+			portlet(title='Network Outband Call')
 				super-table(type='network')
 		div.col-md-6
-			card(title='Crash List' package-name=packageName activity-name=activityName resource-type='crash')
+			portlet(title='Crash List')
 				super-table(type='crash')
 block style
 	style.

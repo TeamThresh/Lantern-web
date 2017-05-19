@@ -4,19 +4,19 @@ block content
 	div.row
 		div.col-xs-12
 			h4.title
-				span(style='color: #fff;') Activity Detail #{resourceType} of #{packageName}'s #{activityName}
+				span Activity Detail #{resourceType} of #{packageName}'s #{activityName}
 	div.row
 		div.col-lg-5.col-sm-12
-			card(title=resourceType)
+			portlet(title=resourceType)
 				dist-graph(type=resourceType)
 		div.col-lg-7.col-sm-12
-			card
+			portlet(simple='ture')
 				div.tabbable-line
 					ul.nav.nav-tabs
 						li.active
-							a.font-white(href='#tabCallStack' data-toggle='tab') Call Stack
+							a(href='#tabCallStack' data-toggle='tab') Call Stack
 						li
-							a.font-white(href='#tabOs' data-toggle='tab') OS
+							a(href='#tabOs' data-toggle='tab') OS
 					div.tab-content
 						div.tab-pane.active#tabCallStack
 							stack-trace-tree

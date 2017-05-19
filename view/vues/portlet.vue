@@ -5,7 +5,7 @@
 			<span class="caption-subject bold uppercase">{{title}}</span>
 			<span class="caption-helper">{{desc}}</span>
 		</div>
-		<div class="actions">
+		<div class="actions" v-if="action">
 			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
 				<i class="icon-cloud-upload"></i>
 			</a> -->
@@ -29,7 +29,7 @@
 <script>
 module.exports = {
 	props: [
-		'title', 'desc', 'content', 'simple',
+		'title', 'desc', 'content', 'simple', 'action',
 		'packageName', 'activityName', 'resourceType' // for top-right button
 	]
 }
