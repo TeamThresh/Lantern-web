@@ -142,7 +142,7 @@ module.exports = {
 					return d.dy / 2;
 				})
 				.attr("dy", ".35em")
-				.attr('fill', 'white')
+				.attr('fill', 'black')
 				.attr("text-anchor", "end")
 				.attr("transform", null)
 				.text(function(d) {
@@ -184,7 +184,7 @@ module.exports = {
 
 	.node text {
 		pointer-events: none;
-		text-shadow: 0 1px 0 #fff;
+		// text-shadow: 0 1px 0 #fff;
 	}
 
 	.link {

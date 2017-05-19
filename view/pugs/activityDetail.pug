@@ -7,8 +7,10 @@ block content
 				span Activity Detail #{resourceType} of #{packageName}'s #{activityName}
 	div.row
 		div.col-lg-5.col-sm-12
-			portlet(title=resourceType)
+			portlet(simple='true')
 				dist-graph(type=resourceType)
+				br
+				super-table
 		div.col-lg-7.col-sm-12
 			portlet(simple='ture')
 				div.tabbable-line

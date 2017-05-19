@@ -22,13 +22,10 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
-			$.get(`/api/${this.fetchUrl}/${this.app.packageName}/${this.app.activityName}`).then(res => {
+			$.get(`/api/${this.fetchUrl}/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}`).then(res => {
 				this.clear()
-				if( ! (res instanceof Object && res.hasOwnProperty('data')) ) {
-					return
-				}
 				this.data = []
-				res.data.forEach(d => {
+				res.forEach(d => {
 					this.data.push({
 						date: moment(d.timestamp),
 						value: d.value
@@ -36,7 +33,8 @@ module.exports = {
 				})
 
 				// calculate timeformat by the gap of y min and max
-				let delta = this.data[this.data.length - 1].date - this.data[0].date
+				let range = this.app.getRange()
+				let delta = moment(range.endRange) - moment(range.startRange)
 				if( delta <= moment.duration(1, 'd') ) {
 					this.timeFormat = '%H:%M'
 				} else if( delta <= moment.duration(1, 'y') ) {
@@ -136,6 +134,7 @@ module.exports = {
 		},
 		draw: function() {
 			var me = this;
+			var range = this.app.getRange()
 			var svg = d3.select(me.$el).select('svg');
 			var width = $(svg.node()).width();
 			var height = $(svg.node()).height();
@@ -160,8 +159,8 @@ module.exports = {
 			var boxHeight = 8;
 			var xScale = d3.scaleQuantize()
 				.domain((function() {
-					var date2 = me.data[me.data.length - 1].date
-					var date1 = me.data[0].date;
+					var date2 = range.endRange
+					var date1 = range.startRange
 					return [date1, date2];
 				})())
 				.range((function() {
@@ -196,23 +195,6 @@ module.exports = {
 			// me.data = me.getRandomSapleData(xScale.domain()[0], xScale.domain()[1]);
 			me.data = me.sampling(me.data, xScale, yScale);
 
-			$.each(me.data, function(index, data) {
-				svg.append('rect')
-					.attr('width', boxWidth)
-					.attr('height', boxHeight)
-					.attr('x', data.x)
-					.attr('y', data.y)
-					.attr('fill', data.color)
-					.attr('class', 'box');
-				svg.append('text')
-					.attr('x', data.x)
-					.attr('y', data.y + 8)
-					.attr('fill', '#000')
-					.attr('font-size', '10px')
-					.text(data.value)
-					.style('display', 'none');
-			});
-
 			// axis
 			var xAxis = d3.axisBottom(xScale)
 				.tickFormat(d3.timeFormat(this.timeFormat))
@@ -231,8 +213,42 @@ module.exports = {
 				.attr('transform', 'translate(' + axesPadding + ', ' + ((boxHeight / 2) + 5) + ')')
 				.call(yAxis);
 
-			// debug
-			window.xScale = xScale;
+			// guide line
+			let guideGroup = svg.append('g').attr('class', 'guide-group');
+			guideGroup.selectAll('line')
+				.data(svg.select('g.x-axis').selectAll('text').nodes()).enter().append('line')
+				.attr('x1', (d) => $(d).position().left - $(d).parent().parent().parent().position().left + 10)
+				.attr('x2', (d) => $(d).position().left - $(d).parent().parent().parent().position().left + 10)
+				.attr('y1', (d) => $(d).position().top - $(d).parent().parent().parent().position().top - 7)
+				.attr('y2', 10)
+				.attr('stroke-dasharray', '5, 5')
+				.attr('class', 'guide');
+			guideGroup.append('line').attr('class', 'guide')
+				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
+				.attr('y1', yScale(0) + boxHeight).attr('y2', yScale(0) + boxHeight);
+			guideGroup.append('line').attr('class', 'guide')
+				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
+				.attr('y1', yScale(50) + boxHeight).attr('y2', yScale(50) + boxHeight);
+			guideGroup.append('line').attr('class', 'guide')
+				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
+				.attr('y1', yScale(100)).attr('y2', yScale(100));
+
+			$.each(me.data, function(index, data) {
+				svg.append('rect')
+					.attr('width', boxWidth)
+					.attr('height', boxHeight)
+					.attr('x', data.x)
+					.attr('y', data.y)
+					.attr('fill', data.color)
+					.attr('class', 'box');
+				svg.append('text')
+					.attr('x', data.x)
+					.attr('y', data.y + 8)
+					.attr('fill', '#000')
+					.attr('font-size', '10px')
+					.text(data.value)
+					.style('display', 'none');
+			});
 		}
 	},
 	mounted: function() {
@@ -273,6 +289,9 @@ module.exports = {
 					fill: #868e96;
 				}
 			}
+		}
+		.guide-group line {
+			stroke: #ddd;
 		}
 	}
 }

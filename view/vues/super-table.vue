@@ -46,10 +46,7 @@ module.exports = {
 			}
 			$.get(url).then(res => {
 				this.clear()
-				if( ! (res instanceof Object && Object.keys(res).length == 1) ) {
-					return
-				}
-				let data = res[Object.keys(res)[0]].reverse()
+				let data = res.reverse()
 				data.forEach(d => {
 					let row = []
 					Object.keys(d).forEach(h => {
