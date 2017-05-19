@@ -2,7 +2,7 @@
 div.m-grid.m-grid-row(style='height: 50px;')
 	div.m-grid-col.m-grid-col-xs-6.m-grid-col-middle.font-white.left
 		i.fa.fa-dropbox
-		span Dropbox
+		span {{app.packageName}}
 		i.fa.fa-chevron-right
 	div.m-grid-col.m-grid-col-xs-6.m-grid-col-middle.font-white.right
 		i.fa.fa-bar-chart(style='margin: 0 5px 0 0')
@@ -12,6 +12,11 @@ div.m-grid.m-grid-row(style='height: 50px;')
 
 <script>
 module.exports = {
+	data() {
+		return {
+			app: this.$root.app
+		}
+	}
 }
 </script>
 

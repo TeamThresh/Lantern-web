@@ -51,6 +51,7 @@ window.app = new Vue({
 	el: '#app',
 	data: {
 		debug: true,
+		serverDead: true,
 		app: {
 			packageNames: [],
 			packageName: '',
@@ -159,6 +160,9 @@ window.app = new Vue({
 	},
 	methods: {
 		redirectToLogin() {
+			if( this.serverDead ) {
+				return
+			}
 			this.$cookie.delete('LANTERNSESSIONID')
 			alert('로그인이 필요합니다!')
 			location.href = '/'
@@ -173,21 +177,17 @@ window.app = new Vue({
 	mounted() {
 		let p = new Promise((s, f) => {
 			// login check
-			if( this.$cookie.get('LANTERNSESSIONID') == null ) {
-				this.redirectToLogin()
-			} else {
-				$.get({url: '/api/packageNames',
-					success: (res) => {
-						let obj = JSON.parse(window.atobUnicode(this.$cookie.get('LANTERNSESSIONID').split('.')[1]))
-						this.app.user.nickname = obj.nickname
-						this.app.user.email = obj.username
-						s()
-					},
-					error: (res) => {
-						this.redirectToLogin()
-					}
-				})
-			}
+			$.get({url: '/api/packageNames',
+				success: (res) => {
+					let obj = JSON.parse(window.atobUnicode(this.$cookie.get('LANTERNSESSIONID').split('.')[1]))
+					this.app.user.nickname = obj.nickname
+					this.app.user.email = obj.username
+					s()
+				},
+				error: (res) => {
+					this.redirectToLogin()
+				}
+			})
 		})
 		p = p.then(() => {
 			return new Promise((s, f) => {
@@ -200,7 +200,7 @@ window.app = new Vue({
 								if( data.length == 0 ) {
 									return;
 								}
-								this.app.packageNames = data.packageNames;
+								this.app.packageNames = data;
 								this.app.packageName = this.app.packageNames[0];
 								s()
 							}

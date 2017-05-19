@@ -3,7 +3,7 @@
 	.mt-list-head.list-news.ext-1
 		.list-head-title-container
 			h3.list-title.uppercase select  your app
-		.list-count.pull-right.bg-yellow-saffron {{app.packageNames.length}}
+		.list-count.pull-right.bg-yellow-saffron {{packages.length}}
 	.mt-list-container.list-news.ext-2
 		ul
 			li.mt-list-item(v-for='package in packages', @click='move(package.package)')

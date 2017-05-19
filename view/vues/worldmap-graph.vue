@@ -22,12 +22,7 @@ module.exports = {
 	methods: {
 		fetch() {
 			$.get(`/api/location/${this.app.packageName}${this.app.getFilterQuery()}`).then((res) => {
-				if( res instanceof Array && res.length == 0 ) {
-					res = {
-						location: []
-					}
-				}
-				this.draw(res.location);
+				this.draw(res);
 			});
 		},
 		draw: function(data) {
