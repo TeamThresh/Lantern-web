@@ -8,26 +8,25 @@ module.exports = {
 	data() {
 		return {
 			app: this.$root.app,
-			data: [
-				{text: 'Zygote', type: 'android', children: [
-					{text: 'Method.handler', type: 'android'},
-					{text: 'DB Access', type: 'db'}
-				]},
-				{text: 'Lantern.collect()', type: 'android', children: [
-					{text: 'connectToServer()', type:'network'}
-				]}
-			]
+			data: []
 		}
 	},
 	watch: {
 		'app.packageName'() {
+		},
+		'app.uuid'() {
 			this.fetch()
+		},
+		'app.distSelection'() {
+			this.clear()
 		},
 		data: 'draw'
 	},
 	methods: {
 		fetch() {
-			$.get(`/api/reverseStack/${this.app.packageName}/${this.app.activityName}`).then(res => {
+			let query = this.app.getFilters()
+			query.uuid = this.app.uuid
+			$.ajax({type: 'get', url: `/api/reverseStack/${this.app.packageName}/${this.app.activityName}`, data: query}).then(res => {
 				this.clear()
 				this.data = []
 				res.forEach(d => {

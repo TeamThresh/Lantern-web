@@ -1,7 +1,7 @@
 <template lang="pug">
 div.filter-bar
 	div.menu
-		select.selectpicker(v-model='app.filters.fixedRange')
+		select.selectpicker(v-model='fixedRange')
 			option(value=0) Today
 			option(value=3) 3 Days
 			option(value=7) 7 Days
@@ -34,10 +34,17 @@ div.filter-bar
 module.exports = {
 	data() {
 		return {
-			app: this.$root.app
+			app: this.$root.app,
+			fixedRange: this.$root.app.filters.fixedRange
 		}
 	},
 	watch: {
+		fixedRange(v) {
+			this.app.filters.fixedRange = v
+			let range = this.app.getRange()
+			this.app.filters.startRange = range.startRange
+			this.app.filters.endRange = range.endRange
+		}
 	},
 	methods: {
 		clearFilters() {
@@ -52,6 +59,8 @@ module.exports = {
 			}
 			$('.selectpicker').selectpicker('val', this.app.filters.fixedRange)
 		}
+	},
+	created() {
 	},
 	mounted() {
 		$(this.$el).find('.selectpicker').selectpicker({

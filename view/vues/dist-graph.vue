@@ -304,6 +304,10 @@ module.exports = {
 				maxUsage = Math.floor(maxUsage)
 				minRange = Math.floor(minRange)
 				maxRange = Math.floor(maxRange)
+				this.app.distSelection.startUsage = minUsage
+				this.app.distSelection.endUsage = maxUsage
+				this.app.distSelection.startRange = minRange
+				this.app.distSelection.endRange = maxRange
 			}))
 		}
 	},
@@ -320,6 +324,11 @@ module.exports = {
 				this.fetchUrl = 'memory'
 				break
 		}
+		// init app data
+		this.app.distSelection.startUsage = 0
+		this.app.distSelection.endUsage = 100
+		this.app.distSelection.startRange = 0
+		this.app.distSelection.endRange = 0
 	}
 }
 </script>

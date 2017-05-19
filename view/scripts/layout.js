@@ -51,7 +51,7 @@ window.app = new Vue({
 	el: '#app',
 	data: {
 		debug: true,
-		serverDead: true,
+		serverDead: false,
 		app: {
 			packageNames: [],
 			packageName: '',
@@ -63,14 +63,22 @@ window.app = new Vue({
 				device: [],
 				os: [],
 				android: [],
-				startRange: '',
-				endRange: '',
+				startRange: moment().subtract(7, 'd').hour(0).minute(0).second(0).millisecond(0).valueOf(),
+				endRange: moment().valueOf(),
 				fixedRange: '7'
 			},
 			filterGroups: [],
 			user: {nickname: '', email: ''},
-			startUsage: 0,
-			endUsage: 100,
+			distSelection: {
+				startUsage: 0,
+				endUsage: 100,
+				startRange: 0,
+				endRange: 0
+			},
+			uuid: '', // for stack-trace-tree view
+			getFilters: function() {
+				return JSON.parse(JSON.stringify(this.filters))
+			},
 			getFilterQuery: function() {
 				let location = ''
 				this.filters.location.forEach((l) => {
@@ -154,7 +162,7 @@ window.app = new Vue({
 	},
 	watch: {
 		'app.filters': {
-			handler() {
+			handler(v, ov) {
 				this.$cookie.set('filters', JSON.stringify(this.app.filters))
 			},
 			deep: true

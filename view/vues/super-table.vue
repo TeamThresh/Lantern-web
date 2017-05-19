@@ -6,7 +6,7 @@ div.table-scrollable
 				th.text-center(v-for='name in head') {{name}}
 		tbody
 			tr(v-for='b in body')
-				td.text-center(v-for='d in b') {{d}}
+				td.text-center(v-for='d in b' @click='click(b)') {{d}}
 </template>
 
 <script>
@@ -30,26 +30,35 @@ module.exports = {
 			},
 			deep: true
 		},
-		'app.startUsage': 'fetch',
-		'app.endUsage': 'fetch'
+		'app.distSelection': {
+			handler() {
+				this.fetch()
+			},
+			deep: true
+		}
 	},
 	methods: {
 		fetch() {
 			let url = ''
+			let query = JSON.parse(JSON.stringify(this.app.filters))
 			switch( this.type ) {
 				case 'network':
-					url = `/api/network/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}`
+					url = `/api/network/${this.app.packageName}/${this.app.activityName}`
 					break
 				case 'crash5':
-					url = '&limit=5'
+					query.limit = 5
 				case 'crash':
-					url = `/api/crashCount/${this.app.packageName}${this.app.getFilterQuery()}${url}`
+					url = `/api/crashCount/${this.app.packageName}`
 					break
 				case 'userList':
-					url = `/api/userList/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}&startUsage=${this.app.startUsage}&endUsage=${this.app.endUsage}`
+					url = `/api/userList/${this.app.packageName}/${this.app.activityName}`
+					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
+					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
+					query.startUsage = this.app.distSelection.startUsage
+					query.endUsage = this.app.distSelection.endUsage
 					break
 			}
-			$.get(url).then(res => {
+			$.ajax({type: 'get', url: url, data: query}).then(res => {
 				this.clear()
 				let data = res.reverse()
 				data.forEach(d => {
@@ -138,6 +147,11 @@ module.exports = {
 				}
 			}
 			return tmp;
+		},
+		click(d) {
+			if( this.type == 'userList' ) {
+				this.app.uuid = d[0]
+			}
 		}
 	},
 	mounted: function() {
