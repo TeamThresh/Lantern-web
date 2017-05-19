@@ -140,15 +140,19 @@ module.exports = {
 }
 </script>
 
-<style scoped lang="css">
+<style scoped lang="sass">
 	table.table {
 		background-color: transparent;
-		color: white;
+		color: black;
 		border: none;
 	}
 
 	tr {
 		background-color: transparent !important;
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.0625) !important;
+		}
 	}
 
 	table, .table-scrollable, tr, th, td {
@@ -158,8 +162,8 @@ module.exports = {
 
 	th {
 		border: 1px solid #2e3139 !important;
-		background-color: #585f72;
-		color: #fff;
+		/*background-color: #585f72;*/
+		color: black;
 		font-size: 12px;
 		font-weight: bold;
 	}
