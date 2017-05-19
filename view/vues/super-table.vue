@@ -36,12 +36,15 @@ module.exports = {
 			let url = ''
 			switch( this.type ) {
 				case 'network':
-					url = `/api/network/${this.app.packageName}/${this.app.activityName}`
+					url = `/api/network/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}`
 					break
 				case 'crash5':
-					url = '?limit=5'
+					url = '&limit=5'
 				case 'crash':
-					url = `/api/crashCount/${this.app.packageName}${url}`
+					url = `/api/crashCount/${this.app.packageName}${this.app.getFilterQuery()}${url}`
+					break
+				case 'userList':
+					url = `/api/userList/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}`
 					break
 			}
 			$.get(url).then(res => {

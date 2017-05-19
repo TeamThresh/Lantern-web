@@ -29,11 +29,8 @@ module.exports = {
 		fetch() {
 			$.get(`/api/reverseStack/${this.app.packageName}/${this.app.activityName}`).then(res => {
 				this.clear()
-				if( ! (res instanceof Object && res.data instanceof Array) ) {
-					return
-				}
 				this.data = []
-				res.data.forEach(d => {
+				res.forEach(d => {
 					this.data.push({
 						threadName: d.threadName,
 						data: this.preprocess(d.stack[0].children)
