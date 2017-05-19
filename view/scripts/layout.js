@@ -66,6 +66,7 @@ window.app = new Vue({
 				fixedRange: '7'
 			},
 			filterGroups: [],
+			user: {nickname: '', email: ''},
 			getFilterQuery: function() {
 				let location = ''
 				this.filters.location.forEach((l) => {
@@ -176,6 +177,9 @@ window.app = new Vue({
 			} else {
 				$.get({url: '/api/packageNames',
 					success: (res) => {
+						let obj = JSON.parse(window.atobUnicode(this.$cookie.get('LANTERNSESSIONID').split('.')[1]))
+						this.app.user.nickname = obj.nickname
+						this.app.user.email = obj.username
 						s()
 					},
 					error: (res) => {
@@ -192,6 +196,9 @@ window.app = new Vue({
 					case 'dashboard':
 						$.get({url: '/api/packageNames',
 							success: (data) => {
+								if( data.length == 0 ) {
+									return;
+								}
 								this.app.packageNames = data.packageNames;
 								this.app.packageName = this.app.packageNames[0];
 								s()
@@ -234,4 +241,11 @@ window.eunchan = function() {
 			clearInterval(id)
 		}
 	}, 100)
+}
+
+window.atobUnicode = function(str) {
+    // Going backwards: from bytestream, to percent-encoding, to original string.
+    return decodeURIComponent(atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
 }
