@@ -33,20 +33,16 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
+			let url = ''
 			switch( this.type ) {
-				case 'topError':
-					this.fetchUrl = 'topError'
-					break
 				case 'network':
-					this.fetchUrl = 'network'
+					url = `/api/network/${this.app.packageName}/${this.app.activityName}`
 					break
+				case 'crash5':
+					url = '?limit=5'
 				case 'crash':
-					this.fetchUrl = 'crash'
+					url = `/api/crashCount/${this.app.packageName}${url}`
 					break
-			}
-			let url = `/api/${this.fetchUrl}/${this.app.packageName}/${this.app.activityName}`
-			if( this.fetchUrl == 'topError' ) {
-				url = `/api/${this.fetchUrl}/${this.app.packageName}${this.app.getFilterQuery()}`
 			}
 			$.get(url).then(res => {
 				this.clear()

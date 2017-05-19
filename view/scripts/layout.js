@@ -42,6 +42,7 @@ Vue.component('filter-layer', require('../vues/filter-layer.vue'));
 Vue.component('filter-group', require('../vues/filter-group.vue'));
 Vue.component('user-connection-graph', require('../vues/user-connection-graph.vue'));
 Vue.component('stack-trace-tree', require('../vues/stack-trace-tree.vue'));
+Vue.component('package-index', require('../vues/package-index.vue'));
 
 /**
  * apply Vue app
@@ -192,8 +193,8 @@ window.app = new Vue({
 			return new Promise((s, f) => {
 				let pathNames = location.pathname.split('/')
 				switch( pathNames[1] ) {
-					case '': // dashboard
-					case 'dashboard':
+					case '':
+					case 'index':
 						$.get({url: '/api/packageNames',
 							success: (data) => {
 								if( data.length == 0 ) {
@@ -209,6 +210,7 @@ window.app = new Vue({
 						this.app.resourceType = pathNames[4]
 					case 'activitySummary':
 						this.app.activityName = pathNames[3]
+					case 'dashboard':
 					case 'crashList':
 						this.app.packageName = pathNames[2]
 						s()
