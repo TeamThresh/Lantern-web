@@ -3,6 +3,10 @@ div.page-sidebar.navbar-collapse.collapsed.filter-status-bar
 	ul.page-sidebar-menu.page-header-fixed.page-sidebar-menu-closed(data-keep-expanded='false', data-auto-scroll='true', data-slide-speed='200', style='padding-top: 20px')
 		li.nav-item
 			a.nav-link.nav-toggle
+				i.fa.fa-calendar
+				span.title {{app.filters.fixedRange}} Days
+		li.nav-item
+			a.nav-link.nav-toggle
 				i.fa.fa-android
 				span.title Android
 			ul.sub-menu

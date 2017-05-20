@@ -74,17 +74,35 @@ module.exports = {
 			let line = d3.line()
 				.x((d) => d.x).y((d) => d.y);
 			svg.append('path').data([this.data]).attr('d', line).attr('stroke', '#69db7c').attr('fill', 'none');
+
+			let area = d3.area()
+				.x(d => d.x).y0(d => height).y1(d => d.y)
+			svg.append('path').data([this.data]).attr('d', area).attr('fill', '#69c07c')
 		},
 		fakeFetch() {
+			console.log('hello')
 			let range = this.app.getRange()
-			for( let m=moment(range.startRange); m<moment(range.endRange); m.add(1, 'h') ) {
-				let date = this.xScale(m._d)
-				let x = this.xScale(date)
+			this.xScale = this.xScale.domain([range.startRange, range.endRange]).range([23, $(this.$el).find('svg').width() - 10])
+			this.yScale = this.yScale.domain([0, 1000]).range([$(this.$el).find('svg').height(), 10])
+
+			// timeformat
+			let date = this.app.getRange()
+			let delta = moment(date.endRange) - moment(date.startRange)
+			if( delta <= moment.duration(2, 'd') ) {
+				this.timeFormat = '%H:%M'
+			} else if( delta <= moment.duration(1, 'y') ) {
+				this.timeFormat = '%m-%d'
+			} else {
+				this.timeFormat = '%Y-%m'
+			}
+
+			for( let m=moment(range.startRange); m<moment(range.endRange); m.add(30, 'm') ) {
+				let x = Math.floor(this.xScale(m.valueOf()))
 				let y = Math.floor(Math.random() * 1000)
 				let merged = false
 
 				this.data.forEach(d => {
-					if( d.x == x ) {
+					if( d.x == x && ! merged ) {
 						merged = true
 						d.y += y
 					}
@@ -96,26 +114,15 @@ module.exports = {
 						y: y
 					})
 				}
+
+				console.log(this.data.length)
 			}
 
 			this.draw()
 		},
 	},
 	mounted() {
-		let range = this.app.getRange()
-		this.xScale.domain([range.startRange, range.endRange]).range([23, $(this.$el).find('svg').width() - 10])
-		this.yScale.domain([0, 1000]).range([$(this.$el).find('svg').height(), 10])
 
-		// timeformat
-		let date = this.app.getRange()
-		let delta = moment(date.endRange) - moment(date.startRange)
-		if( delta <= moment.duration(2, 'd') ) {
-			this.timeFormat = '%H:%M'
-		} else if( delta <= moment.duration(1, 'y') ) {
-			this.timeFormat = '%m-%d'
-		} else {
-			this.timeFormat = '%Y-%m'
-		}
 	}
 }
 </script>
@@ -140,7 +147,7 @@ module.exports = {
 			}
 
 			g.tick text {
-				fill: white;
+				fill: #868e96;
 			}
 
 			line.guide {
