@@ -3,7 +3,7 @@ div.filter-group
 	div.title Filter Group
 	div.input
 		input.form-control(type=text placeholder='...filter name' v-model='tmpGroupName' maxlength='50')
-		button.btn.btn-success(@click='createGroup') SAVE
+		button.btn.btn-success(@click='createGroup(tmpGroupName)') SAVE
 	div.groups
 		span.group.hvr-bounce-in(v-for='group in app.filterGroups') {{ group.name }}
 </template>
@@ -18,8 +18,17 @@ module.exports = {
 		}
 	},
 	watch: {
+		'app.packageName': 'fetch'
 	},
 	methods: {
+		fetch() {
+			$.get(`/api/group/${this.app.packageName}`).then(res => {
+				if( ! (res instanceof Array && res.length > 0) ) {
+				}
+				this.app.filterGroups = []
+				res.forEach(g => this.app.filterGroups.push(g))
+			})
+		},
 		createSampleGroups() {
 			let max = Math.floor(Math.random() * 10) + 1
 			let groups = []
@@ -33,11 +42,23 @@ module.exports = {
 			}
 			return groups
 		},
-		createGroup() {
-			// $.post(`/api/group/${this.app.packageName}/${this.tmpGroupName}`)
+		createGroup(name) {
+			let filters = this.app.getFilters()
+			$.ajax({
+				type: 'post',
+				url: `/api/group/${this.app.packageName}/${name}`,
+				data: filters,
+				success(res) {
+					this.fetch()
+				},
+				error(err) {
+					alert('그룹 등록 도중 오류가 발생하였습니다\n' + err)
+				}
+			})
 		}
 	},
 	mounted() {
+
 	}
 }
 </script>

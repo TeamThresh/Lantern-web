@@ -55,7 +55,7 @@ module.exports = {
 				android: [],
 				startRange: '',
 				endRange: '',
-				fixedRange: '7'
+				fixedRange: this.app.filters.fixedRange
 			}
 			$('.selectpicker').selectpicker('val', this.app.filters.fixedRange)
 		}

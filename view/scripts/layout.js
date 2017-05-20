@@ -43,6 +43,7 @@ Vue.component('filter-group', require('../vues/filter-group.vue'));
 Vue.component('user-connection-graph', require('../vues/user-connection-graph.vue'));
 Vue.component('stack-trace-tree', require('../vues/stack-trace-tree.vue'));
 Vue.component('package-index', require('../vues/package-index.vue'));
+Vue.component('filter-status-bar', require('../vues/filter-status-bar.vue'));
 
 /**
  * apply Vue app
@@ -51,9 +52,9 @@ window.app = new Vue({
 	el: '#app',
 	data: {
 		debug: true,
-		serverDead: false,
+		serverDead: true,
 		app: {
-			packageNames: [],
+			packages: [],
 			packageName: '',
 			activityName: '',
 			resourceType: '',
@@ -76,8 +77,17 @@ window.app = new Vue({
 				endRange: 0
 			},
 			uuid: '', // for stack-trace-tree view
+			timestampForUuid: 0, // for stack-trace-tree view
 			getFilters: function() {
-				return JSON.parse(JSON.stringify(this.filters))
+				let filters = JSON.parse(JSON.stringify(this.filters))
+				let range = this.getRange()
+				filters.startRange = range.startRange
+				filters.endRange = range.endRange
+				filters.location = filters.location.join(',')
+				filters.device = filters.device.join(',')
+				filters.os = filters.os.join(',')
+				filters.android = filters.android.join(',')
+				return filters
 			},
 			getFilterQuery: function() {
 				let location = ''
@@ -210,9 +220,7 @@ window.app = new Vue({
 								if( data.length == 0 ) {
 									return;
 								}
-								this.app.packageNames = data;
-								this.app.packageName = this.app.packageNames[0];
-								s()
+								this.app.packages = data;
 							}
 						});
 						break
@@ -226,18 +234,6 @@ window.app = new Vue({
 						s()
 						break
 				}
-			})
-		})
-		// get groups
-		p = p.then(() => {
-			return new Promise((s, f) => {
-				$.get(`/api/group/${this.app.packageName}`).then(res => {
-					if( ! (res instanceof Array && res.length > 0) ) {
-						return s()
-					}
-					res.forEach(g => this.app.filterGroups.push(g))
-					return s()
-				})
 			})
 		})
 	}

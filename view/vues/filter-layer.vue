@@ -58,7 +58,6 @@ module.exports = {
 			return nodes
 		},
 		filterUpdate() {
-			window.app.debug && console.log('filter-layer', 'filterUpdate')
 			let filters = this.app.filters[this.title.toLowerCase()]
 			this.nodes.forEach((node) => {
 				if( node.selected && filters.indexOf(node.name) < 0 ) {

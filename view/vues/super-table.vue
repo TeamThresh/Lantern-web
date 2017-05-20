@@ -5,8 +5,8 @@ div.table-scrollable
 			tr
 				th.text-center(v-for='name in head') {{name}}
 		tbody
-			tr(v-for='b in body')
-				td.text-center(v-for='d in b' @click='click(b)') {{d}}
+			tr(v-for='b in body', @click='click(b)')
+				td.text-center(v-for='d in b') {{d}}
 </template>
 
 <script>
@@ -40,7 +40,7 @@ module.exports = {
 	methods: {
 		fetch() {
 			let url = ''
-			let query = JSON.parse(JSON.stringify(this.app.filters))
+			let query = this.app.getFilters()
 			switch( this.type ) {
 				case 'network':
 					url = `/api/network/${this.app.packageName}/${this.app.activityName}`
@@ -151,6 +151,7 @@ module.exports = {
 		click(d) {
 			if( this.type == 'userList' ) {
 				this.app.uuid = d[0]
+				this.app.timestampForUuid = d[6]
 			}
 		}
 	},
@@ -168,6 +169,7 @@ module.exports = {
 
 	tr {
 		background-color: transparent !important;
+		cursor: pointer;
 
 		&:hover {
 			background-color: rgba(0, 0, 0, 0.0625) !important;

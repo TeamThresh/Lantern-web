@@ -14,18 +14,24 @@ module.exports = {
 	watch: {
 		'app.packageName'() {
 		},
-		'app.uuid'() {
-			this.fetch()
-		},
-		'app.distSelection'() {
-			this.clear()
+		'app.distSelection': {
+			handler() {
+				this.fetch()
+			},
+			deep: true
 		},
 		data: 'draw'
 	},
 	methods: {
 		fetch() {
 			let query = this.app.getFilters()
-			query.uuid = this.app.uuid
+			query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
+			query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
+			query.startUsage = this.app.distSelection.startUsage
+			query.endUsage = this.app.distSelection.endUsage
+			// query.uuid = this.app.uuid
+			// query.startRange = this.app.timestampForUuid
+			// query.endRange = parseInt(this.app.timestampForUuid) + 1
 			$.ajax({type: 'get', url: `/api/reverseStack/${this.app.packageName}/${this.app.activityName}`, data: query}).then(res => {
 				this.clear()
 				this.data = []

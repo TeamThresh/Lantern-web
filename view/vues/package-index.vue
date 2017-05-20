@@ -3,10 +3,10 @@
 	.mt-list-head.list-news.ext-1
 		.list-head-title-container
 			h3.list-title.uppercase select  your app
-		.list-count.pull-right.bg-yellow-saffron {{packages.length}}
+		.list-count.pull-right.bg-yellow-saffron {{this.app.packages.length}}
 	.mt-list-container.list-news.ext-2
 		ul
-			li.mt-list-item(v-for='package in packages', @click='move(package.package)')
+			li.mt-list-item(v-for='package in this.app.packages', @click='move(package.package)')
 				.list-icon-container
 					i.fa.fa-angle-right
 				.list-thumb
@@ -15,7 +15,8 @@
 				.list-datetime.bold.uppercase.font-yellow-casablanca {{package.package}}
 				.list-item-content
 					h3.uppercase.bold {{package.name}}
-					p
+					p version: {{package.app_ver}}
+					p.hidden
 						| User :&nbsp;
 						span(:class='{red: package.userScore < 4, yellow: package.userScore < 7, blue: package.userScore < 10}') {{package.userScore}}
 						| &nbsp;&nbsp; {{package.type == 'android' ? 'Activitys' : 'Reactivity'}} :&nbsp;
@@ -33,35 +34,7 @@ module.exports = {
 	props: [],
 	data() {
 		return {
-			app: this.$root.app,
-			packages: [{
-				name: 'dorothy app',
-				package: 'com.dorothy.mealiary',
-				type: 'android',
-				userScore: (Math.random() * 10).toFixed(1),
-				activityScore: (Math.random() * 10).toFixed(1),
-				crashScore: (Math.random() * 10).toFixed(1),
-				resourceScore: (Math.random() * 10).toFixed(1),
-				networkScore: (Math.random() * 10).toFixed(1)
-			}, {
-				name: 'kakaotalk app',
-				package: 'com.kakao.kakaotalk',
-				type: 'android',
-				userScore: (Math.random() * 10).toFixed(1),
-				activityScore: (Math.random() * 10).toFixed(1),
-				crashScore: (Math.random() * 10).toFixed(1),
-				resourceScore: (Math.random() * 10).toFixed(1),
-				networkScore: (Math.random() * 10).toFixed(1)
-			}, {
-				name: 'pokemon go',
-				package: 'com.eunchan.pokemongo',
-				type: 'unity',
-				userScore: (Math.random() * 10).toFixed(1),
-				activityScore: (Math.random() * 10).toFixed(1),
-				crashScore: (Math.random() * 10).toFixed(1),
-				resourceScore: (Math.random() * 10).toFixed(1),
-				networkScore: (Math.random() * 10).toFixed(1)
-			}]
+			app: this.$root.app
 		}
 	},
 	watch: {

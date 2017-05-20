@@ -1,0 +1,20 @@
+extends base.pug
+
+block body
+	div#app
+		top-header
+		div.clearfix
+		div.page-container
+			div.page-sidebar-wrapper
+				block sidebar
+			div.page-content-wrapper
+				div.page-content
+					div.container-fluid
+						br
+						block content
+		right-header
+		bottom-header
+	
+block script
+	
+block style
