@@ -5,7 +5,7 @@ div.dist-graph
 
 <script>
 module.exports = {
-	props: ['type'],
+	props: ['type', 'selectable'],
 	data: function() {
 		return {
 			data: [],
@@ -252,63 +252,65 @@ module.exports = {
 			});
 
 			// drag
-			let selectBox = svg.append('rect').attr('class', 'select-box').attr('fill-opacity', 0)
-			svg.call(d3.drag().on('start', () => {
-				selectBox.attr('x', d3.event.x)
-				selectBox.attr('y', d3.event.y)
-				selectBox.attr('width', 1)
-				selectBox.attr('height', 1)
-				selectBox.attr('fill-opacity', 0.125)
-				boxes.forEach(box => box.classed('selected', false))
-			}).on('drag', () => {
-				let a = d3.event.subject
-				let b = d3.event
-				if( b.x > a.x ) {
-					selectBox.attr('width', b.x - a.x)
-					selectBox.attr('x', a.x)
-				} else if( b.x < a.x ) {
-					selectBox.attr('width', a.x - b.x)
-					selectBox.attr('x', b.x)
-				}
-				if( b.y > a.y ) {
-					selectBox.attr('height', b.y - a.y)
-					selectBox.attr('y', a.y)
-				} else if( b.y < a.y ) {
-					selectBox.attr('height', a.y - b.y)
-					selectBox.attr('y', b.y)
-				}
-			}).on('end', () => {
-				selectBox.attr('fill-opacity', 0)
-				let a = d3.event.subject
-				let b = d3.event
-				let x1 = a.x < b.x ? a.x : b.x
-				let x2 = a.x < b.x ? b.x : a.x
-				let y1 = a.y < b.y ? a.y : b.y
-				let y2 = a.y < b.y ? b.y : a.y
-				let minUsage = 101, maxUsage = -1
-				let minRange = range.endRange, maxRange = range.startRange
-				boxes.forEach(box => {
-					let x = parseInt(box.attr('x')) + boxWidth / 2
-					let y = parseInt(box.attr('y')) + boxHeight / 2
-					if( x1 < x && x < x2 && y1 < y && y < y2 ) {
-						box.classed('selected', true)
-						let usage = yScale.invertExtent(parseInt(box.attr('y')))
-						let range = xScale.invertExtent(parseInt(box.attr('x')))
-						minUsage = minUsage > usage[0] ? usage[0] : minUsage
-						maxUsage = maxUsage < usage[1] ? usage[1] : maxUsage
-						minRange = minRange > range[0] ? range[0] : minRange
-						maxRange = maxRange < range[1] ? range[1] : maxRange
+			if( this.selectable ) {
+				let selectBox = svg.append('rect').attr('class', 'select-box').attr('fill-opacity', 0)
+				svg.call(d3.drag().on('start', () => {
+					selectBox.attr('x', d3.event.x)
+					selectBox.attr('y', d3.event.y)
+					selectBox.attr('width', 1)
+					selectBox.attr('height', 1)
+					selectBox.attr('fill-opacity', 0.125)
+					boxes.forEach(box => box.classed('selected', false))
+				}).on('drag', () => {
+					let a = d3.event.subject
+					let b = d3.event
+					if( b.x > a.x ) {
+						selectBox.attr('width', b.x - a.x)
+						selectBox.attr('x', a.x)
+					} else if( b.x < a.x ) {
+						selectBox.attr('width', a.x - b.x)
+						selectBox.attr('x', b.x)
 					}
-				})
-				minUsage = Math.floor(minUsage)
-				maxUsage = Math.floor(maxUsage)
-				minRange = Math.floor(minRange)
-				maxRange = Math.floor(maxRange)
-				this.app.distSelection.startUsage = minUsage
-				this.app.distSelection.endUsage = maxUsage
-				this.app.distSelection.startRange = minRange
-				this.app.distSelection.endRange = maxRange
-			}))
+					if( b.y > a.y ) {
+						selectBox.attr('height', b.y - a.y)
+						selectBox.attr('y', a.y)
+					} else if( b.y < a.y ) {
+						selectBox.attr('height', a.y - b.y)
+						selectBox.attr('y', b.y)
+					}
+				}).on('end', () => {
+					selectBox.attr('fill-opacity', 0)
+					let a = d3.event.subject
+					let b = d3.event
+					let x1 = a.x < b.x ? a.x : b.x
+					let x2 = a.x < b.x ? b.x : a.x
+					let y1 = a.y < b.y ? a.y : b.y
+					let y2 = a.y < b.y ? b.y : a.y
+					let minUsage = 101, maxUsage = -1
+					let minRange = range.endRange, maxRange = range.startRange
+					boxes.forEach(box => {
+						let x = parseInt(box.attr('x')) + boxWidth / 2
+						let y = parseInt(box.attr('y')) + boxHeight / 2
+						if( x1 < x && x < x2 && y1 < y && y < y2 ) {
+							box.classed('selected', true)
+							let usage = yScale.invertExtent(parseInt(box.attr('y')))
+							let range = xScale.invertExtent(parseInt(box.attr('x')))
+							minUsage = minUsage > usage[0] ? usage[0] : minUsage
+							maxUsage = maxUsage < usage[1] ? usage[1] : maxUsage
+							minRange = minRange > range[0] ? range[0] : minRange
+							maxRange = maxRange < range[1] ? range[1] : maxRange
+						}
+					})
+					minUsage = Math.floor(minUsage)
+					maxUsage = Math.floor(maxUsage)
+					minRange = Math.floor(minRange)
+					maxRange = Math.floor(maxRange)
+					this.app.distSelection.startUsage = minUsage
+					this.app.distSelection.endUsage = maxUsage
+					this.app.distSelection.startRange = minRange
+					this.app.distSelection.endRange = maxRange
+				}))
+			}
 		}
 	},
 	mounted: function() {
