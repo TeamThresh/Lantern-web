@@ -34,10 +34,8 @@ module.exports = {
 			let margin = this.margin
 			let xScale = this.xScale
 			let yScale = this.yScale
-			let xAxis = d3.axisBottom(this.xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat(this.timeFormat));
-			let yAxis = d3.axisLeft(this.yScale).ticks(2).tickSize(0);
-			let minY = Math.min.apply(Math, this.data.map(d => d.y))
-			let maxY = Math.max.apply(Math, this.data.map(d => d.y))
+			let xAxis = d3.axisBottom(this.xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat(this.timeFormat))
+			let yAxis = d3.axisLeft(this.yScale).ticks(2).tickSize(0)
 
 			this.clear()
 
