@@ -12,6 +12,7 @@ module.exports = {
 			data: [],
 			xScale: d3.scaleTime(),
 			yScale: d3.scaleLinear(),
+			margin: {top: 10, right: 0, bottom: 20, left: 30},
 			timeFormat: ''
 		}
 	},
@@ -30,60 +31,30 @@ module.exports = {
 			let width = $(svg.node()).width()
 			let height = $(svg.node()).height()
 			let range = this.app.getRange()
+			let margin = this.margin
 			let xScale = this.xScale
 			let yScale = this.yScale
 			let xAxis = d3.axisBottom(this.xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat(this.timeFormat));
 			let yAxis = d3.axisLeft(this.yScale).ticks(2).tickSize(0);
-			let minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE
-
-			this.data.forEach(d => {
-				if( d.y < minY ) {
-					minY = d.y
-				}
-				if( d.y > maxY ) {
-					maxY = d.y
-				}
-			})
+			let minY = Math.min.apply(Math, this.data.map(d => d.y))
+			let maxY = Math.max.apply(Math, this.data.map(d => d.y))
 
 			this.clear()
 
-			svg.append('g').attr('class', 'x-axis').attr('transform', `translate(0, ${height - 13})`).call(xAxis)
-				.selectAll('line').remove();
-			svg.append('g').attr('class', 'y-axis').attr('transform', `translate(20, 0)`).call(yAxis)
-				.selectAll('line').remove();
-
-			let guideGroup = svg.append('g').attr('class', 'guide-group');
-			guideGroup.selectAll('line')
-				.data(svg.select('g.x-axis').selectAll('text').nodes()).enter().append('line')
-				.attr('x1', (d) => $(d).position().left - $(d).parent().parent().parent().position().left + 10)
-				.attr('x2', (d) => $(d).position().left - $(d).parent().parent().parent().position().left + 10)
-				.attr('y1', (d) => $(d).position().top - $(d).parent().parent().parent().position().top - 7)
-				.attr('y2', 10)
-				.attr('stroke-dasharray', '5, 5')
-				.attr('class', 'guide');
-			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
-				.attr('y1', yScale(0)).attr('y2', yScale(0));
-			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
-				.attr('y1', yScale(maxY / 2)).attr('y2', yScale(maxY / 2));
-			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
-				.attr('y1', yScale(maxY)).attr('y2', yScale(maxY));
+			this.app.drawAxis(svg, xAxis, yAxis, margin)
 
 			let line = d3.line()
 				.x((d) => d.x).y((d) => d.y);
 			svg.append('path').data([this.data]).attr('d', line).attr('stroke', '#69db7c').attr('fill', 'none');
 
 			let area = d3.area()
-				.x(d => d.x).y0(d => height).y1(d => d.y)
+				.x(d => d.x).y0(d => height - this.margin.bottom).y1(d => d.y)
 			svg.append('path').data([this.data]).attr('d', area).attr('fill', '#69c07c')
 		},
 		fakeFetch() {
-			console.log('hello')
 			let range = this.app.getRange()
-			this.xScale = this.xScale.domain([range.startRange, range.endRange]).range([23, $(this.$el).find('svg').width() - 10])
-			this.yScale = this.yScale.domain([0, 1000]).range([$(this.$el).find('svg').height(), 10])
+			this.xScale = this.xScale.domain([range.startRange, range.endRange]).range([this.margin.left, $(this.$el).find('svg').width() - this.margin.right])
+			this.yScale = this.yScale.domain([0, 1000]).range([$(this.$el).find('svg').height() - this.margin.bottom, this.margin.top])
 
 			// timeformat
 			let date = this.app.getRange()
@@ -96,9 +67,9 @@ module.exports = {
 				this.timeFormat = '%Y-%m'
 			}
 
-			for( let m=moment(range.startRange); m<moment(range.endRange); m.add(30, 'm') ) {
+			for( let m=moment(range.startRange); m<moment(range.endRange); m.add(1, 'h') ) {
 				let x = Math.floor(this.xScale(m.valueOf()))
-				let y = Math.floor(Math.random() * 1000)
+				let y = this.yScale(Math.floor(Math.random() * 1000))
 				let merged = false
 
 				this.data.forEach(d => {
@@ -114,8 +85,6 @@ module.exports = {
 						y: y
 					})
 				}
-
-				console.log(this.data.length)
 			}
 
 			this.draw()

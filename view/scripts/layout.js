@@ -2,49 +2,49 @@
  * import scripts
  */
 // Vue.js
-// window.Vue = require('vue/dist/vue.min.js');
-window.Vue = require('vue/dist/vue.common.js');
+// window.Vue = require('vue/dist/vue.min.js')
+window.Vue = require('vue/dist/vue.common.js')
 // jQuery
-// window.$ = require('jquery');
-// window.jQuery = window.$;
+// window.$ = require('jquery')
+// window.jQuery = window.$
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 
 /**
  * load Vue Components
  */
-Vue.component('mainmenu', require('../vues/mainmenu.vue'));
-Vue.component('submenu', require('../vues/submenu.vue'));
-Vue.component('filtermenu', require('../vues/filtermenu.vue'));
-Vue.component('flame-graph', require('../vues/flame-graph.vue'));
-Vue.component('activity-map', require('../vues/activity-map.vue'));
-Vue.component('histogram', require('../vues/histogram.vue'));
-Vue.component('screen-mode-viewer', require('../vues/screen-mode-viewer.vue'));
-Vue.component('top-header', require('../vues/top-header.vue'));
-Vue.component('left-header', require('../vues/left-header.vue'));
-Vue.component('page-toolbar', require('../vues/page-toolbar.vue'));
-Vue.component('right-header', require('../vues/right-header.vue'));
-Vue.component('bottom-header', require('../vues/bottom-header.vue'));
-Vue.component('activity-map-toolbar', require('../vues/activity-map-toolbar.vue'));
-Vue.component('portlet', require('../vues/portlet.vue'));
-Vue.component('one-depth-user-flow', require('../vues/one-depth-user-flow.vue'));
-Vue.component('dist-graph', require('../vues/dist-graph.vue'));
-Vue.component('super-table', require('../vues/super-table.vue'));
-Vue.component('radar-chart', require('../vues/radar-chart.vue'));
-Vue.component('device-usage-graph', require('../vues/device-usage-graph.vue'));
-Vue.component('line-graph', require('../vues/line-graph.vue'));
-Vue.component('worldmap-graph', require('../vues/worldmap-graph.vue'));
-Vue.component('card', require('../vues/card.vue'));
-Vue.component('top-crash', require('../vues/top-crash.vue'));
-Vue.component('filter-bar', require('../vues/filter-bar.vue'));
-Vue.component('app-status', require('../vues/app-status.vue'));
-Vue.component('filter-layer', require('../vues/filter-layer.vue'));
-Vue.component('filter-group', require('../vues/filter-group.vue'));
-Vue.component('user-connection-graph', require('../vues/user-connection-graph.vue'));
-Vue.component('stack-trace-tree', require('../vues/stack-trace-tree.vue'));
-Vue.component('package-index', require('../vues/package-index.vue'));
-Vue.component('filter-status-bar', require('../vues/filter-status-bar.vue'));
-Vue.component('area-graph', require('../vues/area-graph.vue'));
+Vue.component('mainmenu', require('../vues/mainmenu.vue'))
+Vue.component('submenu', require('../vues/submenu.vue'))
+Vue.component('filtermenu', require('../vues/filtermenu.vue'))
+Vue.component('flame-graph', require('../vues/flame-graph.vue'))
+Vue.component('activity-map', require('../vues/activity-map.vue'))
+Vue.component('histogram', require('../vues/histogram.vue'))
+Vue.component('screen-mode-viewer', require('../vues/screen-mode-viewer.vue'))
+Vue.component('top-header', require('../vues/top-header.vue'))
+Vue.component('left-header', require('../vues/left-header.vue'))
+Vue.component('page-toolbar', require('../vues/page-toolbar.vue'))
+Vue.component('right-header', require('../vues/right-header.vue'))
+Vue.component('bottom-header', require('../vues/bottom-header.vue'))
+Vue.component('activity-map-toolbar', require('../vues/activity-map-toolbar.vue'))
+Vue.component('portlet', require('../vues/portlet.vue'))
+Vue.component('one-depth-user-flow', require('../vues/one-depth-user-flow.vue'))
+Vue.component('dist-graph', require('../vues/dist-graph.vue'))
+Vue.component('super-table', require('../vues/super-table.vue'))
+Vue.component('radar-chart', require('../vues/radar-chart.vue'))
+Vue.component('device-usage-graph', require('../vues/device-usage-graph.vue'))
+Vue.component('line-graph', require('../vues/line-graph.vue'))
+Vue.component('worldmap-graph', require('../vues/worldmap-graph.vue'))
+Vue.component('card', require('../vues/card.vue'))
+Vue.component('top-crash', require('../vues/top-crash.vue'))
+Vue.component('filter-bar', require('../vues/filter-bar.vue'))
+Vue.component('app-status', require('../vues/app-status.vue'))
+Vue.component('filter-layer', require('../vues/filter-layer.vue'))
+Vue.component('filter-group', require('../vues/filter-group.vue'))
+Vue.component('user-connection-graph', require('../vues/user-connection-graph.vue'))
+Vue.component('stack-trace-tree', require('../vues/stack-trace-tree.vue'))
+Vue.component('package-index', require('../vues/package-index.vue'))
+Vue.component('filter-status-bar', require('../vues/filter-status-bar.vue'))
+Vue.component('area-graph', require('../vues/area-graph.vue'))
 
 /**
  * apply Vue app
@@ -168,6 +168,51 @@ window.app = new Vue({
 				} else {
 					node.networkColorValue = 1
 				}
+			},
+			drawAxis(svg, xAxis, yAxis, margin) {
+				let xAxisGroup = svg.append('g')
+					.attr('class', 'x-axis')
+					.attr('transform', `translate(0, ${yAxis.scale().range()[0]})`)
+					.call(xAxis)
+					.selectAll('line').remove()
+
+				let yAxisGroup = svg.append('g')
+					.attr('transform', `translate(${margin.left}, 0)`)
+					.call(yAxis)
+					.selectAll('line').remove()
+
+				let guideGroup = svg.append('g')
+				guideGroup.selectAll('line')
+					.data(svg.selectAll('g.x-axis text').nodes())
+					.enter()
+					.append('line')
+						.attr('x1', (d) => $(d).position().left - $(d).parent().parent().parent().position().left + 10)
+						.attr('x2', (d) => $(d).position().left - $(d).parent().parent().parent().position().left + 10)
+						.attr('y1', (d) => $(d).position().top - $(d).parent().parent().parent().position().top - 7)
+						.attr('y2', 10)
+						.attr('stroke-dasharray', '5, 5')
+						.attr('class', 'guide')
+				guideGroup.append('line')
+					.attr('x1', xAxis.scale().range()[0])
+					.attr('x2', xAxis.scale().range()[1])
+					.attr('y1', yAxis.scale().range()[0])
+					.attr('y2', yAxis.scale().range()[0])
+					.attr('stroke', '#3e3e3e')
+					.attr('stroke-opacity', 0.5)
+				guideGroup.append('line')
+					.attr('x1', xAxis.scale().range()[0])
+					.attr('x2', xAxis.scale().range()[1])
+					.attr('y1', yAxis.scale().range()[0] / 2)
+					.attr('y2', yAxis.scale().range()[0] / 2)
+					.attr('stroke', '#3e3e3e')
+					.attr('stroke-opacity', 0.5)
+				guideGroup.append('line')
+					.attr('x1', xAxis.scale().range()[0])
+					.attr('x2', xAxis.scale().range()[1])
+					.attr('y1', yAxis.scale().range()[1])
+					.attr('y2', yAxis.scale().range()[1])
+					.attr('stroke', '#3e3e3e')
+					.attr('stroke-opacity', 0.5)
 			}
 		}
 	},
@@ -207,6 +252,7 @@ window.app = new Vue({
 				},
 				error: (res) => {
 					this.redirectToLogin()
+					s()
 				}
 			})
 		})
@@ -219,11 +265,11 @@ window.app = new Vue({
 						$.get({url: '/api/packageNames',
 							success: (data) => {
 								if( data.length == 0 ) {
-									return;
+									return
 								}
-								this.app.packages = data;
+								this.app.packages = data
 							}
-						});
+						})
 						break
 					case 'activityDetail':
 						this.app.resourceType = pathNames[4]
@@ -238,7 +284,7 @@ window.app = new Vue({
 			})
 		})
 	}
-});
+})
 
 window.eunchan = function() {
 	let arr = $('.node')
@@ -255,6 +301,6 @@ window.eunchan = function() {
 window.atobUnicode = function(str) {
     // Going backwards: from bytestream, to percent-encoding, to original string.
     return decodeURIComponent(atob(str).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    }).join(''))
 }

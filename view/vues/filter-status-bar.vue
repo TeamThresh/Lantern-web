@@ -5,6 +5,10 @@ div.page-sidebar.navbar-collapse.collapsed.filter-status-bar
 			a.nav-link.nav-toggle
 				i.fa.fa-calendar
 				span.title {{app.filters.fixedRange}} Days
+			//- ul.sub-menu
+			//- 	div.row
+			//- 		div.col-xs-12
+			//- 			filter-bar
 		li.nav-item
 			a.nav-link.nav-toggle
 				i.fa.fa-android
@@ -64,5 +68,6 @@ module.exports = {
 <style lang="sass">
 	.filter-status-bar {
 		height: 100vh;
+		background-color: #2e3139 !important;
 	}
 </style>
