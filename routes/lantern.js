@@ -42,6 +42,13 @@ router.get('/crashList/:packageName', (req, res, next) => {
 	});
 });
 
+router.get('/crashDetail/:packageName/:crashName', (req, res, next) => {
+	res.render('../view/pugs/crashDetail.pug', {
+		packageName: req.params.packageName,
+		crashName: req.params.crashName
+	});
+});
+
 // login
 router.get('/login', (req, res, next) => {
 	if( req.cookies[SESSION_NAME] ) {

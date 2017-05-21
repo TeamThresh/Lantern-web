@@ -1,6 +1,5 @@
 <template lang="pug">
 div.layer
-	resize-observer(@notify='handleResize')
 	div.header
 		slot(name='icon')
 		div {{ title }}
@@ -304,9 +303,6 @@ module.exports = {
 			} else {
 				this.draw(this.makeOthers(this.nodes))
 			}
-		},
-		handleResize() {
-			this.draw()
 		}
 	},
 	mounted() {

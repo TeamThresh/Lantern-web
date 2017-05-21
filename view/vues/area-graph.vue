@@ -1,12 +1,11 @@
 <template lang="pug">
 div.area-graph
-	resize-observer(@notify='handleResize')
 	svg
 </template>
 
 <script>
 module.exports = {
-	props: [],
+	props: ['type'],
 	data() {
 		return {
 			app: this.$root.app,
@@ -22,7 +21,57 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
-			this.fakeFetch()
+			new Promise((s, f) => {
+				switch( this.type ) {
+					case 'crashUsage':
+						this.$http.get(`/api/crashUsage/${this.app.packageName}`, {params: this.app.getFilters()}).then(res => {
+							let data = res.body
+							this.data = data.map(d => {
+								return {x: d.collect_time, y: d.count}
+							})
+							s()
+						})
+						break
+				}
+			}).then(() => {
+				let range = this.app.getRange()
+
+				this.xScale = this.xScale.domain([range.startRange, range.endRange]).range([this.margin.left, $(this.$el).find('svg').width() - this.margin.right])
+
+				// timeformat
+				let delta = moment(range.endRange) - moment(range.startRange)
+				if( delta <= moment.duration(2, 'd') ) {
+					this.timeFormat = '%H:%M'
+				} else if( delta <= moment.duration(1, 'y') ) {
+					this.timeFormat = '%m-%d'
+				} else {
+					this.timeFormat = '%Y-%m'
+				}
+
+				let newData = []
+				this.data.forEach(d => {
+					let x = Math.floor(this.xScale(d.x))
+					let merged = false
+
+					newData.forEach(n => {
+						if( ! merged && Math.floor(this.xScale(n.x)) == x ) {
+							merged = true
+							n.y += d.y
+						}
+					})
+
+					if( ! merged ) {
+						newData.push({x: d.x, y: d.y})
+					}
+				})
+				this.data = newData.sort((a, b) => a.x > b.x)
+
+				let maxCount = Math.max.apply(Math, this.data.map(d => d.y))
+
+				this.yScale = this.yScale.domain([0, maxCount]).range([$(this.$el).find('svg').height() - this.margin.bottom, this.margin.top])
+
+				this.draw()
+			})
 		},
 		clear() {
 			$(this.$el).find('svg *').remove()
@@ -42,13 +91,13 @@ module.exports = {
 
 			this.app.drawAxis(svg, xAxis, yAxis, margin)
 
-			let line = d3.line()
-				.x((d) => d.x).y(d => yScale(d.value));
-			svg.append('path').data([this.data]).attr('d', line).attr('stroke', '#69db7c').attr('fill', 'none');
-
 			let area = d3.area()
-				.x(d => d.x).y0(d => height - this.margin.bottom).y1(d => yScale(d.value))
-			svg.append('path').data([this.data]).attr('d', area).attr('fill', '#69c07c')
+			.x(d => xScale(d.x)).y0(d => height - this.margin.bottom).y1(d => yScale(d.y))
+			svg.append('path').data([this.data]).attr('d', area).attr('fill', 'rgba(247, 103, 7, 0.62)')
+
+			let line = d3.line()
+			.x((d) => xScale(d.x)).y(d => yScale(d.y));
+			svg.append('path').data([this.data]).attr('d', line).attr('stroke', '#d9480f').attr('fill', 'none').attr('stroke-width', '2px');
 		},
 		fakeFetch() {
 			let range = this.app.getRange()
@@ -83,9 +132,6 @@ module.exports = {
 				}
 			}
 
-			this.draw()
-		},
-		handleResize() {
 			this.draw()
 		}
 	},

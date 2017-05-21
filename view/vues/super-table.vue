@@ -11,7 +11,7 @@ div.table-scrollable
 
 <script>
 module.exports = {
-	props: ['type', 'light'],
+	props: ['type', 'light', 'stopWatchPackageName', 'toDetail'],
 	data: function() {
 		return {
 			head: [],
@@ -22,7 +22,10 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName'() {
-			// this.fetch()
+			if( this.stopWatchPackageName ) {
+				return
+			}
+			this.fetch()
 		},
 		'app.filters': {
 			handler() {
@@ -85,6 +88,8 @@ module.exports = {
 			if( this.type == 'userList' ) {
 				this.app.uuid = d[0]
 				this.app.timestampForUuid = d[6]
+			} else if( this.toDetail !== undefined ) {
+				location.href = `/crashDetail/${this.app.packageName}/${d[0]}`
 			}
 		}
 	},

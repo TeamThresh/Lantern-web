@@ -316,7 +316,7 @@ module.exports = {
 			}
 		},
 		handleResize() {
-			this.draw()
+			// this.draw()
 		}
 	},
 	mounted: function() {

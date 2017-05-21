@@ -49,6 +49,7 @@ Vue.component('stack-trace-tree', require('../vues/stack-trace-tree.vue'))
 Vue.component('package-index', require('../vues/package-index.vue'))
 Vue.component('filter-status-bar', require('../vues/filter-status-bar.vue'))
 Vue.component('area-graph', require('../vues/area-graph.vue'))
+Vue.component('pie-graph', require('../vues/pie-graph.vue'))
 
 /**
  * apply Vue app
