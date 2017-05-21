@@ -5,6 +5,7 @@ div.one-depth-user-flow
 
 <script>
 module.exports = {
+	props: ['crashEventPath'],
 	data: function() {
 		return {
 			data:{

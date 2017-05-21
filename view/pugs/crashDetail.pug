@@ -7,15 +7,25 @@ block content
 	div.row
 		div.col-xs-12
 			h4.title
-				span Crash Detail
+				span Crash Detail 
 	div.row
-		div.col-xs-12.col-sm-7
-			area-graph(type='crashUsage')
-		div.col-xs-12.col-sm-5
-			//- pie-graph(type='crashCount')
+		crash-info.col-xs-12
 	div.row
-		div.col-xs-12
-			super-table(type='crash')
+		portlet.col-xs-6.col-sm-3(title='OS Version')
+			pie-graph(type='crashVersionOs')
+		portlet.col-xs-6.col-sm-3(title='App Veresion')
+			pie-graph(type='crashVersionApp')
+		portlet.col-xs-6.col-sm-3(title='Device')
+			pie-graph(type='crashVersionDevice')
+		portlet.col-xs-6.col-sm-3(title='Country')
+			pie-graph(type='crashVersionLocation')
+	div.row
+		portlet.col-xs-12(title='Critical Information')
+			//- one-depth-user-flow
+	div.row
+		portlet.col-xs-12(title='Reverse Stack')
+			//- super-table(tpye='crashCallStack')
+			stack-trace-tree(crash-reverse-stack watch-package-name)
 block style
 	style.
 	

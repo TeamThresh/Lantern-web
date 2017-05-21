@@ -4,7 +4,7 @@ div.panel-group.accordion#callStackAccordion
 
 <script>
 module.exports = {
-	props: [],
+	props: ['crashReverseStack', 'watchPackageName'],
 	data() {
 		return {
 			app: this.$root.app,
@@ -13,6 +13,9 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName'() {
+			if( this.watchPackageName !== undefined ) {
+				this.fetch()
+			}
 		},
 		'app.distSelection': {
 			handler() {
@@ -29,19 +32,29 @@ module.exports = {
 			query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
 			query.startUsage = this.app.distSelection.startUsage
 			query.endUsage = this.app.distSelection.endUsage
-			// query.uuid = this.app.uuid
-			// query.startRange = this.app.timestampForUuid
-			// query.endRange = parseInt(this.app.timestampForUuid) + 1
-			$.ajax({type: 'get', url: `/api/reverseStack/${this.app.packageName}/${this.app.activityName}`, data: query}).then(res => {
-				this.clear()
-				this.data = []
-				res.forEach(d => {
-					this.data.push({
-						threadName: d.threadName,
-						data: this.preprocess(d.stack[0].children)
+			if( this.crashReverseStack !== undefined ) {
+				$.ajax({type: 'get', url: `/api/crashReverseStack/${this.app.packageName}/${this.app.crashId}`}).then(res => {
+					this.clear()
+					this.data = []
+					this.data = res.map(d => {
+						return {
+							threadName: d.threadName,
+							data: this.preprocess(d.stack[0].children)
+						}
 					})
 				})
-			})
+			} else {
+				$.ajax({type: 'get', url: `/api/reverseStack/${this.app.packageName}/${this.app.activityName}`, data: query}).then(res => {
+					this.clear()
+					this.data = []
+					res.forEach(d => {
+						this.data.push({
+							threadName: d.threadName,
+							data: this.preprocess(d.stack[0].children)
+						})
+					})
+				})
+			}
 		},
 		clear() {
 			$(this.$el).find('*').remove()

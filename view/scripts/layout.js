@@ -52,6 +52,7 @@ Vue.component('package-index', require('../vues/package-index.vue'))
 Vue.component('filter-status-bar', require('../vues/filter-status-bar.vue'))
 Vue.component('area-graph', require('../vues/area-graph.vue'))
 Vue.component('pie-graph', require('../vues/pie-graph.vue'))
+Vue.component('crash-info', require('../vues/crash-info.vue'))
 
 /**
  * apply Vue app
@@ -86,6 +87,7 @@ window.app = new Vue({
 			},
 			uuid: '', // for stack-trace-tree view
 			timestampForUuid: 0, // for stack-trace-tree view
+			crashId: 0, // for crash detail
 			getFilters: function() {
 				let filters = JSON.parse(JSON.stringify(this.filters))
 				let range = this.getRange()
@@ -287,7 +289,9 @@ window.app = new Vue({
 					case 'activityDetail':
 						this.app.resourceType = pathNames[4]
 					case 'activitySummary':
+					case 'crashDetail':
 						this.app.activityName = pathNames[3]
+						this.app.crashId = pathNames[3]
 					case 'dashboard':
 					case 'crashList':
 						this.app.packageName = pathNames[2]
