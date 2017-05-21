@@ -22,7 +22,7 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName'() {
-			if( this.stopWatchPackageName ) {
+			if( this.stopWatchPackageName !== undefined ) {
 				return
 			}
 			this.fetch()
@@ -54,7 +54,45 @@ module.exports = {
 					url = `/api/crashCount/${this.app.packageName}`
 					break
 				case 'userList':
-					url = `/api/userList/${this.app.packageName}/${this.app.activityName}/${this.app.resourceType}`
+					switch( this.app.resourceType ) {
+						case 'cpu':
+							url = `/api/userList/${this.app.packageName}/${this.app.activityName}/cpu`
+							break
+						case 'memory':
+							url = `/api/userList/${this.app.packageName}/${this.app.activityName}/memory`
+							break
+						case 'rendering':
+							url = `/api/userList/${this.app.packageName}/${this.app.activityName}/ui`
+							break
+					}
+					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
+					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
+					query.startUsage = this.app.distSelection.startUsage
+					query.endUsage = this.app.distSelection.endUsage
+					break
+				case 'detailOs':
+					url = `/api/cpu/detailOS/${this.app.packageName}/${this.app.activityName}`
+					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
+					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
+					query.startUsage = this.app.distSelection.startUsage
+					query.endUsage = this.app.distSelection.endUsage
+					break
+				case 'detailCpuApp':
+					url = `/api/cpu/detailApp/${this.app.packageName}/${this.app.activityName}`
+					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
+					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
+					query.startUsage = this.app.distSelection.startUsage
+					query.endUsage = this.app.distSelection.endUsage
+					break
+				case 'detailVmStat':
+					url = `/api/memory/vmstat/${this.app.packageName}/${this.app.activityName}`
+					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
+					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
+					query.startUsage = this.app.distSelection.startUsage
+					query.endUsage = this.app.distSelection.endUsage
+					break
+				case 'detailMemoryApp':
+					url = `/api/memory/detailApp/${this.app.packageName}/${this.app.activityName}`
 					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
 					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
 					query.startUsage = this.app.distSelection.startUsage
@@ -64,6 +102,7 @@ module.exports = {
 			$.ajax({type: 'get', url: url, data: query}).then(res => {
 				this.clear()
 				let data = res.reverse()
+				let newData = []
 				data.forEach(d => {
 					let row = []
 					Object.keys(d).forEach(h => {
@@ -71,13 +110,14 @@ module.exports = {
 							this.head.push(h)
 						}
 						// timestamp must be readable format
-						if( h == 'time' || h == 'timestamp' ) {
+						if( h == 'time' || h == 'timestamp' || h == 'start_time' || h == 'end_time') {
 							d[h] = moment(d[h]).format('YYYY-MM-DD HH:mm:ss')
 						}
 						row.push(d[h])
 					})
-					this.body.push(row)
+					newData.push(row)
 				})
+				this.body = newData
 			})
 		},
 		clear() {

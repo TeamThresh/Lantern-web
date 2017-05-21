@@ -13,7 +13,7 @@ block content
 			portlet(simple='true')
 				dist-graph(type=resourceType selectable='true')
 				br
-				super-table(type='userList' stop-watch-package-name='true')
+				super-table(type='userList' stop-watch-package-name)
 		div.col-lg-7.col-sm-12
 			portlet(simple='ture')
 				div.tabbable-line
@@ -28,7 +28,12 @@ block content
 						div.tab-pane#tabOs
 							div.row
 								div.col-xs-12
-									area-graph(type='osDetail')
+									if resourceType == 'cpu'
+										super-table(type='detailOs' stop-watch-package-name)
+										super-table(type='detailCpuApp' stop-watch-package-name)
+									else if resourceType == 'memory'
+										super-table(type='detailVmStat' stop-watch-package-name)
+										super-table(type='detailMemoryApp' stop-watch-package-name)
 		
 block style
 	style.
