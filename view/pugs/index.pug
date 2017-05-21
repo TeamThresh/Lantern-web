@@ -3,7 +3,12 @@ extends layout-simple.pug
 block content
 	div.container
 		div.row
-			div.col-xs-12.col-sm-12.border-blue-oleo
+			div.col-xs-12
+				div.note.note-info
+					| If you wanna register new one, click&nbsp;
+					a(href='/getStarted') here
+		div.row
+			div.col-xs-12.border-blue-oleo
 				package-index
 block style
 	style.

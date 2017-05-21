@@ -40,7 +40,7 @@ gulp.task('bundling', function() {
                         {test: /\.(scss|sass|css)$/, loader: 'style!css!sass'},
                         {test: /\.vue$/, loader: 'vue'},
                         {test: /\.(png|eot|woff2|woff|ttf|svg)/, loader: 'file?name=[path][name].[ext]&publicPath=/'}
-                    ]
+					]
                 }
             }))
             .pipe(rename(function(file) {

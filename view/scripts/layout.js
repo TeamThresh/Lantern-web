@@ -13,6 +13,8 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 import VueResize from 'vue-resize'
 Vue.use(VueResize)
+import showdown from 'showdown'
+window.showdown = showdown
 
 /**
  * load Vue Components

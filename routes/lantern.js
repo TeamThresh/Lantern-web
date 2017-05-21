@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var db = require('../db/db');
 var analyzer = require('../../Lantern-analyzer/analyzer');
+const unirest = require('unirest')
+const $ = require('jquery')
 
 const SESSION_NAME = 'LANTERNSESSIONID';
 
@@ -48,6 +50,11 @@ router.get('/crashDetail/:packageName/:crashName', (req, res, next) => {
 		crashName: req.params.crashName
 	});
 });
+
+router.get('/getStarted', (req, res, next) => {
+	res.render('../view/pugs/getStarted.pug', {
+	});
+})
 
 // login
 router.get('/login', (req, res, next) => {
