@@ -1,14 +1,18 @@
 <template lang="pug">
 div.page-sidebar.navbar-collapse.collapsed.filter-status-bar
-	ul.page-sidebar-menu.page-header-fixed.page-sidebar-menu-closed(data-keep-expanded='false', data-auto-scroll='true', data-slide-speed='200', style='padding-top: 20px')
+	ul.page-sidebar-menu.page-header-fixed.page-sidebar-menu-closed(data-keep-expanded='true', style='padding-top: 20px')
+		li.sidebar-toggler-wrapper
+			div.sidebar-toggler
+				span
+		li.nav-item
 		li.nav-item
 			a.nav-link.nav-toggle
 				i.fa.fa-calendar
-				span.title {{app.filters.fixedRange}} Days
-			//- ul.sub-menu
-			//- 	div.row
-			//- 		div.col-xs-12
-			//- 			filter-bar
+				span.title Query Date Range
+			ul.sub-menu
+				li.nav-item
+					a.nav-link
+						span.title {{app.filters.fixedRange}} Days
 		li.nav-item
 			a.nav-link.nav-toggle
 				i.fa.fa-android

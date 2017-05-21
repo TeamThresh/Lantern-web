@@ -12,7 +12,9 @@ module.exports = {
 			app: this.$root.app,
 			fetchUrl: '',
 			linkUrl: '',
-			timeFormat: ''
+			timeFormat: '',
+			xScale: undefined,
+			yScale: undefined
 		};
 	},
 	watch: {
@@ -157,7 +159,7 @@ module.exports = {
 				return range[minIndex];
 			})();
 			var boxHeight = 8;
-			var xScale = d3.scaleQuantize()
+			var xScale = this.xScale = d3.scaleQuantize()
 				.domain((function() {
 					var date2 = range.endRange
 					var date1 = range.startRange
@@ -293,12 +295,12 @@ module.exports = {
 						let y = parseInt(box.attr('y')) + boxHeight / 2
 						if( x1 < x && x < x2 && y1 < y && y < y2 ) {
 							box.classed('selected', true)
-							let usage = yScale.invertExtent(parseInt(box.attr('y')))
-							let range = xScale.invertExtent(parseInt(box.attr('x')))
-							minUsage = minUsage > usage[0] ? usage[0] : minUsage
-							maxUsage = maxUsage < usage[1] ? usage[1] : maxUsage
-							minRange = minRange > range[0] ? range[0] : minRange
-							maxRange = maxRange < range[1] ? range[1] : maxRange
+							let usage = yScale.invertExtent(parseFloat(box.attr('y')))
+							let range = xScale.invertExtent(parseFloat(box.attr('x')))
+							minUsage = Math.min(minUsage, usage[0])
+							maxUsage = Math.max(maxUsage, usage[1])
+							minRange = Math.min(minRange, range[0])
+							maxRange = Math.max(maxRange, range[1])
 						}
 					})
 					minUsage = Math.floor(minUsage)
@@ -344,8 +346,8 @@ module.exports = {
 		.box {
 			shape-rendering: crispEdges;
 			&.selected {
-				stroke: red;
-				stroke-width: 3px;
+				stroke: chartreuse;
+				stroke-width: 2px;
 			}
 		}
 		.x-axis, .y-axis {

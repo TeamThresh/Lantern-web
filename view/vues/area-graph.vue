@@ -42,11 +42,11 @@ module.exports = {
 			this.app.drawAxis(svg, xAxis, yAxis, margin)
 
 			let line = d3.line()
-				.x((d) => d.x).y((d) => d.y);
+				.x((d) => d.x).y(d => yScale(d.value));
 			svg.append('path').data([this.data]).attr('d', line).attr('stroke', '#69db7c').attr('fill', 'none');
 
 			let area = d3.area()
-				.x(d => d.x).y0(d => height - this.margin.bottom).y1(d => d.y)
+				.x(d => d.x).y0(d => height - this.margin.bottom).y1(d => yScale(d.value))
 			svg.append('path').data([this.data]).attr('d', area).attr('fill', '#69c07c')
 		},
 		fakeFetch() {
@@ -65,23 +65,20 @@ module.exports = {
 				this.timeFormat = '%Y-%m'
 			}
 
-			for( let m=moment(range.startRange); m<moment(range.endRange); m.add(1, 'h') ) {
+			for( let m=moment(range.startRange); m<moment(range.endRange); m.add(4, 'h') ) {
 				let x = Math.floor(this.xScale(m.valueOf()))
-				let y = this.yScale(Math.floor(Math.random() * 1000))
+				let value = Math.floor(Math.random() * 700) + 300
 				let merged = false
 
 				this.data.forEach(d => {
 					if( d.x == x && ! merged ) {
 						merged = true
-						d.y += y
+						d.value += value
 					}
 				})
 
 				if( ! merged ) {
-					this.data.push({
-						x: x,
-						y: y
-					})
+					this.data.push({x, value})
 				}
 			}
 

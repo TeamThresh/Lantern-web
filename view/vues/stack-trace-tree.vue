@@ -57,7 +57,6 @@ module.exports = {
 						</div>
 						<div class='panel-collapse collapse' id='thread${idx}'>
 							<div class='panel-body'>
-								<h3>${d.threadName}</h3>
 								<div class='jstree jstree-default jstree${idx}'>
 								</div>
 							</div>
@@ -100,6 +99,7 @@ module.exports = {
 				} else if( a.stackName.indexOf('java') == 0 ) {
 					a.type = 'java'
 				}
+				a.id = ''
 				if( a.hasOwnProperty('children') ) {
 					this.preprocess(a.children)
 				}

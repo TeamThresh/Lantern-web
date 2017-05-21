@@ -22,11 +22,11 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName'() {
-			this.fetch()
+			// this.fetch()
 		},
 		'app.filters': {
 			handler() {
-				this.fetch()
+				// this.fetch()
 			},
 			deep: true
 		},
@@ -51,7 +51,7 @@ module.exports = {
 					url = `/api/crashCount/${this.app.packageName}`
 					break
 				case 'userList':
-					url = `/api/userList/${this.app.packageName}/${this.app.activityName}`
+					url = `/api/userList/${this.app.packageName}/${this.app.activityName}/${this.app.resourceType}`
 					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
 					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
 					query.startUsage = this.app.distSelection.startUsage
@@ -67,6 +67,10 @@ module.exports = {
 						if( this.head.indexOf(h) < 0 ) {
 							this.head.push(h)
 						}
+						// timestamp must be readable format
+						if( h == 'time' || h == 'timestamp' ) {
+							d[h] = moment(d[h]).format('YYYY-MM-DD HH:mm:ss')
+						}
 						row.push(d[h])
 					})
 					this.body.push(row)
@@ -76,77 +80,6 @@ module.exports = {
 		clear() {
 			this.head = []
 			this.body = []
-		},
-		transformData: function(data) {
-			/**
-			 * data should be formed like one of below
-			 * and this method will transform from passed data to Object type 1
-			 * actually it doesn't work right now(2017-03-28) ..... sorry I dont want to work anymore
-			 * - Object type1
-			 * {
-			 * 		head: ['a', 'b', 'c', 'd', ...],
-			 * 		body: [
-			 * 			['a', 'b', 'c', 'd', ...],
-			 * 			['a', 'b', 'c', 'd', ...],
-			 * 			['a', 'b', 'c', 'd', ...]...
-			 * 		]
-			 * }
-			 * - Object type2
-			 * {
-			 * 		head: ['a', 'b', 'c', 'd', ...],
-			 * 		body: [
-			 * 			{
-			 * 				'a': 'a',
-			 * 				'b': 'b',
-			 * 				'c': 'c',
-			 * 				'd': 'd'...
-			 * 			},
-			 * 			{
-			 * 				'a': 'a',
-			 * 				'b': 'b',
-			 * 				'c': 'c',
-			 * 				'd': 'd'...
-			 * 			}...
-			 * 		]
-			 * }
-			 * - Array type
-			 * [
-			 * 		{
-			 * 			'a': 'a',
-			 * 			'b': 'b',
-			 * 			'c': 'c',
-			 * 			'd': 'd'...
-			 * 		},
-			 * 		{
-			 * 			'a': 'a',
-			 * 			'b': 'b',
-			 * 			'c': 'c',
-			 * 			'd': 'd'...
-			 * 		},
-			 * 		{
-			 * 			'a': 'a',
-			 * 			'b': 'b',
-			 * 			'c': 'c',
-			 * 			'd': 'd'...
-			 * 		}...
-			 * ]
-			 */
-			var me = this;
-			me.data = {};
-			// Object type
-			if( data instanceof Object ) {
-
-			}
-		},
-		createRandomCrashName(n) {
-			let tmp = '';
-			for( let i=0; i<n; i++ ) {
-				tmp += String.fromCharCode(Math.floor(Math.random() * 26) + 97);
-				if( i % 10 == 0 ) {
-					tmp += '.';
-				}
-			}
-			return tmp;
 		},
 		click(d) {
 			if( this.type == 'userList' ) {

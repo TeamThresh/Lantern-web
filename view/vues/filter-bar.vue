@@ -18,7 +18,7 @@ div.filter-bar
 		a.type-filter.btn.grey-mint(@click='app.valueType = "network"', :class='{active: app.valueType == "network"}')
 			| Network
 			i.icon-feed
-		a.type-filter.btn.red(@click='clearFilters()') Clear Filters
+		//- a.type-filter.btn.red(@click='clearFilters()') Clear Filters
 	filter-layer(title='Android')
 		i.fa.fa-android(slot='icon')
 	filter-layer(title='OS')
@@ -91,7 +91,7 @@ div.filter-bar {
 		}
 
 		a.type-filter {
-			width: 103px !important;
+			width: 98px !important;
 			height: 30px !important;
 			text-align: left;
 			border-radius: 3px !important;

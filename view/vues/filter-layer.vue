@@ -88,6 +88,15 @@ module.exports = {
 								node.sizeValue = (node.usageCount / max) * 100
 								this.nodes.push(node)
 							})
+							// saved filter check
+							let filter = this.app.filters[this.title.toLowerCase()]
+							this.nodes.forEach(n => {
+								if( filter.indexOf(n.name) >= 0 ) {
+									n.selected = true
+								}
+							})
+
+							// done
 							s()
 						})
 						break
@@ -105,6 +114,15 @@ module.exports = {
 								node.sizeValue = (node.usageCount / max) * 100
 								this.nodes.push(node)
 							})
+							// saved filter check
+							let filter = this.app.filters[this.title.toLowerCase()]
+							this.nodes.forEach(n => {
+								if( filter.indexOf(n.name) >= 0 ) {
+									n.selected = true
+								}
+							})
+
+							// done
 							s()
 						})
 						break
@@ -122,6 +140,15 @@ module.exports = {
 								node.sizeValue = (node.usageCount / max) * 100
 								this.nodes.push(node)
 							})
+							// saved filter check
+							let filter = this.app.filters[this.title.toLowerCase()]
+							this.nodes.forEach(n => {
+								if( filter.indexOf(n.name) >= 0 ) {
+									n.selected = true
+								}
+							})
+
+							// done
 							s()
 						})
 						break
@@ -139,6 +166,15 @@ module.exports = {
 								node.sizeValue = (node.usageCount / max) * 100
 								this.nodes.push(node)
 							})
+							// saved filter check
+							let filter = this.app.filters[this.title.toLowerCase()]
+							this.nodes.forEach(n => {
+								if( filter.indexOf(n.name) >= 0 ) {
+									n.selected = true
+								}
+							})
+
+							// done
 							s()
 						})
 						break

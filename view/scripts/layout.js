@@ -9,6 +9,8 @@ window.Vue = require('vue/dist/vue.common.js')
 // window.jQuery = window.$
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
+import VueResource from 'vue-resource'
+Vue.use(VueResource)
 
 /**
  * load Vue Components
@@ -53,7 +55,7 @@ window.app = new Vue({
 	el: '#app',
 	data: {
 		debug: true,
-		serverDead: true,
+		serverDead: false,
 		app: {
 			packages: [],
 			packageName: '',
@@ -213,6 +215,9 @@ window.app = new Vue({
 					.attr('y2', yAxis.scale().range()[1])
 					.attr('stroke', '#3e3e3e')
 					.attr('stroke-opacity', 0.5)
+			},
+			server: {
+				group: undefined
 			}
 		}
 	},
@@ -232,6 +237,9 @@ window.app = new Vue({
 			this.$cookie.delete('LANTERNSESSIONID')
 			alert('로그인이 필요합니다!')
 			location.href = '/'
+		},
+		initServer() {
+			this.app.server.group = this.$resource(`/api/group/${this.app.packageName}{/name}`)
 		}
 	},
 	created() {
@@ -278,6 +286,7 @@ window.app = new Vue({
 					case 'dashboard':
 					case 'crashList':
 						this.app.packageName = pathNames[2]
+						this.initServer()
 						s()
 						break
 				}

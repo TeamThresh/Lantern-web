@@ -27,7 +27,7 @@ module.exports = {
 		},
 		draw: function(data) {
 			var gdpData = {};
-			for( d of data ) {
+			for( let d of data ) {
 				let code = d.country_code.toLowerCase();
 				let value = 0;
 				if( d.usage_count == 0 ) {

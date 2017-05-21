@@ -19,14 +19,16 @@ block content
 				div.tabbable-line
 					ul.nav.nav-tabs
 						li.active
-							a(href='#tabCallStack' data-toggle='tab') Call Stack
+							a(href='#tabCallStack' data-toggle='tab') Reverse Stack
 						li
 							a(href='#tabOs' data-toggle='tab') OS
 					div.tab-content
 						div.tab-pane.active#tabCallStack
 							stack-trace-tree
 						div.tab-pane#tabOs
-							h1.font-white OS
+							div.row
+								div.col-xs-12
+									area-graph
 		
 block style
 		

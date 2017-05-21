@@ -5,7 +5,11 @@ div.filter-group
 		input.form-control(type=text placeholder='...filter name' v-model='tmpGroupName' maxlength='50')
 		button.btn.btn-success(@click='createGroup(tmpGroupName)') SAVE
 	div.groups
-		span.group.hvr-bounce-in(v-for='group in app.filterGroups') {{ group.name }}
+		span.group.reset.hvr-buzz-out(@click='reset') RESET
+		span.group(v-for='group in groups' @click='click(group)')
+			| {{group.name}}
+			span.delete.hvr-grow-rotate(@click.stop='deleteGroup(group)')
+				i.fa.fa-times
 </template>
 
 <script>
@@ -18,43 +22,61 @@ module.exports = {
 		}
 	},
 	watch: {
-		'app.packageName': 'fetch'
+		'app.packageName'() {
+			this.fetch()
+		}
 	},
 	methods: {
 		fetch() {
-			$.get(`/api/group/${this.app.packageName}`).then(res => {
-				if( ! (res instanceof Array && res.length > 0) ) {
-				}
-				this.app.filterGroups = []
-				res.forEach(g => this.app.filterGroups.push(g))
-			})
-		},
-		createSampleGroups() {
-			let max = Math.floor(Math.random() * 10) + 1
-			let groups = []
-			for( let i=0; i<max; i++ ) {
-				groups.push({
-					name: `group${i + 1}`,
-					filters: {
-						location: ['asd','asdf']
-					}
+			this.groups = []
+			// $.get(`/api/group/${this.app.packageName}`).then(res => {
+			// 	res.forEach(groupName => {
+			// 		$.get(`/api/group/${this.app.packageName}/${groupName}`).then(res => {
+			// 			res.name = groupName
+			// 			this.groups.push(res)
+			// 		})
+			// 	})
+			// })
+			this.app.server.group.get().then(res => {
+				let data = res.body
+				data.forEach(d => {
+					this.app.server.group.get({name: d}).then(res => {
+						let data = res.body
+						data.name = d
+						this.groups.push(data)
+					})
 				})
-			}
-			return groups
+			})
 		},
 		createGroup(name) {
-			let filters = this.app.getFilters()
-			$.ajax({
-				type: 'post',
-				url: `/api/group/${this.app.packageName}/${name}`,
-				data: filters,
-				success(res) {
-					this.fetch()
-				},
-				error(err) {
-					alert('그룹 등록 도중 오류가 발생하였습니다\n' + err)
-				}
+			let filters = this.app.filters
+			this.app.server.group.save({name}, {filters}).then(res => {
+				this.fetch()
+				this.tmpGroupName = ''
+			}, res => {
+				alert('그룹 등록 도중 오류가 발생하였습니다\n')
+				console.error(res)
 			})
+		},
+		click(group) {
+			this.app.filters.android = group.android
+			this.app.filters.os = group.os
+			this.app.filters.device = group.device
+			this.app.filters.location = group.location
+		},
+		deleteGroup(group) {
+			this.app.server.group.delete({name: group.name}).then(res => {
+				this.fetch()
+			}, res => {
+				alert('그룹 삭제 도중 오류가 발생하였습니다\n')
+				console.error(res)
+			})
+		},
+		reset() {
+			this.app.filters.android = []
+			this.app.filters.os = []
+			this.app.filters.device = []
+			this.app.filters.location = []
 		}
 	},
 	mounted() {
@@ -100,6 +122,15 @@ div.filter-group {
 			&:hover {
 				background-color: #fff;
 				color: black;
+			}
+
+			&.reset {
+				background-color: #d9480f;
+			}
+
+			span.delete {
+				margin: 0 0 0 10px;
+				color: red;
 			}
 		}
 	}
