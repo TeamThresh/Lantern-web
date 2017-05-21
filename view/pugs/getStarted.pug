@@ -9,13 +9,23 @@ block content
 			portlet(simple='true')
 				div.markdown.markdown-body
 block style
-	link(href='https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.min.css', rel='stylesheet', type='text/css')
+	link(rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/solarized-light.min.css')
+	style.
+		pre {
+			padding: 0px;
+			margin: 0 0 10px 0;
+			border: none;
+		}
 	
 block script
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js')
 	script.
 		$(document).on('ready', function() {
 			$.get('https://raw.githubusercontent.com/TeamThresh/Lantern-sdk/master/README.md').then(res => {
 				var text = new window.showdown.Converter().makeHtml(res);
 				$('div.markdown').html(text);
+				$('pre code').each(function(i, block) {
+					hljs.highlightBlock(block);
+				});
 			})
 		});
