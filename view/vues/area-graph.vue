@@ -1,5 +1,6 @@
 <template lang="pug">
 div.area-graph
+	resize-observer(@notify='handleResize')
 	svg
 </template>
 
@@ -84,9 +85,11 @@ module.exports = {
 
 			this.draw()
 		},
+		handleResize() {
+			this.draw()
+		}
 	},
 	mounted() {
-
 	}
 }
 </script>

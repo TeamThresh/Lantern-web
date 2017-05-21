@@ -11,6 +11,8 @@ import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
+import VueResize from 'vue-resize'
+Vue.use(VueResize)
 
 /**
  * load Vue Components

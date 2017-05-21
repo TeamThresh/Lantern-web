@@ -1,5 +1,6 @@
 <template lang="pug">
 div.dist-graph
+	resize-observer(@notify='handleResize')
 	svg
 </template>
 
@@ -313,6 +314,9 @@ module.exports = {
 					this.app.distSelection.endRange = maxRange
 				}))
 			}
+		},
+		handleResize() {
+			this.draw()
 		}
 	},
 	mounted: function() {
