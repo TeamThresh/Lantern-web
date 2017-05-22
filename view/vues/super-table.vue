@@ -11,7 +11,7 @@ div.table-scrollable
 
 <script>
 module.exports = {
-	props: ['type', 'light', 'stopWatchPackageName', 'toDetail'],
+	props: ['type', 'light', 'stopWatchPackageName', 'toDetail', 'watchFilters'],
 	data: function() {
 		return {
 			head: [],
@@ -29,7 +29,9 @@ module.exports = {
 		},
 		'app.filters': {
 			handler() {
-				// this.fetch()
+				if( this.watchFilters !== undefined ) {
+					this.fetch()
+				}
 			},
 			deep: true
 		},
