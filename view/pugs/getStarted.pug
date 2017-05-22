@@ -7,7 +7,8 @@ block content
 				h4.title Get Started
 		div.row
 			portlet(simple='true')
-				div.markdown.markdown-body
+				get-started
+				//- div.markdown.markdown-body
 block style
 	link(rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/solarized-light.min.css')
 	style.
@@ -17,15 +18,5 @@ block style
 			border: none;
 		}
 	
-block script
+block pre-script
 	script(src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js')
-	script.
-		$(document).on('ready', function() {
-			$.get('https://raw.githubusercontent.com/TeamThresh/Lantern-sdk/master/README.md').then(res => {
-				var text = new window.showdown.Converter().makeHtml(res);
-				$('div.markdown').html(text);
-				$('pre code').each(function(i, block) {
-					hljs.highlightBlock(block);
-				});
-			})
-		});

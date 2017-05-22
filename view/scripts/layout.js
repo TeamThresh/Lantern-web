@@ -53,6 +53,7 @@ Vue.component('filter-status-bar', require('../vues/filter-status-bar.vue'))
 Vue.component('area-graph', require('../vues/area-graph.vue'))
 Vue.component('pie-graph', require('../vues/pie-graph.vue'))
 Vue.component('crash-info', require('../vues/crash-info.vue'))
+Vue.component('get-started', require('../vues/get-started.vue'))
 
 /**
  * apply Vue app

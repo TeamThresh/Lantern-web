@@ -6,10 +6,10 @@
 		.list-count.pull-right.bg-yellow-saffron {{this.app.packages.length}}
 	.mt-list-container.list-news.ext-2
 		ul
-			li.mt-list-item(v-for='package in this.app.packages', @click='move(package.package)')
-				.list-icon-container
-					i.fa.fa-angle-right
-				.list-thumb
+			li.mt-list-item(v-for='package in this.app.packages', @click='move(package.package, package.app_ver)', :class='{disabled: package.app_ver == null}')
+				.list-icon-container(@click.stop='remove(package)')
+					i.fa.fa-times.font-red.delete-btn
+				.list-thumb(v-if='package.app_ver != null')
 					img(alt='', src='/assets/img/android-logo.png' v-if='package.type == "android"')
 					img(alt='', src='/assets/img/unity-logo.png' v-if='package.type == "unity"')
 				.list-datetime.bold.uppercase.font-yellow-casablanca {{package.package}}
@@ -41,8 +41,26 @@ module.exports = {
 
 	},
 	methods: {
-		move(packageName) {
+		move(packageName, appVersion) {
+			if( appVersion == null ) {
+				alert("we didn't get any data for this package")
+				return
+			}
 			window.location.href = `/dashboard/${packageName}`
+		},
+		remove(p) {
+			this.$http.delete(`/api/project/${p.package}`).then(res => {
+				$.get({url: '/api/packageNames',
+					success: (data) => {
+						if( data.length == 0 ) {
+							return
+						}
+						this.app.packages = data
+					}
+				})
+			}, res => {
+				alert('error occured while seding request to delete it')
+			})
 		}
 	},
 	mounted() {
@@ -53,6 +71,14 @@ module.exports = {
 <style lang="sass">
 	.mt-list-item {
 		cursor: pointer;
+
+		&.disabled {
+			cursor: not-allowed;
+		}
+
+		.delete-btn {
+			cursor: pointer;
+		}
 	}
 	span.blue {
 		color: rgb(34, 138, 230);
