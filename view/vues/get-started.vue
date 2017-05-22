@@ -30,7 +30,9 @@ div.get-started.mt-clipboard-container
 	br
 	br
 	br
-	h2(v-if='! isSucceed') Waiting For Data From Your App Installed LANTERN...
+	template(v-if='! isSucceed')
+		h2 Waiting For Data From Your App Installed LANTERN...
+		h4 not necessary. it's just a test.
 	template(v-if='isSucceed')
 		h2 BOOYAH! You Just Did It!
 		h4 your app version is {{this.appVersion}}
