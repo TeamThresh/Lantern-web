@@ -21,7 +21,7 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
-			$.get(`/api/location/${this.app.packageName}${this.app.getFilterQuery()}`).then((res) => {
+			$.get(`/api/location/${this.app.packageName}`, this.app.getFilters()).then((res) => {
 				this.draw(res);
 			});
 		},

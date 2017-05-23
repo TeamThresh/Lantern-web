@@ -69,13 +69,13 @@ module.exports = {
 		},
 		fetchData() {
 			return new Promise((s, f) => {
-				let query = this.app.getFilterQuery()
+				let query = this.app.getFilters()
 
 				// nodes clear
 				this.nodes = []
 				switch( this.title.toLowerCase() ) {
 					case 'location':
-						$.get(`/api/statusOfLocation/${this.app.packageName}${query}`).then((res) => {
+						$.get(`/api/statusOfLocation/${this.app.packageName}`, query).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
 							res.forEach((node, idx) => {
@@ -101,7 +101,7 @@ module.exports = {
 						})
 						break
 					case 'device':
-						$.get(`/api/statusOfDevice/${this.app.packageName}${query}`).then((res) => {
+						$.get(`/api/statusOfDevice/${this.app.packageName}`, query).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
 							res.forEach((node, idx) => {
@@ -127,7 +127,7 @@ module.exports = {
 						})
 						break
 					case 'os':
-						$.get(`/api/statusOfOs/${this.app.packageName}${query}`).then((res) => {
+						$.get(`/api/statusOfOs/${this.app.packageName}`, query).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
 							res.forEach((node, idx) => {
@@ -153,7 +153,7 @@ module.exports = {
 						})
 						break
 					case 'android':
-						$.get(`/api/statusOfActivity/${this.app.packageName}${query}`).then((res) => {
+						$.get(`/api/statusOfActivity/${this.app.packageName}`, query).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
 							res.forEach((node, idx) => {

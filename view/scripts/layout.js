@@ -19,29 +19,29 @@ window.showdown = showdown
 /**
  * load Vue Components
  */
-Vue.component('mainmenu', require('../vues/mainmenu.vue'))
-Vue.component('submenu', require('../vues/submenu.vue'))
-Vue.component('filtermenu', require('../vues/filtermenu.vue'))
-Vue.component('flame-graph', require('../vues/flame-graph.vue'))
+// Vue.component('mainmenu', require('../vues/mainmenu.vue'))
+// Vue.component('submenu', require('../vues/submenu.vue'))
+// Vue.component('filtermenu', require('../vues/filtermenu.vue'))
+// Vue.component('flame-graph', require('../vues/flame-graph.vue'))
 Vue.component('activity-map', require('../vues/activity-map.vue'))
-Vue.component('histogram', require('../vues/histogram.vue'))
-Vue.component('screen-mode-viewer', require('../vues/screen-mode-viewer.vue'))
+// Vue.component('histogram', require('../vues/histogram.vue'))
+// Vue.component('screen-mode-viewer', require('../vues/screen-mode-viewer.vue'))
 Vue.component('top-header', require('../vues/top-header.vue'))
 Vue.component('left-header', require('../vues/left-header.vue'))
-Vue.component('page-toolbar', require('../vues/page-toolbar.vue'))
-Vue.component('right-header', require('../vues/right-header.vue'))
+// Vue.component('page-toolbar', require('../vues/page-toolbar.vue'))
+// Vue.component('right-header', require('../vues/right-header.vue'))
 Vue.component('bottom-header', require('../vues/bottom-header.vue'))
-Vue.component('activity-map-toolbar', require('../vues/activity-map-toolbar.vue'))
+// Vue.component('activity-map-toolbar', require('../vues/activity-map-toolbar.vue'))
 Vue.component('portlet', require('../vues/portlet.vue'))
 Vue.component('one-depth-user-flow', require('../vues/one-depth-user-flow.vue'))
 Vue.component('dist-graph', require('../vues/dist-graph.vue'))
 Vue.component('super-table', require('../vues/super-table.vue'))
-Vue.component('radar-chart', require('../vues/radar-chart.vue'))
-Vue.component('device-usage-graph', require('../vues/device-usage-graph.vue'))
+// Vue.component('radar-chart', require('../vues/radar-chart.vue'))
+// Vue.component('device-usage-graph', require('../vues/device-usage-graph.vue'))
 Vue.component('line-graph', require('../vues/line-graph.vue'))
 Vue.component('worldmap-graph', require('../vues/worldmap-graph.vue'))
 Vue.component('card', require('../vues/card.vue'))
-Vue.component('top-crash', require('../vues/top-crash.vue'))
+// Vue.component('top-crash', require('../vues/top-crash.vue'))
 Vue.component('filter-bar', require('../vues/filter-bar.vue'))
 Vue.component('app-status', require('../vues/app-status.vue'))
 Vue.component('filter-layer', require('../vues/filter-layer.vue'))
@@ -76,7 +76,8 @@ window.app = new Vue({
 				android: [],
 				startRange: moment().subtract(7, 'd').hour(0).minute(0).second(0).millisecond(0).valueOf(),
 				endRange: moment().valueOf(),
-				fixedRange: '7'
+				fixedRange: '7',
+				app: '' // app version
 			},
 			filterGroups: [],
 			user: {nickname: '', email: ''},
@@ -89,6 +90,7 @@ window.app = new Vue({
 			uuid: '', // for stack-trace-tree view
 			timestampForUuid: 0, // for stack-trace-tree view
 			crashId: 0, // for crash detail
+			versions: [], // app verseions
 			getFilters: function() {
 				let filters = JSON.parse(JSON.stringify(this.filters))
 				let range = this.getRange()
@@ -99,47 +101,6 @@ window.app = new Vue({
 				filters.os = filters.os.join(',')
 				filters.android = filters.android.join(',')
 				return filters
-			},
-			getFilterQuery: function() {
-				let location = ''
-				this.filters.location.forEach((l) => {
-					location += l + ','
-				})
-
-				let device = ''
-				this.filters.device.forEach((d) => {
-					device += d + ','
-				})
-
-				let os = ''
-				this.filters.os.forEach((d) => {
-					os += d + ','
-				})
-
-				let android = ''
-				this.filters.android.forEach((d) => {
-					android += d + ','
-				})
-
-				let range = this.getRange()
-
-				let query = '?'
-				if( location != '' ) {
-					query += `&location=${location}`
-				}
-				if( device != '' ) {
-					query += `&device=${device}`
-				}
-				if( os != '' ) {
-					query += `&os=${os}`
-				}
-				if( android != '' ) {
-					query += `&activity=${android}`
-				}
-				query += `&startRange=${range.startRange}&endRange=${range.endRange}`
-				query += '&'
-
-				return query
 			},
 			getRange: function() {
 				let range = {
@@ -300,6 +261,19 @@ window.app = new Vue({
 						s()
 						break
 				}
+			})
+		})
+		// app verseions
+		p = p.then(() => {
+			return new Promise((s, f) => {
+				this.$http.get(`/api/appVersion/${this.app.packageName}`).then(res => {
+					this.app.versions = res.body
+					// init version to app.app
+					if( this.app.filters.app == '' ) {
+						this.app.filters.app = this.app.versions[0]
+					}
+					s()
+				})
 			})
 		})
 	}

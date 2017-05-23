@@ -29,9 +29,7 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
-			// let tmpRangeQuery = `&startRange=${moment('2017-03-01').valueOf()}&endRange=${moment('2017-04-30').valueOf()}`
-
-			$.get(`/api/userCount/${this.app.packageName}${this.app.getFilterQuery()}`).then(res => {
+			$.get(`/api/userCount/${this.app.packageName}`, this.app.getFilters()).then(res => {
 				let arr1 = []
 				let arr2 = []
 				res.forEach(r => {

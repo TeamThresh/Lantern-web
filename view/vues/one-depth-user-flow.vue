@@ -22,7 +22,7 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
-			$.get(`/api/one-depth-userflow/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}`).then((res) => {
+			$.get(`/api/one-depth-userflow/${this.app.packageName}/${this.app.activityName}`, this.app.getFilters()).then((res) => {
 				if( ! res instanceof Object ) {
 					return
 				}

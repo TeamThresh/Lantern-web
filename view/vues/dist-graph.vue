@@ -25,7 +25,7 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
-			$.get(`/api/${this.fetchUrl}/${this.app.packageName}/${this.app.activityName}${this.app.getFilterQuery()}`).then(res => {
+			$.get(`/api/${this.fetchUrl}/${this.app.packageName}/${this.app.activityName}`, this.app.getFilters()).then(res => {
 				this.clear()
 				this.data = []
 				res.forEach(d => {
