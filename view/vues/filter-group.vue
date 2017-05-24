@@ -82,7 +82,7 @@ module.exports = {
 			})
 		},
 		reset() {
-			this.app.filters.android = []
+			this.app.filters.activity = []
 			this.app.filters.os = []
 			this.app.filters.device = []
 			this.app.filters.location = []
