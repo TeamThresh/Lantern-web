@@ -24,12 +24,12 @@ div.page-sidebar.navbar-collapse.collapsed.filter-status-bar
 		li.nav-item
 			a.nav-link.nav-toggle
 				i.fa.fa-android
-				span.title Android
+				span.title Activity
 			ul.sub-menu
-				li.nav-item(v-for='android in app.filters.android')
+				li.nav-item(v-for='activity in app.filters.activity')
 					a.nav-link
 						i.fa.fa-circle
-						span.title {{android}}
+						span.title {{activity}}
 		li.nav-item
 			a.nav-link.nav-toggle
 				i.fa.fa-terminal
