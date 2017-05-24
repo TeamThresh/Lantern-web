@@ -11,12 +11,23 @@ module.exports = {
 		};
 	},
 	watch: {
-		'app.packageName': 'fetch',
+		'app.packageName'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
+		},
 		'app.filters': {
 			handler() {
 				this.fetch()
 			},
 			deep: true
+		},
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
 		}
 	},
 	methods: {

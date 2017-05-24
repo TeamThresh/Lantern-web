@@ -73,7 +73,7 @@ window.app = new Vue({
 				location: [],
 				device: [],
 				os: [],
-				android: [],
+				activity: [],
 				startRange: moment().subtract(7, 'd').hour(0).minute(0).second(0).millisecond(0).valueOf(),
 				endRange: moment().valueOf(),
 				fixedRange: '7',
@@ -91,6 +91,7 @@ window.app = new Vue({
 			timestampForUuid: 0, // for stack-trace-tree view
 			crashId: 0, // for crash detail
 			versions: [], // app verseions
+			isInitDone: false, // init flag
 			getFilters: function() {
 				let filters = JSON.parse(JSON.stringify(this.filters))
 				let range = this.getRange()
@@ -99,7 +100,7 @@ window.app = new Vue({
 				filters.location = filters.location.join(',')
 				filters.device = filters.device.join(',')
 				filters.os = filters.os.join(',')
-				filters.android = filters.android.join(',')
+				filters.activity = filters.activity.join(',')
 				return filters
 			},
 			getRange: function() {
@@ -193,7 +194,10 @@ window.app = new Vue({
 	watch: {
 		'app.filters': {
 			handler(v, ov) {
-				this.$cookie.set('filters', JSON.stringify(this.app.filters))
+				if( ! this.app.isInitDone ) {
+					return
+				}
+				this.$cookie.set(this.app.packageName, JSON.stringify(this.app.filters))
 			},
 			deep: true
 		}
@@ -209,13 +213,28 @@ window.app = new Vue({
 		},
 		initServer() {
 			this.app.server.group = this.$resource(`/api/group/${this.app.packageName}{/name}`)
+		},
+		loadCookie() {
+			// get filters from cookie
+			let cookie = this.$cookie.get(this.app.packageName)
+			if( cookie != null ) {
+				cookie = JSON.parse(cookie)
+				this.app.filters = cookie
+				// this.app.filters.location = cookie.location
+				// this.app.filters.device = cookie.device
+				// this.app.filters.os = cookie.os
+				// this.app.filters.activity = cookie.activity
+				// this.app.filters.app = cookie.app
+				// this.app.filters.fixedRange = cookie.fixedRange
+				// this.app.filters.startRange = cookie.startRange
+				// this.app.filters.endRange = cookie.endRange
+				// supply
+				this.app.filters.app = this.app.filters.app || ''
+			}
 		}
 	},
 	created() {
-		// get filters from cookie
-		if( this.$cookie.get('filters') != null ) {
-			this.app.filters = JSON.parse(this.$cookie.get('filters'))
-		}
+
 	},
 	mounted() {
 		let p = new Promise((s, f) => {
@@ -247,6 +266,7 @@ window.app = new Vue({
 								this.app.packages = data
 							}
 						})
+						f()
 						break
 					case 'activityDetail':
 						this.app.resourceType = pathNames[4]
@@ -263,6 +283,13 @@ window.app = new Vue({
 				}
 			})
 		})
+		// load cookie
+		p = p.then(() => {
+			return new Promise((s, f) => {
+				this.loadCookie()
+				s()
+			})
+		})
 		// app verseions
 		p = p.then(() => {
 			return new Promise((s, f) => {
@@ -276,6 +303,11 @@ window.app = new Vue({
 				})
 			})
 		})
+		// init done
+		let handler = () => {
+			this.app.isInitDone = true
+		}
+		p.then(handler, handler)
 	}
 })
 

@@ -18,13 +18,25 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName': function() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
 			this.fetch()
 		},
 		'app.filters': {
 			handler() {
+				if( ! this.app.isInitDone ) {
+					return
+				}
 				this.fetch()
 			},
 			deep: true
+		},
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
 		}
 	},
 	methods: {

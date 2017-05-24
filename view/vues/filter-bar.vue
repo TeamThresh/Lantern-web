@@ -1,7 +1,7 @@
 <template lang="pug">
 div.filter-bar
 	div.menu
-		select.selectpicker2(v-model='fixedRange')
+		select.selectpicker2(v-model='app.filters.fixedRange')
 			option(value=0) Today
 			option(value=3) 3 Days
 			option(value=7) 7 Days
@@ -18,8 +18,7 @@ div.filter-bar
 		a.type-filter.btn.grey-mint(@click='app.valueType = "network"', :class='{active: app.valueType == "network"}')
 			| Network
 			i.icon-feed
-		//- a.type-filter.btn.red(@click='clearFilters()') Clear Filters
-	filter-layer(title='Android')
+	filter-layer(title='Activity')
 		i.fa.fa-android(slot='icon')
 	filter-layer(title='OS')
 		i.fa.fa-terminal(slot='icon')
@@ -34,39 +33,29 @@ div.filter-bar
 module.exports = {
 	data() {
 		return {
-			app: this.$root.app,
-			fixedRange: this.$root.app.filters.fixedRange
+			app: this.$root.app
 		}
 	},
 	watch: {
-		fixedRange(v) {
-			this.app.filters.fixedRange = v
-			let range = this.app.getRange()
-			this.app.filters.startRange = range.startRange
-			this.app.filters.endRange = range.endRange
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.selectPicker()
 		}
 	},
 	methods: {
-		clearFilters() {
-			this.app.filters = {
-				location: [],
-				device: [],
-				os: [],
-				android: [],
-				startRange: '',
-				endRange: '',
-				fixedRange: this.app.filters.fixedRange
-			}
-			$(this.$el).find('.selectpicker2').selectpicker('val', this.app.filters.fixedRange)
+		selectPicker() {
+			$(this.$el).find('.selectpicker2').val(this.app.filters.fixedRange)
+			$(this.$el).find('.selectpicker2').selectpicker({
+				style: 'btn',
+				size: 4
+			})
 		}
 	},
 	created() {
 	},
 	mounted() {
-		$(this.$el).find('.selectpicker2').selectpicker({
-			style: 'btn',
-			size: 4
-		})
 	}
 }
 </script>

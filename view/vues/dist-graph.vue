@@ -20,6 +20,15 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
+		},
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
 			this.fetch()
 		}
 	},

@@ -23,10 +23,16 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName': function(v, ov) {
+			if( ! this.app.isInitDone ) {
+				return
+			}
 			this.fetchData().then(() => this.draw(this.makeOthers(this.nodes)))
 		},
 		'app.filters': {
 			handler: function(v, ov) {
+				if( ! this.app.isInitDone ) {
+					return
+				}
 				this.fetchData().then(() => {
 					let filters = this.app.filters[this.title.toLowerCase()]
 					// select mark
@@ -40,8 +46,17 @@ module.exports = {
 			deep: true
 		},
 		'app.valueType': function(v, ov) {
+			if( ! this.app.isInitDone ) {
+				return
+			}
 			this.clear()
 			this.draw(this.expanded ? this.nodes : this.makeOthers(this.nodes))
+		},
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetchData().then(() => this.draw(this.makeOthers(this.nodes)))
 		}
 	},
 	methods: {
@@ -152,7 +167,7 @@ module.exports = {
 							s()
 						})
 						break
-					case 'android':
+					case 'activity':
 						$.get(`/api/statusOfActivity/${this.app.packageName}`, query).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE

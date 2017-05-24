@@ -20,15 +20,27 @@ module.exports = {
     },
 	watch: {
 		'app.packageName': function(d) {
+			if( ! this.app.isInitDone ) {
+				return
+			}
 			this.fetch();
 		},
 		'app.filters': {
 			handler: function(v, ov) {
+				if( ! this.app.isInitDone ) {
+					return
+				}
 				this.fetch()
 			},
 			deep: true
 		},
-		'app.valueType': 'draw'
+		'app.valueType': 'draw',
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
+		}
 	},
     methods: {
 		drawIndex: function() {
@@ -112,7 +124,7 @@ module.exports = {
 			// window.app.debug && console.log('activity-map', data)
 			if( ! (typeof data == 'object' && data.hasOwnProperty('nodes') && data.nodes.length > 0) ) {
 				// error or no data
-				console.err('activity-map', 'no data', data)
+				console.log('activity-map', 'no data', data)
 				return
 			}
 

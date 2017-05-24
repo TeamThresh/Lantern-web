@@ -7,6 +7,14 @@ div.page-sidebar.navbar-collapse.collapsed.filter-status-bar
 		li.nav-item
 		li.nav-item
 			a.nav-link.nav-toggle
+				i.fa.fa-bar-chart
+				span.title App Version
+			ul.sub-menu
+				li.nav-item
+					a.nav-link
+						span.title {{app.filters.app}}
+		li.nav-item
+			a.nav-link.nav-toggle
 				i.fa.fa-calendar
 				span.title Query Date Range
 			ul.sub-menu
@@ -59,12 +67,6 @@ module.exports = {
 		}
 	},
 	watch: {
-		'app.filters': {
-			handler() {
-
-			},
-			deep: true
-		}
 	}
 }
 </script>

@@ -14,6 +14,9 @@ export default {
 	},
 	watch: {
 		'app.packageName'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
 			this.fetch()
 		}
 	},

@@ -22,6 +22,9 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
 			if( this.stopWatchPackageName !== undefined ) {
 				return
 			}
@@ -29,6 +32,9 @@ module.exports = {
 		},
 		'app.filters': {
 			handler() {
+				if( ! this.app.isInitDone ) {
+					return
+				}
 				if( this.watchFilters !== undefined ) {
 					this.fetch()
 				}
@@ -37,9 +43,18 @@ module.exports = {
 		},
 		'app.distSelection': {
 			handler() {
+				if( ! this.app.isInitDone ) {
+					return
+				}
 				this.fetch()
 			},
 			deep: true
+		},
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
 		}
 	},
 	methods: {

@@ -13,17 +13,29 @@ module.exports = {
 	},
 	watch: {
 		'app.packageName'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
 			if( this.watchPackageName !== undefined ) {
 				this.fetch()
 			}
 		},
 		'app.distSelection': {
 			handler() {
+				if( ! this.app.isInitDone ) {
+					return
+				}
 				this.fetch()
 			},
 			deep: true
 		},
-		data: 'draw'
+		data: 'draw',
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
+		}
 	},
 	methods: {
 		fetch() {

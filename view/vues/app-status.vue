@@ -3,7 +3,6 @@ div.app-status.m-grid.m-grid-row(style='height: 50px;')
 	div.m-grid-col.m-grid-col-xs-6.m-grid-col-middle.font-white.left
 		i.fa.fa-dropbox
 		span {{app.packageName}}
-		//- i.fa.fa-chevron-right
 	div.m-grid-col.m-grid-col-xs-6.m-grid-col-middle.font-white.right
 		div.m-grid.m-grid-row
 			div.m-grid-col.m-grid-col-xs-2.m-grid-col-middle
@@ -23,7 +22,16 @@ module.exports = {
 	},
 	watch: {
 		'app.versions'() {
-			setTimeout(this.selectPicker, 500) // mother fucker why v-for render lifecycle does not be specified? really sucks
+			// setTimeout(this.selectPicker, 500) // mother fucker why v-for render lifecycle does not be specified? really sucks
+		},
+		version() {
+			this.app.filters.app = this.version
+		},
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.selectPicker()
 		}
 	},
 	methods: {
