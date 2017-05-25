@@ -265,4 +265,9 @@ html(lang='en')
 					}
 				});
 			}
+			$('input[name=password]', $('.login-form')).keyup(function(e) {
+				if( e.keyCode == 13 ) {
+					window.login();
+				}
+			})
 		//- END CUSTOM SCRIPTS
