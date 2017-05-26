@@ -80,14 +80,14 @@
 					</ul>
 				</div>
                 <!-- BEGIN TOP NAVIGATION MENU -->
-                <div class="top-menu hide">
+                <div class="top-menu">
                     <ul class="nav navbar-nav pull-right">
                         <li class="separator hide"> </li>
                         <!-- BEGIN NOTIFICATION DROPDOWN -->
                         <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                         <!-- DOC: Apply "dropdown-hoverable" class after "dropdown" and remove data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to enable hover dropdown mode -->
                         <!-- DOC: Remove "dropdown-hoverable" and add data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to the below A element with dropdown-toggle class -->
-                        <li class="dropdown dropdown-extended dropdown-notification dropdown-dark" id="header_notification_bar">
+                        <li class="dropdown dropdown-extended dropdown-notification dropdown-dark hide" id="header_notification_bar">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="icon-bell"></i>
                                 <span class="badge badge-success"> 7 </span>
@@ -189,7 +189,7 @@
                         <li class="separator hide"> </li>
                         <!-- BEGIN INBOX DROPDOWN -->
                         <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                        <li class="dropdown dropdown-extended dropdown-inbox dropdown-dark" id="header_inbox_bar">
+                        <li class="dropdown dropdown-extended dropdown-inbox dropdown-dark hide" id="header_inbox_bar">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="icon-envelope-open"></i>
                                 <span class="badge badge-danger"> 4 </span>
@@ -265,7 +265,7 @@
                         <li class="separator hide"> </li>
                         <!-- BEGIN TODO DROPDOWN -->
                         <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                        <li class="dropdown dropdown-extended dropdown-tasks dropdown-dark" id="header_task_bar">
+                        <li class="dropdown dropdown-extended dropdown-tasks dropdown-dark hide" id="header_task_bar">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="icon-calendar"></i>
                                 <span class="badge badge-primary"> 3 </span>
