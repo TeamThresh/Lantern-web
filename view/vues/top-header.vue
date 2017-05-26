@@ -80,7 +80,7 @@
 					</ul>
 				</div>
                 <!-- BEGIN TOP NAVIGATION MENU -->
-                <div class="top-menu">
+                <div class="top-menu hide">
                     <ul class="nav navbar-nav pull-right">
                         <li class="separator hide"> </li>
                         <!-- BEGIN NOTIFICATION DROPDOWN -->
@@ -381,7 +381,7 @@
                                 <span class="username username-hide-on-mobile"> {{app.user.nickname}} </span>
                                 <!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
                                 <img alt="" class="img-circle" src="/assets/theme2/layouts/layout4/img/avatar9.jpg" /> </a>
-                            <ul class="dropdown-menu dropdown-menu-default">
+                            <ul class="dropdown-menu dropdown-menu-default hide">
                                 <li>
                                     <a href="page_user_profile_1.html">
                                         <i class="icon-user"></i> My Profile </a>

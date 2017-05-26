@@ -18,6 +18,12 @@ export default {
 				return
 			}
 			this.fetch()
+		},
+		'app.isInitDone'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
 		}
 	},
 	methods: {
