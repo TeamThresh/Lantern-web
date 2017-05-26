@@ -135,9 +135,9 @@ module.exports = {
 			// color
 			$.each(boxes, function(index, box) {
 				var value = box.value / boxCountByX[box.x];
-				if( value >= 0.05 )
+				if( value >= 0.15 )
 					box.color = me.getColor(3);
-				else if( value >= 0.03 )
+				else if( value >= 0.05 )
 					box.color = me.getColor(2);
 				else
 					box.color = me.getColor(1);
@@ -245,6 +245,12 @@ module.exports = {
 				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
 				.attr('y1', yScale(100)).attr('y2', yScale(100));
 
+			// tooltip
+			let tooltip = d3.select('body')
+				.append('div')
+				.attr('class', 'tooltip2')
+				.style('opacity', 0)
+
 			let boxes = []
 			$.each(me.data, function(index, data) {
 				boxes.push(svg.append('rect')
@@ -253,7 +259,25 @@ module.exports = {
 					.attr('x', data.x)
 					.attr('y', data.y)
 					.attr('fill', data.color)
-					.attr('class', 'box'))
+					.attr('class', 'box')
+					.on('mouseover', () => {
+						tooltip.transition()
+							.duration(200)
+							.style('opacity', .9)
+						tooltip.html(`${data.value}<br/>
+							${Math.floor(yScale.invertExtent(data.y)[0])}% ~ ${Math.floor(yScale.invertExtent(data.y)[1])}%<br/>
+							${moment(xScale.invertExtent(data.x)[0]).format('YYYY-MM-DD HH:mm:ss')}<br/>
+							~<br/>
+							${moment(xScale.invertExtent(data.x)[1]).format('YYYY-MM-DD HH:mm:ss')}`)
+							.style('left', `${d3.event.pageX}px`)
+							.style('top', `${d3.event.pageY}px`)
+					})
+					.on('mouseout', () => {
+						tooltip.transition()
+							.duration(500)
+							.style('opacity', 0)
+					}))
+
 				svg.append('text')
 					.attr('x', data.x)
 					.attr('y', data.y + 8)
@@ -380,5 +404,19 @@ module.exports = {
 			stroke: #ddd;
 		}
 	}
+}
+
+div.tooltip2 {
+	position: absolute;
+	text-align: center;
+	width: 100px;
+	padding: 2px;
+	font: 12px sans-serif;
+	background-color: black !important;
+	color: white !important;
+	border: 0px;
+	border-radius: 8px;
+	pointer-events: none;
+	z-index: 9999;
 }
 </style>

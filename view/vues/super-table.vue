@@ -11,7 +11,7 @@ div.table-scrollable
 
 <script>
 module.exports = {
-	props: ['type', 'light', 'stopWatchPackageName', 'toDetail', 'watchFilters'],
+	props: ['type', 'light', 'stopWatchPackageName', 'toDetail', 'watchFilters', 'stopWatchIsInitDone'],
 	data: function() {
 		return {
 			head: [],
@@ -52,6 +52,9 @@ module.exports = {
 		},
 		'app.isInitDone'() {
 			if( ! this.app.isInitDone ) {
+				return
+			}
+			if( this.stopWatchIsInitDone !== undefined ) {
 				return
 			}
 			this.fetch()

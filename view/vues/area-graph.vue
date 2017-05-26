@@ -109,6 +109,34 @@ module.exports = {
 			let line = d3.line()
 			.x((d) => xScale(d.x)).y(d => yScale(d.y));
 			svg.append('path').data([this.data]).attr('d', line).attr('stroke', '#d9480f').attr('fill', 'none').attr('stroke-width', '2px');
+
+			let tooltip = d3.select('body')
+				.append('div')
+				.attr('class', 'tooltip2')
+				.style('opacity', 0)
+
+			let dots = svg.selectAll('circle')
+				.data(this.data)
+				.enter()
+				.append('circle')
+				.attr('class', 'dot')
+				.attr('cx', (d) => xScale(d.x))
+				.attr('cy', (d) => yScale(d.y))
+				.attr('r', '3px')
+				.attr('fill', '#e66735')
+				.on('mouseover', (d) => {
+					tooltip.transition()
+						.duration(200)
+						.style('opacity', .9)
+					tooltip.html(`${d.y}<br/>(${moment(d.date).format('YYYY-MM-DD HH:mm:ss')})`)
+						.style('left', `${d3.event.pageX}px`)
+						.style('top', `${d3.event.pageY}px`)
+				})
+				.on('mouseout', () => {
+					tooltip.transition()
+						.duration(500)
+						.style('opacity', 0)
+				})
 		},
 		fakeFetch() {
 			let range = this.app.getRange()
@@ -179,4 +207,18 @@ module.exports = {
 			}
 		}
 	}
+
+div.tooltip2 {
+	position: absolute;
+	text-align: center;
+	width: 100px;
+	padding: 2px;
+	font: 12px sans-serif;
+	background-color: black !important;
+	color: white !important;
+	border: 0px;
+	border-radius: 8px;
+	pointer-events: none;
+	z-index: 9999;
+}
 </style>

@@ -4,7 +4,7 @@ div.panel-group.accordion#callStackAccordion
 
 <script>
 module.exports = {
-	props: ['crashReverseStack', 'watchPackageName'],
+	props: ['crashReverseStack', 'watchPackageName', 'stopWatchIsInitDone'],
 	data() {
 		return {
 			app: this.$root.app,
@@ -32,6 +32,9 @@ module.exports = {
 		data: 'draw',
 		'app.isInitDone'() {
 			if( ! this.app.isInitDone ) {
+				return
+			}
+			if( this.stopWatchIsInitDone !== undefined ) {
 				return
 			}
 			this.fetch()

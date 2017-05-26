@@ -98,6 +98,34 @@ module.exports = {
 			let line = d3.line()
 				.x((d) => xScale(d.date)).y((d) => yScale(d.value));
 			svg.append('path').data([this.data]).attr('d', line).attr('stroke', '#69db7c').attr('fill', 'none');
+
+			let tooltip = d3.select('body')
+				.append('div')
+				.attr('class', 'tooltip2')
+				.style('opacity', 0)
+
+			let dots = svg.selectAll('circle')
+				.data(this.data)
+				.enter()
+				.append('circle')
+				.attr('class', 'dot')
+				.attr('cx', (d) => xScale(d.date))
+				.attr('cy', (d) => yScale(d.value))
+				.attr('r', '3px')
+				.attr('fill', '#96eba4')
+				.on('mouseover', (d) => {
+					tooltip.transition()
+						.duration(200)
+						.style('opacity', .9)
+					tooltip.html(`${d.value}<br/>(${moment(d.date).format('YYYY-MM-DD HH:mm:ss')})`)
+						.style('left', `${d3.event.pageX}px`)
+						.style('top', `${d3.event.pageY}px`)
+				})
+				.on('mouseout', () => {
+					tooltip.transition()
+						.duration(500)
+						.style('opacity', 0)
+				})
 		},
 		createSampleData() {
 			var data = [];
@@ -143,5 +171,19 @@ module.exports = {
 			stroke: #3e3e3e;
 		}
 	}
+}
+
+div.tooltip2 {
+	position: absolute;
+	text-align: center;
+	width: 100px;
+	padding: 2px;
+	font: 12px sans-serif;
+	background-color: black !important;
+	color: white !important;
+	border: 0px;
+	border-radius: 8px;
+	pointer-events: none;
+	z-index: 9999;
 }
 </style>

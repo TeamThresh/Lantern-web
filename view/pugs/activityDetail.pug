@@ -13,7 +13,7 @@ block content
 			portlet(simple='true')
 				dist-graph(type=resourceType selectable='true')
 				br
-				super-table(type='userList' stop-watch-package-name)
+				super-table(type='userList' stop-watch-package-name stop-watch-is-init-done)
 		div.col-lg-7.col-sm-12
 			portlet(simple='ture')
 				div.tabbable-line
@@ -24,16 +24,16 @@ block content
 							a(href='#tabOs' data-toggle='tab') OS
 					div.tab-content
 						div.tab-pane.active#tabCallStack
-							stack-trace-tree
+							stack-trace-tree(stop-watch-is-init-done)
 						div.tab-pane#tabOs
 							div.row
 								div.col-xs-12
 									if resourceType == 'cpu'
-										super-table(type='detailOs' stop-watch-package-name)
-										super-table(type='detailCpuApp' stop-watch-package-name)
+										super-table(type='detailOs' stop-watch-package-name stop-watch-is-init-done)
+										super-table(type='detailCpuApp' stop-watch-package-name stop-watch-is-init-done)
 									else if resourceType == 'memory'
-										super-table(type='detailVmStat' stop-watch-package-name)
-										super-table(type='detailMemoryApp' stop-watch-package-name)
+										super-table(type='detailVmStat' stop-watch-package-name stop-watch-is-init-done)
+										super-table(type='detailMemoryApp' stop-watch-package-name stop-watch-is-init-done)
 		
 block style
 	style.
