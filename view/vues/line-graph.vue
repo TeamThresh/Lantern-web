@@ -67,7 +67,7 @@ module.exports = {
 			let xScale = d3.scaleTime().domain([date.startRange, date.endRange]).range([23, width - 10]);
 			let yScale = d3.scaleLinear().domain([0, this.y.max]).range([height - 15, 10]);
 			let xAxis = d3.axisBottom(xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat(this.timeFormat));
-			let yAxis = d3.axisLeft(yScale).ticks(2).tickSize(0);
+			let yAxis = d3.axisLeft(yScale).tickSize(0).tickValues([0, this.y.max / 2, this.y.max])
 
 			svg.selectAll('*').remove()
 

@@ -96,7 +96,7 @@ module.exports = {
 			let xScale = this.xScale
 			let yScale = this.yScale
 			let xAxis = d3.axisBottom(this.xScale).ticks(4).tickSize(0).tickFormat(d3.timeFormat(this.timeFormat))
-			let yAxis = d3.axisLeft(this.yScale).ticks(2).tickSize(0)
+			let yAxis = d3.axisLeft(this.yScale).tickSize(0).tickValues([0, yScale.domain()[1] / 2, yScale.domain()[1]])
 
 			this.clear()
 
