@@ -15,7 +15,10 @@
 				.list-datetime.bold.uppercase.font-yellow-casablanca {{package.package}}
 				.list-item-content
 					h3.uppercase.bold {{package.name}}
-					p version: {{package.app_ver}}
+					p
+						| version: {{package.app_ver}}
+						| &nbsp;&nbsp; mornitoring: &nbsp;
+						input.make-switch(type='checkbox', checked, data-on-color='success', data-off-color='default')
 					p.hidden
 						| User :&nbsp;
 						span(:class='{red: package.userScore < 4, yellow: package.userScore < 7, blue: package.userScore < 10}') {{package.userScore}}
@@ -38,7 +41,9 @@ module.exports = {
 		}
 	},
 	watch: {
-
+		'app.packages'() {
+			setTimeout(() => $('.make-switch').bootstrapSwitch(), 500)
+		}
 	},
 	methods: {
 		move(packageName, appVersion) {
@@ -89,4 +94,7 @@ module.exports = {
 	span.red {
 		color: rgb(217, 72, 15);
 	}
+.bootstrap-switch-wrapper {
+	border: none !important;
+}
 </style>
