@@ -211,7 +211,7 @@ module.exports = {
 div.tooltip2 {
 	position: absolute;
 	text-align: center;
-	width: 100px;
+	// width: 100px;
 	padding: 2px;
 	font: 12px sans-serif;
 	background-color: black !important;

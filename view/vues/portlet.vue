@@ -4,6 +4,7 @@
 		<div class="caption">
 			<span class="caption-subject bold uppercase">{{title}}</span>
 			<span class="caption-helper">{{desc}}</span>
+			<slot name='title'></slot>
 		</div>
 		<div class="actions" v-if="action">
 			<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">

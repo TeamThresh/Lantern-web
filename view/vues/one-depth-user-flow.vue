@@ -31,70 +31,99 @@ module.exports = {
 	},
 	methods: {
 		fetch() {
-			$.get(`/api/one-depth-userflow/${this.app.packageName}/${this.app.activityName}`, this.app.getFilters()).then((res) => {
-				if( ! res instanceof Object ) {
-					return
-				}
-				if( ! res.hasOwnProperty('crash') ) {
-					res.crash = 0
-				}
-				if( ! res.hasOwnProperty('exit') ) {
-					res.exit = 0
-				}
-
-				let arr = []
-				Object.keys(res).forEach(name => {
-					arr.push({
-						name: name,
-						value: parseInt(res[name])
-					})
+			if( this.crashEventPath !== undefined ) {
+				this.$http.get(`/api/crashEventPath/${this.app.packageName}/${this.app.crashId}`, {params: this.app.getFilters()}).then(res => {
+					let data = res.body
+					this.nodes = []
+					this.links = []
+					this.sampling({class_name: 'crash', method_name: '', line_num: '', children: data.children}, 0)
+					this.draw()
 				})
-
-				arr = arr.sort((a, b) => a.value > b.value ? -1 : 1)
-				arr = arr.splice(0, 5)
-
-				let isExit = false
-				let isCrash = false
-				arr.forEach(d => {
-					if( d.name == 'exit' ) {
-						isExit = true
-					} else if( d.name == 'crash' ) {
-						isCrash = true
+			} else {
+				$.get(`/api/one-depth-userflow/${this.app.packageName}/${this.app.activityName}`, this.app.getFilters()).then((res) => {
+					this.nodes = []
+					this.links = []
+					if( ! res instanceof Object ) {
+						return
 					}
-				})
-				if( ! isExit ) {
-					arr.push({
-						name: 'exit',
-						value: res.exit
-					})
-				}
-				if( ! isCrash ) {
-					arr.push({
-						name: 'crash',
-						value: res.crash
-					})
-				}
+					if( ! res.hasOwnProperty('crash') ) {
+						res.crash = 0
+					}
+					if( ! res.hasOwnProperty('exit') ) {
+						res.exit = 0
+					}
 
-				this.nodes = [{name: this.app.activityName}]
-				this.links = []
-				arr.forEach(d => {
-					this.nodes.push({name: d.name})
-					this.links.push({
-						source: 0,
-						target: this.nodes.length - 1,
-						value: d.value
+					let arr = []
+					Object.keys(res).forEach(name => {
+						arr.push({
+							name: name,
+							value: parseInt(res[name])
+						})
 					})
-				})
 
-				this.data = {nodes: this.nodes, links: this.links}
-				this.clear()
-				this.draw(this.data)
-			})
+					arr = arr.sort((a, b) => a.value > b.value ? -1 : 1)
+					arr = arr.splice(0, 5)
+
+					let isExit = false
+					let isCrash = false
+					arr.forEach(d => {
+						if( d.name == 'exit' ) {
+							isExit = true
+						} else if( d.name == 'crash' ) {
+							isCrash = true
+						}
+					})
+					if( ! isExit ) {
+						arr.push({
+							name: 'exit',
+							value: res.exit
+						})
+					}
+					if( ! isCrash ) {
+						arr.push({
+							name: 'crash',
+							value: res.crash
+						})
+					}
+
+					this.nodes = [{name: this.app.activityName}]
+					this.links = []
+					arr.forEach(d => {
+						this.nodes.push({name: d.name})
+						this.links.push({
+							source: 0,
+							target: this.nodes.length - 1,
+							value: d.value
+						})
+					})
+
+					this.data = {nodes: this.nodes, links: this.links}
+					this.clear()
+					this.draw()
+				})
+			}
+		},
+		sampling(node, parentIndex) {
+			let nodes = this.nodes
+			let links = this.links
+			// first put myself
+			nodes.push({name: `${node.class_name}.${node.method_name}:${node.line_num}`})
+			let myIndex = nodes.length - 1
+			// if this is root node, no link
+			if( myIndex > 0 ) {
+				links.push({source: parentIndex, target: myIndex, value: node.count})
+			}
+			if( node.children instanceof Array && node.children.length > 0 ) {
+				for( let child of node.children ) {
+					this.sampling(child, myIndex)
+				}
+			}
 		},
 		clear() {
 			$(this.$el).find('svg *').remove()
 		},
-		draw: function(data) {
+		draw: function() {
+			let data = {nodes: this.nodes, links: this.links}
 			var svg = d3.select('div.one-depth-user-flow > svg');
 			var units = "Widgets";
 
@@ -128,6 +157,11 @@ module.exports = {
 				.links(graph.links)
 				.layout(32);
 
+			let tooltip = d3.select('body')
+				.append('div')
+				.attr('class', 'tooltip2')
+				.style('opacity', 0)
+
 			// add in the links
 			var link = svg.append("g").selectAll(".link")
 				.data(graph.links)
@@ -135,14 +169,27 @@ module.exports = {
 				.attr("class", "link")
 				.attr("d", path)
 				.style("stroke-width", function(d) { return Math.max(1, d.dy); })
-				.sort(function(a, b) { return b.dy - a.dy; });
+				.sort(function(a, b) { return b.dy - a.dy; })
+				.on('mouseover', (d) => {
+					tooltip.transition()
+						.duration(200)
+						.style('opacity', .9)
+					tooltip.html(`${d.source.name} -> ${d.target.name} (${d.value})`)
+						.style('left', `${d3.event.pageX}px`)
+						.style('top', `${d3.event.pageY}px`)
+				})
+				.on('mouseout', () => {
+					tooltip.transition()
+						.duration(500)
+						.style('opacity', 0)
+				})
 
 			// add the link titles
-			link.append("text")
-				.text(function(d) {
-					return d.source.name + " → " +
-						d.target.name + "\n" + format(d.value);
-				})
+			// link.append("text")
+			// 	.text(function(d) {
+			// 		return d.source.name + " → " +
+			// 			d.target.name + "\n" + format(d.value);
+			// 	})
 
 			// add in the nodes
 			var node = svg.append("g").selectAll(".node")
@@ -159,7 +206,20 @@ module.exports = {
 				.on("start", function() {
 					this.parentNode.appendChild(this);
 				})
-				.on("drag", dragmove));
+				.on("drag", dragmove))
+				// .on('mouseover', (d) => {
+				// 	tooltip.transition()
+				// 		.duration(200)
+				// 		.style('opacity', .9)
+				// 	tooltip.html(`${d.name}`)
+				// 		.style('left', `${d3.event.pageX}px`)
+				// 		.style('top', `${d3.event.pageY}px`)
+				// })
+				// .on('mouseout', () => {
+				// 	tooltip.transition()
+				// 		.duration(500)
+				// 		.style('opacity', 0)
+				// })
 
 			// add the rectangles for the nodes
 			node.append("rect")
@@ -181,7 +241,8 @@ module.exports = {
 				});
 
 			// add in the title for the nodes
-			node.append("text")
+			if( this.crashEventPath === undefined ) {
+				node.append("text")
 				.attr("x", -6)
 				.attr("y", function(d) {
 					return d.dy / 2;
@@ -198,6 +259,7 @@ module.exports = {
 				})
 				.attr("x", 6 + sankey.nodeWidth())
 				.attr("text-anchor", "start");
+			}
 
 			// the function for moving the nodes
 			function dragmove(d) {
@@ -241,5 +303,18 @@ module.exports = {
 	.link:hover {
 		stroke-opacity: .5;
 	}
+}
+
+div.tooltip2 {
+	position: absolute;
+	text-align: center;
+	padding: 2px;
+	font: 12px sans-serif;
+	background-color: black !important;
+	color: white !important;
+	border: 0px;
+	border-radius: 8px;
+	pointer-events: none;
+	z-index: 9999;
 }
 </style>

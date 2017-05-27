@@ -1,5 +1,7 @@
 <template lang="pug">
 portlet.crash-info(:title='data.crash_name')
+	span(slot='title')
+		crash-rank-marker(:crash-rank.sync='data.crash_rank' @mark='mark')
 	pre
 		code {{data.crash_stacktrace}}
 	div.device-status
@@ -36,9 +38,16 @@ export default {
 	methods: {
 		fetch() {
 			new Promise((s, f) => {
-				this.$http.get(`/api/crashDetail/${this.app.packageName}/${this.app.crashId}`).then(res => {
+				this.$http.get(`/api/crashDetail/${this.app.packageName}/${this.app.crashId}`, {params: this.app.getFilters()}).then(res => {
 					this.data = res.body
 				})
+			})
+		},
+		mark(crashRank) {
+			this.$http.post(`/api/markCrashRank/${this.app.packageName}/${this.app.crashId}`, {crash_rank: crashRank}).then(res => {
+				this.data.crash_rank = crashRank
+			}, res => {
+				console.error(res)
 			})
 		}
 	},

@@ -32,7 +32,7 @@ export default {
 				this.data = []
 				switch( this.type ) {
 					case 'crashVersionOs':
-						this.$http.get(`/api/crashVersion/${this.app.packageName}/${this.app.crashId}/os`).then(res => {
+						this.$http.get(`/api/crashVersion/${this.app.packageName}/${this.app.crashId}/os`, {params: this.app.getFilters()}).then(res => {
 							this.data = res.body.map(d => {
 								return {label: d.os_ver, value: d.crash_count}
 							})
@@ -40,7 +40,7 @@ export default {
 						})
 						break
 					case 'crashVersionApp':
-						this.$http.get(`/api/crashVersion/${this.app.packageName}/${this.app.crashId}/app`).then(res => {
+						this.$http.get(`/api/crashVersion/${this.app.packageName}/${this.app.crashId}/app`, {params: this.app.getFilters()}).then(res => {
 							this.data = res.body.map(d => {
 								return {label: d.app_ver, value: d.crash_count}
 							})
@@ -48,7 +48,7 @@ export default {
 						})
 						break
 					case 'crashVersionDevice':
-						this.$http.get(`/api/crashVersion/${this.app.packageName}/${this.app.crashId}/device`).then(res => {
+						this.$http.get(`/api/crashVersion/${this.app.packageName}/${this.app.crashId}/device`, {params: this.app.getFilters()}).then(res => {
 							this.data = res.body.map(d => {
 								return {label: d.device_name, value: d.crash_count}
 							})
@@ -56,7 +56,7 @@ export default {
 						})
 						break
 					case 'crashVersionLocation':
-						this.$http.get(`/api/crashVersion/${this.app.packageName}/${this.app.crashId}/location`).then(res => {
+						this.$http.get(`/api/crashVersion/${this.app.packageName}/${this.app.crashId}/location`, {params: this.app.getFilters()}).then(res => {
 							this.data = res.body.map(d => {
 								return {label: d.location_code, value: d.crash_count}
 							})
@@ -64,7 +64,7 @@ export default {
 						})
 						break
 					case 'crashRank':
-						this.$http.get(`/api/crashRank/${this.app.packageName}`).then(res => {
+						this.$http.get(`/api/crashRank/${this.app.packageName}`, {params: this.app.getFilters()}).then(res => {
 							this.data = res.body.map(d => {
 								return {label: d.crash_rank, value: d.crash_count}
 							})

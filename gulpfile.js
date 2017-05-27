@@ -36,12 +36,17 @@ gulp.task('bundling', function() {
                 context: __dirname + '/view/assets/bundles', // file loader가 view를 [path]로 인식해버려서..
                 module: {
                     loaders: [
-												{test: /\.js$/, loader: 'babel', query: {presets: ['es2015']}},
+						{test: /\.js$/, loader: 'babel', query: {presets: ['es2015']}},
                         {test: /\.(scss|sass|css)$/, loader: 'style!css!sass'},
                         {test: /\.vue$/, loader: 'vue'},
                         {test: /\.(png|eot|woff2|woff|ttf|svg)/, loader: 'file?name=[path][name].[ext]&publicPath=/'}
 					]
-                }
+                },
+				vue: {
+					loaders: {
+						scss: 'style!css!sass'
+					}
+				}
             }))
             .pipe(rename(function(file) {
                 // file.basename = 'bundle';

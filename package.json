@@ -50,6 +50,7 @@
     "scss-loader": "0.0.1",
     "serve-favicon": "~2.3.2",
     "showdown": "^1.6.4",
+    "sweet-modal-vue": "^1.1.0",
     "tween.js": "^16.6.0",
     "underscore": "^1.8.3",
     "unirest": "^0.5.1",

@@ -15,6 +15,9 @@ import VueResize from 'vue-resize'
 Vue.use(VueResize)
 import showdown from 'showdown'
 window.showdown = showdown
+import {SweetModal, SweetModalTab} from 'sweet-modal-vue'
+Vue.component('sweet-modal', SweetModal)
+Vue.component('sweet-modal-tab', SweetModalTab)
 
 /**
  * load Vue Components
@@ -54,6 +57,7 @@ Vue.component('area-graph', require('../vues/area-graph.vue'))
 Vue.component('pie-graph', require('../vues/pie-graph.vue'))
 Vue.component('crash-info', require('../vues/crash-info.vue'))
 Vue.component('get-started', require('../vues/get-started.vue'))
+Vue.component('crash-rank-marker', require('../vues/crash-rank-marker.vue'))
 
 /**
  * apply Vue app
