@@ -63,6 +63,15 @@ export default {
 							s()
 						})
 						break
+					case 'crashRank':
+						this.$http.get(`/api/crashRank/${this.app.packageName}`).then(res => {
+							this.data = res.body.map(d => {
+								return {label: d.crash_rank, value: d.crash_count}
+							})
+							$(this.$el).height('300px')
+							s()
+						})
+						break
 				}
 			}).then(() => {
 				Morris.Donut({
@@ -84,5 +93,11 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
+.pie-graph {
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+}
 </style>
