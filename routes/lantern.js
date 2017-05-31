@@ -65,4 +65,11 @@ router.get('/login', (req, res, next) => {
 	}
 })
 
+// Insight
+router.get('/insight/:packageName', (req, res, next) => {
+	res.render('../view/pugs/insight.pug', {
+		packageName: req.params.packageName
+	})
+})
+
 module.exports = router;

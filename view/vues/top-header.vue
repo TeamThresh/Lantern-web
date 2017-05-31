@@ -75,7 +75,10 @@
 						<li><a href="/index">Project</a></li>
 						<li><a :href="`/dashboard/${app.packageName}`">Dashboard</a></li>
 						<li><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
-						<li><a href="/">Report</a></li>
+						<li><a :href="`/insight/${app.packageName}`">
+                                Insight
+                                <span class="badge badge-danger">NEW</span>
+                        </a></li>
 						<li><a href="javascript:eunchan();">Machine Gun</a></li>
 					</ul>
 				</div>
