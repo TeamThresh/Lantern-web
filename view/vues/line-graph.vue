@@ -113,6 +113,7 @@ module.exports = {
 				.attr('cy', (d) => yScale(d.value))
 				.attr('r', '3px')
 				.attr('fill', '#96eba4')
+				.attr('fill', 'transparent')
 				.on('mouseover', (d) => {
 					tooltip.transition()
 						.duration(200)
