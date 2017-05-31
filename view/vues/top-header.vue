@@ -72,7 +72,7 @@
                 <!-- END HEADER SEARCH BOX -->
 				<div class="hor-menu">
 					<ul class="nav navbar-nav pull-left">
-						<li><a href="/index">Index</a></li>
+						<li><a href="/index">Project</a></li>
 						<li><a :href="`/dashboard/${app.packageName}`">Dashboard</a></li>
 						<li><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
 						<li><a href="/">Report</a></li>
