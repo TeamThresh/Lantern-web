@@ -280,6 +280,7 @@ window.app = new Vue({
 						this.app.crashId = pathNames[3]
 					case 'dashboard':
 					case 'crashList':
+					case 'insight':
 						this.app.packageName = pathNames[2]
 						this.initServer()
 						s()
