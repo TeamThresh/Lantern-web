@@ -58,6 +58,7 @@ Vue.component('pie-graph', require('../vues/pie-graph.vue'))
 Vue.component('crash-info', require('../vues/crash-info.vue'))
 Vue.component('get-started', require('../vues/get-started.vue'))
 Vue.component('crash-rank-marker', require('../vues/crash-rank-marker.vue'))
+Vue.component('insight-status', require('../vues/insight-status.vue'))
 
 /**
  * apply Vue app
@@ -96,6 +97,10 @@ window.app = new Vue({
 			crashId: 0, // for crash detail
 			versions: [], // app verseions
 			isInitDone: false, // init flag
+			insight: {
+				type: 'cpu',
+				p95: 0
+			},
 			getFilters: function() {
 				let filters = JSON.parse(JSON.stringify(this.filters))
 				let range = this.getRange()

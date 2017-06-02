@@ -5,7 +5,7 @@ div.pie-graph
 
 <script>
 export default {
-	props: ['type'],
+	props: ['type', 'initData'],
 	data() {
 		return {
 			app: this.$root.app,
@@ -24,10 +24,14 @@ export default {
 				return
 			}
 			this.fetch()
+		},
+		initData() {
+			this.fetch()
 		}
 	},
 	methods: {
 		fetch() {
+			this.clear()
 			new Promise((s, f) => {
 				this.data = []
 				switch( this.type ) {
@@ -72,6 +76,10 @@ export default {
 							s()
 						})
 						break
+					case 'custom':
+						this.data = this.initData
+						s()
+						break
 				}
 			}).then(() => {
 				Morris.Donut({
@@ -81,7 +89,7 @@ export default {
 			})
 		},
 		clear() {
-			$(this.$el).select('svg *').remove()
+			$(this.$el).find('svg *').remove()
 		},
 		draw() {
 
