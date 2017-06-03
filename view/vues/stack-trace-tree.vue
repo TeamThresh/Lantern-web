@@ -4,7 +4,7 @@ div.panel-group.accordion#callStackAccordion
 
 <script>
 module.exports = {
-	props: ['crashReverseStack', 'watchPackageName', 'stopWatchIsInitDone'],
+	props: ['crashReverseStack', 'watchPackageName', 'stopWatchIsInitDone', 'insight'],
 	data() {
 		return {
 			app: this.$root.app,
@@ -38,6 +38,15 @@ module.exports = {
 				return
 			}
 			this.fetch()
+		},
+		'app.insight.status'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			if( this.insight == undefined ) {
+				return
+			}
+			this.fetch()
 		}
 	},
 	methods: {
@@ -49,7 +58,6 @@ module.exports = {
 			query.endUsage = this.app.distSelection.endUsage
 			if( this.crashReverseStack !== undefined ) {
 				$.ajax({type: 'get', url: `/api/crashReverseStack/${this.app.packageName}/${this.app.crashId}`}).then(res => {
-					this.clear()
 					this.data = []
 					this.data = res.map(d => {
 						return {
@@ -58,9 +66,23 @@ module.exports = {
 						}
 					})
 				})
+			} else if( this.insight !== undefined ) {
+				let params = {}
+				params.activity = this.app.insight.status.act.map(d => d.key).join(',')
+				params.os = this.app.insight.status.os.map(d => d.key).join(',')
+				params.device = this.app.insight.status.dev.map(d => d.key).join(',')
+				params.location = this.app.insight.status.loc.map(d => d.key).join(',')
+				this.$http.get(`/api/reverseStack/${this.app.packageName}`, {params}).then(res => {
+					this.data = []
+					res.body.forEach(d => {
+						this.data.push({
+							threadName: d.threadName,
+							data: this.preprocess(d.stack[0].children)
+						})
+					})
+				})
 			} else {
 				$.ajax({type: 'get', url: `/api/reverseStack/${this.app.packageName}/${this.app.activityName}`, data: query}).then(res => {
-					this.clear()
 					this.data = []
 					res.forEach(d => {
 						this.data.push({
@@ -75,6 +97,7 @@ module.exports = {
 			$(this.$el).find('*').remove()
 		},
 		draw() {
+			this.clear()
 			this.data.forEach((d, idx) => {
 				$(this.$el).append(`
 					<div class='panel panel-default'>

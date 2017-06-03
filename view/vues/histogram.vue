@@ -47,7 +47,7 @@ export default {
         fetch() {
             this.$http.get(`/api/histogram/${this.app.packageName}/${this.app.insight.type}`).then(res => {
                 this.data = res.body
-                this.app.insight.p = this.data.p95.rate
+                this.app.insight.p95 = this.data.p95.rate
                 this.draw()
             })
         },
@@ -61,11 +61,12 @@ export default {
             let margin = this.margin
             let width = $(svg.nodes()).width()
             let height = $(svg.nodes()).height()
-            let xScaleMax = 110
-            let rectCount = 50
+            let xScaleMax = 101
+            let rectCount = 49
             if( this.app.insight.type == 'network' ) {
                 xScaleMax = Math.max.apply(Math, this.data.histogram.map(d => d.rate)) + 100
-            } else if( this.app.insight.type == 'ui' ){
+            } else if( this.app.insight.type == 'memory'
+                || this.app.insight.type == 'ui' ) {
                 xScaleMax = Math.max.apply(Math, this.data.histogram.map(d => d.rate)) + 10
             }
             let preXScale = d3.scaleLinear().domain([0, xScaleMax]).range([0, rectCount])

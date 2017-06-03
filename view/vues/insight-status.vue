@@ -31,9 +31,8 @@ export default {
 			if( ! this.app.isInitDone ) {
 				return
 			}
-			this.fetch()
 		},
-		'app.insight.type'() {
+		'app.insight.p95'() {
 			if( ! this.app.isInitDone ) {
 				return
 			}
@@ -46,6 +45,12 @@ export default {
 				this.activityData = res.body.act.map(d => {
 					return {label: d.key, value: d.count}
 				})
+				// remove others
+				let types = ['act', 'os', 'dev', 'loc']
+				types.forEach(type => {
+					res.body[type] = res.body[type].filter(d => d.key != 'others')
+				})
+
 				this.osData = res.body.os.map(d => {
 					return {label: d.key, value: d.count}
 				})
@@ -55,6 +60,8 @@ export default {
 				this.locationData = res.body.loc.map(d => {
 					return {label: d.key, value: d.count}
 				})
+				// save to store
+				this.app.insight.status = res.body
 			})
 		}
 	}

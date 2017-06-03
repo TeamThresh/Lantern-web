@@ -99,7 +99,8 @@ window.app = new Vue({
 			isInitDone: false, // init flag
 			insight: {
 				type: 'cpu',
-				p95: 0
+				p95: 0,
+				status: {}
 			},
 			getFilters: function() {
 				let filters = JSON.parse(JSON.stringify(this.filters))
