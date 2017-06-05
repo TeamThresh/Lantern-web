@@ -134,9 +134,9 @@ window.app = new Vue({
 					node.crashColorValue = 1
 				}
 
-				if( node.cpuCount >= 40 || node.memoryCount >= 40 ) {
+				if( node.cpuUsage >= 40 || node.memoryUsage >= 40 ) {
 					node.resourceColorValue = 1
-				} else if( node.cpuCount >= 20 || node.memoryCount >= 20 ) {
+				} else if( node.cpuUsage >= 20 || node.memoryUsage >= 20 ) {
 					node.resourceColorValue = 2
 				} else {
 					node.resourceColorValue = 3
