@@ -63,7 +63,7 @@ module.exports = {
 			if( ! this.app.isInitDone ) {
 				return
 			}
-			if( this.watchUuid !== undefined ) {
+			if( this.watchUuid == undefined ) {
 				return
 			}
 			this.fetch()
@@ -149,7 +149,6 @@ module.exports = {
 						}
 						row.push(d[h])
 					})
-					row.selected = false
 					newData.push(row)
 				})
 				this.body = newData
@@ -161,11 +160,10 @@ module.exports = {
 		},
 		click(d, $event) {
 			if( this.type == 'userList' ) {
-				d.selected = ! d.selected
-				if( d.selected ) {
-					this.app.uuid.push(d[0])
-				} else {
+				if( this.app.uuid.indexOf(d[0]) > -1 ) {
 					this.app.uuid.splice(this.app.uuid.indexOf(d[0]), 1)
+				} else {
+					this.app.uuid.push(d[0])
 				}
 				// select mark
 				let elem = $($event.srcElement)
