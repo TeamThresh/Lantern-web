@@ -157,6 +157,7 @@ module.exports = {
 		clear() {
 			this.head = []
 			this.body = []
+			$(this.$el).find('.selected').removeClass('selected')
 		},
 		click(d, $event) {
 			if( this.type == 'userList' ) {
