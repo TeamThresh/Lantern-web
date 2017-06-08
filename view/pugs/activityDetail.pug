@@ -20,20 +20,50 @@ block content
 					ul.nav.nav-tabs
 						li.active
 							a(href='#tabCallStack' data-toggle='tab') Reverse Stack
-						li
-							a(href='#tabOs' data-toggle='tab') OS
+						if resourceType == 'cpu'
+							li
+								a(href='#tabCpuOs' data-toggle='tab') OS
+							li
+								a(href='#tabCpuApp' data-toggle='tab') App
+						if resourceType == 'memory'
+							li
+								a(href='#tabMemoryUsage' data-toggle='tab') Memory Usage
+							li
+								a(href='#tabVmstat' data-toggle='tab') Vmstat
+						if resourceType == 'cpu' || resourceType == 'memory'
+							li
+								a(href='#tabRaw' data-toggle='tab') Raw
 					div.tab-content
 						div.tab-pane.active#tabCallStack
 							stack-trace-tree(stop-watch-is-init-done)
-						div.tab-pane#tabOs
-							div.row
-								div.col-xs-12
-									if resourceType == 'cpu'
-										super-table(type='detailOs' stop-watch-package-name stop-watch-is-init-done)
-										super-table(type='detailCpuApp' stop-watch-package-name stop-watch-is-init-done)
-									else if resourceType == 'memory'
-										super-table(type='detailVmStat' stop-watch-package-name stop-watch-is-init-done)
-										super-table(type='detailMemoryApp' stop-watch-package-name stop-watch-is-init-done)
+						if resourceType == 'cpu'
+							div.tab-pane#tabCpuOs
+								div.row
+									div.col-xs-12
+											os-detail-dist-graph(type='stat')
+							div.tab-pane#tabCpuApp
+								div.row
+									div.col-xs-12
+											os-detail-dist-graph(type='pstat')
+						if resourceType == 'memory'
+							div.tab-pane#tabMemoryUsage
+								div.row
+									div.col-xs-12
+											os-detail-dist-graph(type='memory')
+							div.tab-pane#tabVmstat
+								div.row
+									div.col-xs-12
+											os-detail-dist-graph(type='vmstat')
+						if resourceType == 'cpu' || resourceType == 'memory'
+							div.tab-pane#tabRaw
+								div.row
+									div.col-xs-12
+										if resourceType == 'cpu'
+											super-table(type='detailOs' stop-watch-package-name stop-watch-is-init-done, watch-uuid)
+											super-table(type='detailCpuApp' stop-watch-package-name stop-watch-is-init-done, watch-uuid)
+										else if resourceType == 'memory'
+											super-table(type='detailVmStat' stop-watch-package-name stop-watch-is-init-done, watch-uuid)
+											super-table(type='detailMemoryApp' stop-watch-package-name stop-watch-is-init-done, watch-uuid)
 		
 block style
 	style.

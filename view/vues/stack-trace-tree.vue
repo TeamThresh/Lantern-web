@@ -47,6 +47,12 @@ module.exports = {
 				return
 			}
 			this.fetch()
+		},
+		'app.uuid'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.fetch()
 		}
 	},
 	methods: {
@@ -56,6 +62,9 @@ module.exports = {
 			query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
 			query.startUsage = this.app.distSelection.startUsage
 			query.endUsage = this.app.distSelection.endUsage
+			// uuid
+			query.uuid = this.app.uuid.join(',')
+			
 			if( this.crashReverseStack !== undefined ) {
 				$.ajax({type: 'get', url: `/api/crashReverseStack/${this.app.packageName}/${this.app.crashId}`}).then(res => {
 					this.data = []

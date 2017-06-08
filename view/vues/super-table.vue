@@ -5,13 +5,13 @@ div.table-scrollable
 			tr
 				th.text-center(v-for='name in head') {{name}}
 		tbody
-			tr(v-for='b in body', @click='click(b)')
+			tr(@click='click(b, $event)', v-for='b in body')
 				td.text-center(v-for='d in b') {{d}}
 </template>
 
 <script>
 module.exports = {
-	props: ['type', 'light', 'stopWatchPackageName', 'toDetail', 'watchFilters', 'stopWatchIsInitDone'],
+	props: ['type', 'light', 'stopWatchPackageName', 'toDetail', 'watchFilters', 'stopWatchIsInitDone', 'watchUuid'],
 	data: function() {
 		return {
 			head: [],
@@ -58,20 +58,34 @@ module.exports = {
 				return
 			}
 			this.fetch()
+		},
+		'app.uuid'() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			if( this.watchUuid !== undefined ) {
+				return
+			}
+			this.fetch()
 		}
 	},
 	methods: {
 		fetch() {
 			let url = ''
 			let query = this.app.getFilters()
+			//uuid
+			query.uuid = this.app.uuid.join(',')
+
 			switch( this.type ) {
 				case 'network':
 					url = `/api/network/${this.app.packageName}/${this.app.activityName}`
 					break
 				case 'crash5':
 					query.limit = 5
-				case 'crash':
 					url = `/api/crashCount/${this.app.packageName}`
+					break
+				case 'crash':
+					url = `/api/crashCount/${this.app.packageName}/${this.app.activityName}`
 					break
 				case 'userList':
 					switch( this.app.resourceType ) {
@@ -135,6 +149,7 @@ module.exports = {
 						}
 						row.push(d[h])
 					})
+					row.selected = false
 					newData.push(row)
 				})
 				this.body = newData
@@ -144,10 +159,20 @@ module.exports = {
 			this.head = []
 			this.body = []
 		},
-		click(d) {
+		click(d, $event) {
 			if( this.type == 'userList' ) {
-				this.app.uuid = d[0]
-				this.app.timestampForUuid = d[6]
+				d.selected = ! d.selected
+				if( d.selected ) {
+					this.app.uuid.push(d[0])
+				} else {
+					this.app.uuid.splice(this.app.uuid.indexOf(d[0]), 1)
+				}
+				// select mark
+				let elem = $($event.srcElement)
+				while( elem.prop('tagName') != 'TR' ) {
+					elem = $(elem).parent()
+				}
+				$(elem).toggleClass('selected')
 			} else if( this.toDetail !== undefined ) {
 				location.href = `/crashDetail/${this.app.packageName}/${d[0]}`
 			}
@@ -158,7 +183,7 @@ module.exports = {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang="scss">
 	table.table {
 		background-color: transparent;
 		border: none;
@@ -195,5 +220,9 @@ module.exports = {
 			background-color: #585f72;
 			color: white !important;
 		}
+	}
+
+	table tr.selected {
+		background-color: chartreuse !important;
 	}
 </style>

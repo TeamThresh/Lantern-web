@@ -6,7 +6,7 @@ div.dist-graph
 
 <script>
 module.exports = {
-	props: ['type', 'selectable'],
+	props: ['type', 'selectable', 'initData', 'stopWatchIsInitDone', 'stopWatchPackageName', 'fixedWidth', 'fixedHeight'],
 	data: function() {
 		return {
 			data: [],
@@ -15,12 +15,16 @@ module.exports = {
 			linkUrl: '',
 			timeFormat: '',
 			xScale: undefined,
-			yScale: undefined
+			yScale: undefined,
+			sampled: []
 		};
 	},
 	watch: {
 		'app.packageName'() {
 			if( ! this.app.isInitDone ) {
+				return
+			}
+			if( this.stopWatchPackageName !== undefined ) {
 				return
 			}
 			this.fetch()
@@ -29,7 +33,22 @@ module.exports = {
 			if( ! this.app.isInitDone ) {
 				return
 			}
+			if( this.stopWatchIsInitDone !== undefined ) {
+				return
+			}
 			this.fetch()
+		},
+		data() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.draw()
+		},
+		initData() {
+			if( ! this.app.isInitDone ) {
+				return
+			}
+			this.data = this.initData
 		}
 	},
 	methods: {
@@ -39,23 +58,10 @@ module.exports = {
 				this.data = []
 				res.forEach(d => {
 					this.data.push({
-						date: moment(d.timestamp),
+						date: moment(d.timestamp).valueOf(),
 						value: d.value
 					})
 				})
-
-				// calculate timeformat by the gap of y min and max
-				let range = this.app.getRange()
-				let delta = moment(range.endRange) - moment(range.startRange)
-				if( delta <= moment.duration(1, 'd') ) {
-					this.timeFormat = '%H:%M'
-				} else if( delta <= moment.duration(1, 'y') ) {
-					this.timeFormat = '%m-%d'
-				} else {
-					this.timeFormat = '%Y-%m'
-				}
-
-				this.draw()
 			})
 		},
 		clear() {
@@ -70,151 +76,107 @@ module.exports = {
 			};
 			return color[value];
 		},
-		getRandom: function(min, max) {
-			if( ! max ) {
-				max = min;
-				min = 0;
-			}
-			return Math.floor(min + (Math.random() * (max - min + 1)));
-		},
-		getRandomSapleData: function(dateMin, dateMax) {
-			var me = this;
-			var data = [];
-			var Datum = function(date, value) { // datum constructor
-				return {
-					date: date,
-					value: value
-				};
-			};
-			for( var m = moment(dateMin); m.isBefore(dateMax); m.add(1, 'minutes') ) {
-				// bottom area
-				if( me.getRandom(100) > 0 ) {
-					data.push(new Datum(moment(m), me.getRandom(0, 5)));
-				}
-				if( me.getRandom(100) > 90 ) {
-					data.push(new Datum(moment(m), me.getRandom(5, 15)));
-				}
-				if( me.getRandom(100) > 95 ) {
-					data.push(new Datum(moment(m), me.getRandom(15, 20)));
-				}
-				// middle area
-				if( me.getRandom(100) > 97 ) {
-					data.push(new Datum(moment(m), me.getRandom(21, 40)));
-				}
-				// top area
-				if( me.getRandom(100) > 99 ) {
-					data.push(new Datum(moment(m), me.getRandom(40, 100)));
-				}
-			}
-			return data;
-		},
-		sampling: function(data, xScale, yScale) {
-			var me = this;
-			var Box = function(x, y, value) { // box constructor
-				return {
-					x: x,
-					y: y,
-					value: value
-				}
-			};
-			var boxes = [];
-			var boxCountByX = {};
-			// x and y scaled box generate
-			$.each(data, function(index, d) {
-				var x = xScale(d.date);
-				var y = yScale(d.value);
-				boxCountByX[x] ? boxCountByX[x]++ : boxCountByX[x] = 1;
-				for( var i = 0; i < boxes.length; i++ ) {
-					if( boxes[i].x == x && boxes[i].y == y ) {
-						boxes[i].value++;
-						return;
+		sampling() {
+			let xScale = this.xScale
+			let yScale = this.yScale
+			let data = this.data
+
+			let countSumByX = {}
+			this.data.forEach(d => {
+				d.x = xScale(d.date)
+				d.y = yScale(d.value)
+				countSumByX[d.x] ? countSumByX[d.x] + d.count : countSumByX[d.x] = d.count
+			})
+
+			this.sampled = []
+			this.data.forEach(d => {
+				let found = false
+				this.sampled.forEach(sample => {
+					if( sample.x == d.x && sample.y == d.y ) {
+						sample.count += d.count
+						found = true
 					}
+				})
+				if( ! found ) {
+					this.sampled.push({
+						x: d.x,
+						y: d.y,
+						count: d.count
+					})
 				}
-				boxes.push(new Box(x, y, 1));
-			});
-			// color
-			$.each(boxes, function(index, box) {
-				var value = box.value / boxCountByX[box.x];
-				if( value >= 0.15 )
-					box.color = me.getColor(3);
-				else if( value >= 0.05 )
-					box.color = me.getColor(2);
-				else
-					box.color = me.getColor(1);
-			});
-			return boxes;
+			})
+			this.sampled.forEach(sample => {
+				let p = sample.count / countSumByX[sample.x]
+				if( p >= 0.15 ) {
+					sample.color = this.getColor(3)
+				} else if( p >= 0.05 ) {
+					sample.color = this.getColor(2)
+				} else {
+					sample.color = this.getColor(1)
+				}
+			})
 		},
 		draw: function() {
+			this.clear()
+
 			var me = this;
 			var range = this.app.getRange()
+			if( this.app.distSelection.startRange != 0 ) {
+				range = {
+					startRange: this.app.distSelection.startRange,
+					endRange: this.app.distSelection.endRange
+				}
+			}
 			var svg = d3.select(me.$el).select('svg');
-			var width = $(svg.node()).width();
-			var height = $(svg.node()).height();
+			let width = this.fixedWidth || $(svg.node()).width()
+			let height = this.fixedHeight || $(svg.node()).height()
 			var axesPadding = 25;
 			height -= axesPadding;
 			width -= axesPadding;
 			var boxPadding = 2;
-			var boxWidth = (function() {
-				var range = [32, 31, 30, 29, 28];
-				var widthInt = Math.floor(width);
-				var min = 2147483647;
-				var minIndex = -1;
-				$.each(range, function(i, boxWidth) {
-					var remainder = widthInt % (boxWidth + boxPadding);
-					if( remainder < min ) {
-						min = remainder;
-						minIndex = i	;
-					}
-				});
-				return range[minIndex];
-			})();
+			let boxWidth = 32
 			var boxHeight = 8;
-			var xScale = this.xScale = d3.scaleQuantize()
-				.domain((function() {
-					var date2 = range.endRange
-					var date1 = range.startRange
-					return [date1, date2];
-				})())
-				.range((function() {
-					var range = [];
-					for( var i = 0; i < width / (boxWidth + boxPadding); i++ ) {
-						var r = width - boxWidth - (boxWidth * i) - (boxPadding * i);
-						if( r < 0 )
-							break;
-						r += axesPadding; // for axes place
-						range.push(r);
-					}
-					return range.reverse();
-				})());
-			var yScale = d3.scaleQuantize()
-				.domain((function() {
-					return [0, 100];
-				})())
-				.range((function() {
-					var range = [];
-					for( var i = 0; i < height / (boxHeight + boxPadding); i++ ) {
-						var r = height - boxHeight - (boxHeight * i) - (boxPadding * i);
-						if( r < 0 )
-							break;
-						range.push(r);
-					}
-					return range;
-				})());
-			var colorScale = d3.scaleQuantize()
-				.domain([0, 23])
-				.range([1, 2, 3]);
 
-			// me.data = me.getRandomSapleData(xScale.domain()[0], xScale.domain()[1]);
-			me.data = me.sampling(me.data, xScale, yScale);
+			// calculate timeformat by the gap of y min and max
+			let delta = moment(range.endRange) - moment(range.startRange)
+			if( delta <= moment.duration(1, 'd') ) {
+				this.timeFormat = '%H:%M'
+			} else if( delta <= moment.duration(1, 'y') ) {
+				this.timeFormat = '%m-%d'
+			} else {
+				this.timeFormat = '%Y-%m'
+			}
+
+			let xScale = this.xScale = d3.scaleQuantize()
+				.domain([range.startRange, range.endRange])
+				.range((() => {
+					let arr = []
+					for( let i = axesPadding; i < width; i += boxWidth ) {
+						arr.push(i)
+					}
+					return arr
+				})())
+			let yScale = this.yScale = d3.scaleQuantize()
+				.domain([0, 100])
+				.range((() => {
+					let arr = []
+					for( let i = height; i > 0; i -= boxHeight ) {
+						arr.push(i)
+					}
+					return arr
+				})())
+
+			me.sampling()
+			let data = me.sampled
 
 			// axis
-			var xAxis = d3.axisBottom(xScale)
+			var xAxis = d3.axisBottom(d3.scaleLinear().domain(xScale.domain()).range([axesPadding, width + axesPadding]))
 				.tickFormat(d3.timeFormat(this.timeFormat))
 				.ticks(xScale.range().length / 4)
 				.tickPadding(0);
 			svg.append('g')
 				.attr('class', 'x-axis')
-				.attr('transform', 'translate(' + ((boxWidth / 2) + (boxPadding / 2)) + ', ' + (height) + ')')
+				.attr('transform', 'translate(' + ((boxWidth / 2) + (boxPadding / 2)) + ', ' + (height + 5) + ')')
 				.call(xAxis);
 			var yAxis = d3.axisLeft(yScale)
 				.ticks(2)
@@ -252,7 +214,7 @@ module.exports = {
 				.style('opacity', 0)
 
 			let boxes = []
-			$.each(me.data, function(index, data) {
+			$.each(data, function(index, data) {
 				boxes.push(svg.append('rect')
 					.attr('width', boxWidth)
 					.attr('height', boxHeight)
@@ -264,7 +226,7 @@ module.exports = {
 						tooltip.transition()
 							.duration(200)
 							.style('opacity', .9)
-						tooltip.html(`${data.value}<br/>
+						tooltip.html(`${data.count}<br/>
 							${Math.floor(yScale.invertExtent(data.y)[0])}% ~ ${Math.floor(yScale.invertExtent(data.y)[1])}%<br/>
 							${moment(xScale.invertExtent(data.x)[0]).format('YYYY-MM-DD HH:mm:ss')}<br/>
 							~<br/>
@@ -324,10 +286,12 @@ module.exports = {
 					let y2 = a.y < b.y ? b.y : a.y
 					let minUsage = 101, maxUsage = -1
 					let minRange = range.endRange, maxRange = range.startRange
+					let flag = false
 					boxes.forEach(box => {
 						let x = parseInt(box.attr('x')) + boxWidth / 2
 						let y = parseInt(box.attr('y')) + boxHeight / 2
 						if( x1 < x && x < x2 && y1 < y && y < y2 ) {
+							flag = true
 							box.classed('selected', true)
 							let usage = yScale.invertExtent(parseFloat(box.attr('y')))
 							let range = xScale.invertExtent(parseFloat(box.attr('x')))
@@ -337,6 +301,14 @@ module.exports = {
 							maxRange = Math.max(maxRange, range[1])
 						}
 					})
+					// nothing selected
+					if( ! flag ) {
+						this.app.distSelection.startUsage = 0
+						this.app.distSelection.endUsage = 100
+						this.app.distSelection.startRange = range.startRange
+						this.app.distSelection.endRange = range.endRange
+						return
+					}
 					minUsage = Math.floor(minUsage)
 					maxUsage = Math.floor(maxUsage)
 					minRange = Math.floor(minRange)
@@ -365,11 +337,10 @@ module.exports = {
 				this.fetchUrl = 'memory'
 				break
 		}
-		// init app data
-		this.app.distSelection.startUsage = 0
-		this.app.distSelection.endUsage = 100
-		this.app.distSelection.startRange = 0
-		this.app.distSelection.endRange = 0
+		// init data accept
+		if( this.initData !== undefined ) {
+			this.data = this.initData
+		}
 	}
 }
 </script>
@@ -382,6 +353,9 @@ module.exports = {
 		// border: 1px solid red; // for debug
 		.box {
 			shape-rendering: crispEdges;
+			stroke: white;
+			stroke-width: 1px;
+
 			&.selected {
 				stroke: chartreuse;
 				stroke-width: 2px;

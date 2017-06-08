@@ -59,6 +59,7 @@ Vue.component('crash-info', require('../vues/crash-info.vue'))
 Vue.component('get-started', require('../vues/get-started.vue'))
 Vue.component('crash-rank-marker', require('../vues/crash-rank-marker.vue'))
 Vue.component('insight-status', require('../vues/insight-status.vue'))
+Vue.component('os-detail-dist-graph', require('../vues/os-detail-dist-graph.vue'))
 
 /**
  * apply Vue app
@@ -92,7 +93,7 @@ window.app = new Vue({
 				startRange: 0,
 				endRange: 0
 			},
-			uuid: '', // for stack-trace-tree view
+			uuid: [], // for stack-trace-tree view
 			timestampForUuid: 0, // for stack-trace-tree view
 			crashId: 0, // for crash detail
 			versions: [], // app verseions
