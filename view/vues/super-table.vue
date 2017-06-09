@@ -76,6 +76,9 @@ module.exports = {
 			//uuid
 			query.uuid = this.app.uuid.join(',')
 
+			// no need to be reversed
+			let doNotReverse = false
+
 			switch( this.type ) {
 				case 'network':
 					url = `/api/network/${this.app.packageName}/${this.app.activityName}`
@@ -83,9 +86,11 @@ module.exports = {
 				case 'crash5':
 					query.limit = 5
 					url = `/api/crashCount/${this.app.packageName}`
+					doNotReverse = true
 					break
 				case 'crash':
 					url = `/api/crashCount/${this.app.packageName}/${this.app.activityName}`
+					doNotReverse = true
 					break
 				case 'userList':
 					switch( this.app.resourceType ) {
@@ -135,7 +140,10 @@ module.exports = {
 			}
 			$.ajax({type: 'get', url: url, data: query}).then(res => {
 				this.clear()
-				let data = res.reverse()
+				let data = res
+				if( ! doNotReverse ) {
+					data = data.reverse()
+				}
 				let newData = []
 				data.forEach(d => {
 					let row = []
