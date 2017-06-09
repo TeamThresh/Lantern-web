@@ -14,7 +14,7 @@ div.get-started.mt-clipboard-container
 			| android
 			span
 		//- unity not supported yet
-		label.mt-radio.mt-radio-disabled
+		label.mt-radio
 			input(type='radio' v-model='type' value='unity' disabled)
 			img(width='25px' height='25px' src='/assets/img/unity-logo.png')
 			| unity

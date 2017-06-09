@@ -18,6 +18,8 @@ div.filter-bar
 		a.type-filter.btn.grey-mint(@click='app.valueType = "network"', :class='{active: app.valueType == "network"}')
 			| Network
 			i.icon-feed
+	filter-layer.unity(title='Unity', v-if='app.unityVisible')
+		img(src='/assets/img/unity-logo.png', slot='icon')
 	filter-layer(title='Activity')
 		i.fa.fa-android(slot='icon')
 	filter-layer(title='OS')

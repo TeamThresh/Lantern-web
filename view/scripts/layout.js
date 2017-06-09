@@ -103,6 +103,7 @@ window.app = new Vue({
 				p95: 0,
 				status: {}
 			},
+			unityVisible: false, // unity support
 			getFilters: function() {
 				let filters = JSON.parse(JSON.stringify(this.filters))
 				let range = this.getRange()
@@ -242,6 +243,9 @@ window.app = new Vue({
 				// supply
 				this.app.filters.app = this.app.filters.app || ''
 			}
+		},
+		enableUnity() {
+			this.app.unityVisible = true
 		}
 	},
 	created() {
@@ -313,6 +317,17 @@ window.app = new Vue({
 					}
 					s()
 				})
+			})
+		})
+		// keyshortcut setting
+		p = p.then(() => {
+			return new Promise((s, f) => {
+				window.addEventListener('keyup', e => {
+					if( e.keyCode == 117 || e.keyCode == 12635 || e.keyCode == 85 ) {
+						this.enableUnity()
+					}
+				})
+				s()
 			})
 		})
 		// init done

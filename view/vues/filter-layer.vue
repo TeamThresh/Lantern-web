@@ -168,6 +168,7 @@ module.exports = {
 						})
 						break
 					case 'activity':
+					case 'unity':
 						$.get(`/api/statusOfActivity/${this.app.packageName}`, query).then((res) => {
 							res = res.reverse() // 서버에서 순서가 거꾸로온다
 							let max = Number.MIN_VALUE
@@ -182,7 +183,10 @@ module.exports = {
 								this.nodes.push(node)
 							})
 							// saved filter check
-							let filter = this.app.filters[this.title.toLowerCase()]
+							// unity temporary handling
+							let title = this.title.toLowerCase()
+							title == 'unity' ? title = 'activity' : 0
+							let filter = this.app.filters[title]
 							this.nodes.forEach(n => {
 								if( filter.indexOf(n.name) >= 0 ) {
 									n.selected = true
@@ -321,6 +325,10 @@ module.exports = {
 		}
 	},
 	mounted() {
+		// fetch
+		if( this.app.isInitDone ) {
+			this.fetchData().then(() => this.draw(this.makeOthers(this.nodes)))
+		}
 	}
 }
 </script>
@@ -330,6 +338,17 @@ div.layer {
 	margin: 0 0 10px 0;
 	height: 121px;
 	display: flex;
+
+	&.unity {
+		.header {
+			background-color: white;
+			color: black;
+
+			img {
+				width: 40px;
+			}
+		}
+	}
 
 	div.header {
 		width: 70px;
