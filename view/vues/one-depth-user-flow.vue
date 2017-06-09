@@ -73,13 +73,14 @@ module.exports = {
 							isCrash = true
 						}
 					})
-					if( ! isExit ) {
+					// 0 value exit, crash node don't need to be shown
+					if( ! isExit && res.exit > 0 ) {
 						arr.push({
 							name: 'exit',
 							value: res.exit
 						})
 					}
-					if( ! isCrash ) {
+					if( ! isCrash && res.crash > 0 ) {
 						arr.push({
 							name: 'crash',
 							value: res.crash
