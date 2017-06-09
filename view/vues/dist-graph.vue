@@ -6,7 +6,9 @@ div.dist-graph
 
 <script>
 module.exports = {
-	props: ['type', 'selectable', 'initData', 'stopWatchIsInitDone', 'stopWatchPackageName', 'fixedWidth', 'fixedHeight'],
+	props: ['type', 'selectable', 'initData', 'stopWatchIsInitDone', 'stopWatchPackageName', 'fixedWidth', 'fixedHeight',
+		'footnote'
+	],
 	data: function() {
 		return {
 			data: [],
@@ -157,7 +159,14 @@ module.exports = {
 					return arr
 				})())
 			let yScale = this.yScale = d3.scaleQuantize()
-				.domain([0, 100])
+				.domain((() => {
+					let arr = [0]
+					arr.push(Math.max.apply(Math, this.data.map(d => d.value)))
+					if( arr[1] < 100 ) {
+						arr[1] = 100
+					}
+					return arr
+				})())
 				.range((() => {
 					let arr = []
 					for( let i = height; i > 0; i -= boxHeight ) {
@@ -202,10 +211,10 @@ module.exports = {
 				.attr('y1', yScale(0) + boxHeight).attr('y2', yScale(0) + boxHeight);
 			guideGroup.append('line').attr('class', 'guide')
 				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
-				.attr('y1', yScale(50) + boxHeight).attr('y2', yScale(50) + boxHeight);
+				.attr('y1', yScale(yScale.domain()[1] / 2) + boxHeight).attr('y2', yScale(yScale.domain()[1] / 2) + boxHeight);
 			guideGroup.append('line').attr('class', 'guide')
 				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
-				.attr('y1', yScale(100)).attr('y2', yScale(100));
+				.attr('y1', yScale(yScale.domain()[1])).attr('y2', yScale(yScale.domain()[1]));
 
 			// tooltip
 			let tooltip = d3.select('body')
@@ -226,7 +235,7 @@ module.exports = {
 						tooltip.transition()
 							.duration(200)
 							.style('opacity', .9)
-						tooltip.html(`${data.count}<br/>
+						tooltip.html(`${data.count !== undefined ? data.count : ''}<br/>
 							${Math.floor(yScale.invertExtent(data.y)[0])}% ~ ${Math.floor(yScale.invertExtent(data.y)[1])}%<br/>
 							${moment(xScale.invertExtent(data.x)[0]).format('YYYY-MM-DD HH:mm:ss')}<br/>
 							~<br/>
@@ -318,6 +327,17 @@ module.exports = {
 					this.app.distSelection.startRange = minRange
 					this.app.distSelection.endRange = maxRange
 				}))
+			}
+
+			// footnote
+			if( this.footnote !== undefined ) {
+				svg.append('text')
+					.text(this.footnote)
+					.attr('text-anchor', 'end')
+					.attr('x', width)
+					.attr('y', 15)
+					.attr('font-size', '15px')
+					.attr('fill', 'black')
 			}
 		},
 		handleResize() {

@@ -2,7 +2,7 @@
 div.os-detail-dist-graph
 	template(v-for='datum in data')
 		h4.title {{datum.title}}
-		dist-graph(:init-data='datum.data', stop-watch-is-init-done, stop-watch-package-name, fixed-width='1000', fixed-height='300')
+		dist-graph(:init-data='datum.data', stop-watch-is-init-done, stop-watch-package-name, :fixed-width='width', fixed-height='300', :footnote='footnote')
 </template>
 
 <script>
@@ -11,7 +11,9 @@ export default {
 	data() {
 		return {
 			app: this.$root.app,
-			data: []
+			data: [],
+			footnote: '',
+			width: 0
 		}
 	},
 	watch: {
@@ -39,6 +41,13 @@ export default {
 	},
 	methods: {
 		fetch() {
+			// retrieve width
+			let elem = $(this.$el)
+			while( ! elem.hasClass('portlet') ) {
+				elem = $(elem).parent()
+			}
+			this.width = elem.width() - 30
+
 			let params = this.app.getFilters()
 			params.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : params.startRange
 			params.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : params.endRange
@@ -53,9 +62,12 @@ export default {
 						res.body.forEach(b => {
 							b.data.forEach(d => {
 								d.date = moment(d.timestamp).valueOf()
+								d.value = d.value / 1000
 							})
 						})
 						this.data = res.body
+
+						this.footnote = 'unit : Kclock'
 					})
 					break
 				case 'pstat':
@@ -63,9 +75,12 @@ export default {
 						res.body.forEach(b => {
 							b.data.forEach(d => {
 								d.date = moment(d.timestamp).valueOf()
+								d.value = d.value / 1000
 							})
 						})
 						this.data = res.body
+
+						this.footnote = 'unit : Kclock'
 					})
 					break
 				case 'memory':
@@ -73,9 +88,12 @@ export default {
 						res.body.forEach(b => {
 							b.data.forEach(d => {
 								d.date = moment(d.timestamp).valueOf()
+								d.value = d.value / (1024 * 1024)
 							})
 						})
 						this.data = res.body
+
+						this.footnote = 'unit : MB'
 					})
 					break
 				case 'vmstat':
@@ -83,9 +101,12 @@ export default {
 						res.body.forEach(b => {
 							b.data.forEach(d => {
 								d.date = moment(d.timestamp).valueOf()
+								d.value = d.value / (1024 * 1024)
 							})
 						})
 						this.data = res.body
+
+						this.footnote = 'unit : MB'
 					})
 					break
 			}

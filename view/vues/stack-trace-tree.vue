@@ -81,7 +81,7 @@ module.exports = {
 				params.os = this.app.insight.status.os.map(d => d.key).join(',')
 				params.device = this.app.insight.status.dev.map(d => d.key).join(',')
 				params.location = this.app.insight.status.loc.map(d => d.key).join(',')
-				this.$http.get(`/api/reverseStack/${this.app.packageName}`, {params}).then(res => {
+				this.$http.get(`/api/reverseStack/${this.app.packageName}/${this.app.insight.type}`, {params}).then(res => {
 					this.data = []
 					res.body.forEach(d => {
 						this.data.push({
