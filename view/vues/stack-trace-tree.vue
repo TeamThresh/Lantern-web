@@ -4,7 +4,7 @@ div.panel-group.accordion#callStackAccordion
 
 <script>
 module.exports = {
-	props: ['crashReverseStack', 'watchPackageName', 'stopWatchIsInitDone', 'insight'],
+	props: ['crashReverseStack', 'watchPackageName', 'stopWatchIsInitDone', 'insight', 'type'],
 	data() {
 		return {
 			app: this.$root.app,
@@ -64,7 +64,7 @@ module.exports = {
 			query.endUsage = this.app.distSelection.endUsage
 			// uuid
 			query.uuid = this.app.uuid.join(',')
-			
+
 			if( this.crashReverseStack !== undefined ) {
 				$.ajax({type: 'get', url: `/api/crashReverseStack/${this.app.packageName}/${this.app.crashId}`}).then(res => {
 					this.data = []
@@ -84,6 +84,16 @@ module.exports = {
 				this.$http.get(`/api/reverseStack/${this.app.packageName}`, {params}).then(res => {
 					this.data = []
 					res.body.forEach(d => {
+						this.data.push({
+							threadName: d.threadName,
+							data: this.preprocess(d.stack[0].children)
+						})
+					})
+				})
+			} else if( this.type !== undefined ){
+				$.ajax({type: 'get', url: `/api/reverseStack/${this.app.packageName}/${this.app.activityName}/${this.type}`, data: query}).then(res => {
+					this.data = []
+					res.forEach(d => {
 						this.data.push({
 							threadName: d.threadName,
 							data: this.preprocess(d.stack[0].children)

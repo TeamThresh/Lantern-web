@@ -35,7 +35,12 @@ block content
 								a(href='#tabRaw' data-toggle='tab') Raw
 					div.tab-content
 						div.tab-pane.active#tabCallStack
-							stack-trace-tree(stop-watch-is-init-done)
+							if resourceType == 'cpu'
+								stack-trace-tree(stop-watch-is-init-done, type='cpu')
+							else if resourceType == 'memory'
+								stack-trace-tree(stop-watch-is-init-done, type='memory')
+							else if resourceType == 'rendering'
+								stack-trace-tree(stop-watch-is-init-done, type='ui')
 						if resourceType == 'cpu'
 							div.tab-pane#tabCpuOs
 								div.row
