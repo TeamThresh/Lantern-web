@@ -378,6 +378,12 @@
                         </li>
                         <!-- END TODO DROPDOWN -->
                         <!-- BEGIN USER LOGIN DROPDOWN -->
+                        <li>
+                            <a href='#' @click="reTrip" style='color: #c6cfda;'>
+                                <i class="fa fa-question"></i>
+                                Help
+                            </a>
+                        </li>
                         <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                         <li class="dropdown dropdown-user dropdown-dark">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -452,6 +458,10 @@
             logout() {
                 this.$cookie.delete('LANTERNSESSIONID')
                 location.href = '/'
+            },
+            reTrip() {
+                let pathName = location.pathname.split('/')[1]
+				this.app.trips[pathName].start()
             }
         }
     }

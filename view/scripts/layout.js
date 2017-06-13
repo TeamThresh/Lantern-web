@@ -200,6 +200,46 @@ window.app = new Vue({
 			},
 			server: {
 				group: undefined
+			},
+			trips: {
+				index: new Trip([
+					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
+					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
+				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				dashboard: new Trip([
+					{sel: '.app-status', content: `This shows selected package name<br/>and its versions`, position: 'e', expose: true},
+					{sel: `.filter-bar`, content: `These are four layers and options<br/>The app consists of them<br/>Click to filter them`, position: 'n', expose: true},
+					{sel: `.filter-group`, content: `You can manage filter group`, position: 'e', expose: true},
+					{sel: `.filter-status-bar`, content: `Filtered elements are here`, position: 'e', expose: true},
+					{sel: `.map`, content: `Filtered elements are drawn here with their relations`, position: 'w', expose: true},
+					{sel: `.user-connection-graph`, content: `Connections and Retentions is here`, position: 'w', expose: true},
+					{sel: `.worldmap-graph`, content: `Worldmap Connections places is also here`, position: 'w', expose: true},
+					{sel: `.m-grid-col-xs-5 .card`, content: `Crash list here :)`, position: 'w', expose: true},
+				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				activitySummary: new Trip([
+					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
+					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
+				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				activityDetail: new Trip([
+					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
+					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
+				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				insight: new Trip([
+					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
+					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
+				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				crashList: new Trip([
+					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
+					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
+				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				crashDetail: new Trip([
+					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
+					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
+				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				getStarted: new Trip([
+					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
+					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
+				], {showNavigation: true, showCloseBox: true, delay: -1})
 			}
 		}
 	},
@@ -246,6 +286,24 @@ window.app = new Vue({
 		},
 		enableUnity() {
 			this.app.unityVisible = true
+		},
+		isTripped(pathName) {
+			let trip = JSON.parse(this.$cookie.get('trip'))
+			if( trip == null ) {
+				return false
+			} else if( trip[pathName] === undefined || trip[pathName] == false ) {
+				return false
+			} else {
+				return true
+			}
+		},
+		setTripped(pathName) {
+			let trip = JSON.parse(this.$cookie.get('trip'))
+			if( trip == null ) {
+				trip = {}
+			}
+			trip[pathName] = true
+			this.$cookie.set('trip', JSON.stringify(trip))
 		}
 	},
 	created() {
@@ -332,9 +390,20 @@ window.app = new Vue({
 		})
 		// init done
 		let handler = () => {
-			this.app.isInitDone = true
+			return new Promise((s, f) => {
+				this.app.isInitDone = true
+				s()
+			})
 		}
-		p.then(handler, handler)
+		p = p.then(handler, handler)
+		// trip intro
+		p.then(() => {
+			let pathName = location.pathname.split('/')[1]
+			if( ! this.isTripped(pathName) ) {
+				this.app.trips[pathName].start()
+				this.setTripped(pathName)
+			}
+		})
 	}
 })
 
