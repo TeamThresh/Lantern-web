@@ -1,9 +1,9 @@
 <template lang="pug">
 div.user-connection-graph
-	div.title 접속수
+	div.title Connections
 	line-graph(:initData='connectionData')
 	br
-	div.title 복귀수
+	div.title Retentions
 	line-graph(:initData='retentionData')
 </template>
 
