@@ -79,6 +79,7 @@
                             <span class="badge badge-danger">NEW</span>
                         </a></li>
 						<li :class='{active: location.pathname.split("/")[1] == "crashList"}'><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
+                        <li><a href="javascript:eunchan();">Machine Gun</a></li>
 					</ul>
 				</div>
                 <!-- BEGIN TOP NAVIGATION MENU -->
