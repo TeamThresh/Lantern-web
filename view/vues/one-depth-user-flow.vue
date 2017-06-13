@@ -90,6 +90,9 @@ module.exports = {
 					this.nodes = [{name: this.app.activityName}]
 					this.links = []
 					arr.forEach(d => {
+						if( d.value == 0 ) {
+							return
+						}
 						this.nodes.push({name: d.name})
 						this.links.push({
 							source: 0,
