@@ -72,14 +72,13 @@
                 <!-- END HEADER SEARCH BOX -->
 				<div class="hor-menu">
 					<ul class="nav navbar-nav pull-left">
-						<li><a href="/index">Project</a></li>
-						<li><a :href="`/dashboard/${app.packageName}`">Dashboard</a></li>
-                        <li><a :href="`/insight/${app.packageName}`">
+						<li :class='{active: location.pathname.split("/")[1] == "index"}'><a href="/index">Project</a></li>
+						<li :class='{active: location.pathname.split("/")[1] == "dashboard"}'><a :href="`/dashboard/${app.packageName}`">Dashboard</a></li>
+                        <li :class='{active: location.pathname.split("/")[1] == "insight"}'><a :href="`/insight/${app.packageName}`">
                             Insight
                             <span class="badge badge-danger">NEW</span>
                         </a></li>
-						<li><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
-						<li><a href="javascript:eunchan();">Machine Gun</a></li>
+						<li :class='{active: location.pathname.split("/")[1] == "crashList"}'><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
 					</ul>
 				</div>
                 <!-- BEGIN TOP NAVIGATION MENU -->
@@ -444,7 +443,8 @@
     module.exports = {
         data() {
             return {
-                app: this.$root.app
+                app: this.$root.app,
+                location: window.location
             }
         },
         methods: {
