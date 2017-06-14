@@ -205,7 +205,7 @@ window.app = new Vue({
 				index: new Trip([
 					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
 					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
-				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				dashboard: new Trip([
 					{sel: '.app-status', content: `This shows selected package name<br/>and its versions`, position: 'e', expose: true},
 					{sel: `.filter-bar`, content: `These are four layers and options<br/>The app consists of them<br/>Click to filter them`, position: 'n', expose: true},
@@ -215,7 +215,7 @@ window.app = new Vue({
 					{sel: `.user-connection-graph`, content: `Connections and Retentions is here`, position: 'w', expose: true},
 					{sel: `.worldmap-graph`, content: `Worldmap Connections places is also here`, position: 'w', expose: true},
 					{sel: `.m-grid-col-xs-5 .card`, content: `Crash list here :)`, position: 'w', expose: true},
-				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				activitySummary: new Trip([
 					{sel: '.portlet:has(.one-depth-user-flow)', content: `One depth user flow shows<br/>the places where user who had visited this activity have gone`, position: 'e', expose: true},
 					{sel: '.row:nth-of-type(2) .portlet:has(.dist-graph)', content: `Distribution Graph<br/>The activity's rendering elapsed time shows here<br/>y axe is millisecond`, position: 'w', expose: true},
@@ -223,7 +223,7 @@ window.app = new Vue({
 					{sel: '.row:nth-of-type(3) .col-md-6:nth-of-type(2) .portlet:has(.dist-graph)', content: `Distribution Graph<br/>The activity's memory usage shows here<br/>y axe is mega byte of used size`, position: 'w', expose: true},
 					{sel: '.row:nth-of-type(4) .col-md-6:nth-of-type(1) .portlet', content: `The activity's whole network outbound calls are here`, position: 'e', expose: true},
 					{sel: '.row:nth-of-type(4) .col-md-6:nth-of-type(2) .portlet', content: `The activity's whole crashes are here`, position: 'w', expose: true},
-				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				activityDetail: new Trip([
 					{sel: '.col-lg-5.col-sm-12 .portlet', content: `The same distribution graph you saw just before<br/>However it is selectable<br/>just drag and then you know what I mean :)`, position: 'e', expose: true},
 					{sel: '.table-scrollable:first', content: `Just after you select any of the above rectagles<br/>every devices that correspond to selected one shows here XD`, position: 'n', expose: true},
@@ -231,28 +231,28 @@ window.app = new Vue({
 					{sel: `.nav.nav-tabs li:nth-of-type(2)`, content: `Specific usage information<br/>from kernel are shown here`, position: 's', expose: true},
 					{sel: `.nav.nav-tabs li:nth-of-type(3)`, content: `Specific usage information<br/>from the exact process executing the application<br/>are shown here`, position: 's', expose: true},
 					{sel: `.nav.nav-tabs li:nth-of-type(4)`, content: `The exact raw data collected by agent are shown here XD`, position: 's', expose: true},
-				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				insight: new Trip([
 					{sel: '.col-lg-5.col-sm-12 .portlet:nth-of-type(1)', content: `Histogram graph<br/>It shows the sum of users at each usage<br/>and there are two vertical lines,<br/>the yellow one stands for fifty percentage of users<br/>and red one does for only five percentage<br/>the behind of red one should the focus :-)`, position: 'e', expose: true},
 					{sel: '.col-lg-5.col-sm-12 .portlet:nth-of-type(2)', content: `The users behind of the red line on above graph<br/>The information of them are shown here :o`, position: 'e', expose: true},
 					{sel: `.col-lg-7.col-sm-12 .portlet`, content: `And also here is reverse stack for them<br/>you know the guys of which we should take care`, position: 'w', expose: true}
-				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				crashList: new Trip([
 					{sel: '.area-graph', content: `Area graph<br/>shows the count of crash on each day`, position: 'e', expose: true},
 					{sel: '.pie-graph', content: `Pie graph<br/>shows the each count of crash group<br/>you may set their group at their own detail page`, position: 'w', expose: true},
 					{sel: `.table-scrollable`, content: `So here's all the crash your app occured<br/>click whatever you want to see its detail`, position: 'n', expose: true}
-				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				crashDetail: new Trip([
 					{sel: '.portlet.light.crash-info.col-xs-12 .caption', content: `Crash name and its group are here`, position: 'e', expose: true},
 					{sel: '.portlet.light.crash-info.col-xs-12 code', content: `The stack trace is here`, position: 's', expose: true},
 					{sel: '.device-status', content: `The device status at that time the crash occured`, position: 'n', expose: true},
 					{sel: '.row:nth-of-type(3)', content: `The information of all the device the crash occured are here`, position: 's', expose: true},
 					{sel: '.row:nth-of-type(4)', content: `Event path<br/>It is like "Referer" in HTTP<br/>The users' movement recored by agent`, position: 'n', expose: true},
-				], {showNavigation: true, showCloseBox: true, delay: -1}),
+				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				getStarted: new Trip([
 					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
 					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
-				], {showNavigation: true, showCloseBox: true, delay: -1})
+				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'})
 			}
 		}
 	},
