@@ -122,10 +122,10 @@ module.exports = {
 					<div class='panel panel-default'>
 						<div class='panel-heading'>
 							<div class='panel-title'>
-								<a class='accordion-toggle' href='#thread${idx}' data-toggle='collapse'>${d.threadName}</a>
+								<a class='accordion-toggle' href='#thread${idx}' data-toggle='collapse' aria-expanded='true'>${d.threadName}</a>
 							</div>
 						</div>
-						<div class='panel-collapse collapse' id='thread${idx}'>
+						<div class='panel-collapse collapse in' id='thread${idx}' aria-expanded='true'>
 							<div class='panel-body'>
 								<div class='jstree jstree-default jstree${idx}'>
 								</div>
