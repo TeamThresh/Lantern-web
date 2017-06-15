@@ -22,10 +22,19 @@ block content
 	div.row
 		portlet.col-xs-12(title='Event Path')
 			one-depth-user-flow(crash-event-path)
+	//- div.row
+	//- 	portlet.col-xs-12(title='Reverse Stack')
+	//- 		//- super-table(tpye='crashCallStack')
+	//- 		stack-trace-tree(crash-reverse-stack watch-package-name)
 	div.row
-		portlet.col-xs-12(title='Reverse Stack')
-			//- super-table(tpye='crashCallStack')
-			stack-trace-tree(crash-reverse-stack watch-package-name)
+		div.col-md-6
+			a(href='/activityDetail/' + packageName + '/' + crashName + '/cpu')
+				portlet(title='CPU Usage')
+					dist-graph(type='cpu')
+		div.col-md-6
+			a(href='/activityDetail/' + packageName + '/' + crashName + '/memory')
+				portlet(title='Memory Usage')
+					dist-graph(type='memory')
 block style
 	style.
 	

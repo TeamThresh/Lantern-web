@@ -203,12 +203,12 @@ window.app = new Vue({
 			},
 			trips: {
 				index: new Trip([
-					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
+					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'screen-ne', expose: true},
 					{sel: `.note.note-info`, content: `Also here you can register new package`, position: 's', expose: true}
 				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				dashboard: new Trip([
 					{sel: '.app-status', content: `This shows selected package name<br/>and its versions`, position: 'e', expose: true},
-					{sel: `.filter-bar`, content: `These are four layers and options<br/>The app consists of them<br/>Click to filter them`, position: 'n', expose: true},
+					{sel: `.filter-bar`, content: `These are four layers and options<br/>The app consists of them<br/>Click to filter them`, position: 'e', expose: true},
 					{sel: `.filter-group`, content: `You can manage filter group`, position: 'e', expose: true},
 					{sel: `.filter-status-bar`, content: `Filtered elements are here`, position: 'e', expose: true},
 					{sel: `.map`, content: `Filtered elements are drawn here with their relations`, position: 'w', expose: true},
@@ -243,11 +243,13 @@ window.app = new Vue({
 					{sel: `.table-scrollable`, content: `So here's all the crash your app occured<br/>click whatever you want to see its detail`, position: 'n', expose: true}
 				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				crashDetail: new Trip([
-					{sel: '.portlet.light.crash-info.col-xs-12 .caption', content: `Crash name and its group are here`, position: 'e', expose: true},
+					{sel: '.portlet.light.crash-info.col-xs-12 .caption', content: `Crash name and its group are here`, position: 's', expose: true},
 					{sel: '.portlet.light.crash-info.col-xs-12 code', content: `The stack trace is here`, position: 's', expose: true},
 					{sel: '.device-status', content: `The device status at that time the crash occured`, position: 'n', expose: true},
 					{sel: '.row:nth-of-type(3)', content: `The information of all the device the crash occured are here`, position: 's', expose: true},
 					{sel: '.row:nth-of-type(4)', content: `Event path<br/>It is like "Referer" in HTTP<br/>The users' movement recored by agent`, position: 'n', expose: true},
+					{sel: '.col-md-6:nth-of-type(1) .portlet', content: `Distribution Graph<br/>About Cpu usage while the crash occured`, position: 'n', expose: true},
+					{sel: '.col-md-6:nth-of-type(2) .portlet', content: `Distribution Graph<br/>About Memory usage while the crash occured`, position: 'n', expose: true},
 				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				getStarted: new Trip([
 					{sel: '.mt-element-list', content: `Select a package you want to explore`, position: 'n', expose: true},
