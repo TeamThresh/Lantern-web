@@ -13,6 +13,16 @@ portlet(title='status')
 		div.col-xs-6
 			h4.title Location
 			pie-graph(type='custom', :initData='locationData')
+	div.row
+		div.col-xs-12
+			h4.title Filter Group
+	div.row
+		div.col-xs-10
+			input.form-control(type='text', placeholder='filter name', v-model='tmpGroupName', maxlength='50')
+		div.col-xs-2
+			button.btn.btn-success(@click='createGroup') SAVE
+		sweet-modal(ref='modal' icon='success') The group added successfully!
+		sweet-modal(ref='modal2' icon='error') Failed to add. An error occured!
 </template>
 
 <script>
@@ -23,7 +33,8 @@ export default {
 			activityData: [],
 			osData: [],
 			deviceData: [],
-			locationData: []
+			locationData: [],
+			tmpGroupName: ''
 		}
 	},
 	watch: {
@@ -62,6 +73,20 @@ export default {
 				})
 				// save to store
 				this.app.insight.status = res.body
+			})
+		},
+		createGroup() {
+			let name = this.tmpGroupName
+			let filters = JSON.parse(JSON.stringify(this.app.filters))
+			filters.activity = this.app.insight.status.act.map(d => d.key)
+			filters.os = this.app.insight.status.os.map(d => d.key)
+			filters.device = this.app.insight.status.dev.map(d => d.key)
+			filters.location = this.app.insight.status.loc.map(d => d.key)
+			this.app.server.group.save({name}, {filters}).then(res => {
+				this.tmpGroupName = ''
+				this.$refs.modal.open()
+			}, err => {
+				this.$refs.modal2.open()
 			})
 		}
 	}
