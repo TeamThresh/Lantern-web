@@ -68,7 +68,7 @@ module.exports = {
 			})
 		},
 		click(group) {
-			this.app.filters.android = group.android
+			this.app.filters.activity = group.activity
 			this.app.filters.os = group.os
 			this.app.filters.device = group.device
 			this.app.filters.location = group.location
