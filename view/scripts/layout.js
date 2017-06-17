@@ -101,7 +101,11 @@ window.app = new Vue({
 			insight: {
 				type: 'cpu',
 				p95: 0,
-				status: {}
+				status: {},
+				selection: {
+					startUsage: 0,
+					endUsage: 0
+				}
 			},
 			unityVisible: false, // unity support
 			getFilters: function() {

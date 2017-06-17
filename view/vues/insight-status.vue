@@ -48,11 +48,30 @@ export default {
 				return
 			}
 			this.fetch()
+		},
+		'app.insight.selection': {
+			handler() {
+				if( ! this.app.isInitDone ) {
+					return
+				}
+				this.fetch('selection')
+			},
+			deep: true
 		}
 	},
 	methods: {
-		fetch() {
-			this.$http.get(`/api/insight/${this.app.packageName}/${this.app.insight.type}/${this.app.insight.p95}`).then(res => {
+		fetch(type) {
+			let url = `/api/insight/${this.app.packageName}/${this.app.insight.type}/${this.app.insight.p95}`
+			let params = {}
+			switch( type ) {
+				case 'selection':
+					url = `/api/insight/${this.app.packageName}/${this.app.insight.type}`
+					params.startUsage = this.app.insight.selection.startUsage
+					params.endUsage = this.app.insight.selection.endUsage
+					break
+			}
+
+			this.$http.get(url, {params}).then(res => {
 				this.activityData = res.body.act.map(d => {
 					return {label: d.key, value: d.count}
 				})

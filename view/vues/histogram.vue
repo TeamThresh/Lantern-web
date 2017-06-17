@@ -19,7 +19,7 @@ portlet
 
 <script>
 export default {
-    props: [],
+    props: ['selectable'],
     data() {
         return {
             app: this.$root.app,
@@ -94,8 +94,7 @@ export default {
             // draw axis
             this.app.drawAxis(svg, xAxis, yAxis, margin)
 
-            svg.selectAll('rect')
-                .data(this.data.histogram)
+            svg.selectAll('rect').data(this.data.histogram)
                 .enter()
                 .append('rect')
                 .attr('x', d => xScale2(d.preRate))
@@ -103,6 +102,11 @@ export default {
                 .attr('width', rectWidth)
                 .attr('height', d => yScale2(d.user_count))
                 .attr('fill', 'grey')
+
+            let rects = []
+            svg.selectAll('rect')._groups[0].forEach(d => {
+                rects.push(d3.select(d))
+            })
 
             svg.append('line')
                 .attr('x1', xScale(this.data.p50.rate))
@@ -119,6 +123,64 @@ export default {
                 .attr('y2', height - margin.bottom)
                 .attr('stroke', '#ef4000')
                 .attr('stroke-width', '2px')
+
+            if( this.selectable !== undefined ) {
+                let selectBox = svg.append('rect').attr('class', 'select-box').attr('fill-opacity', 0)
+				svg.call(d3.drag().on('start', () => {
+					selectBox.attr('x', d3.event.x)
+					selectBox.attr('y', d3.event.y)
+					selectBox.attr('width', 1)
+					selectBox.attr('height', 1)
+					selectBox.attr('fill-opacity', 0.125)
+					rects.forEach(box => box.classed('selected', false))
+				}).on('drag', () => {
+					let a = d3.event.subject
+					let b = d3.event
+					if( b.x > a.x ) {
+						selectBox.attr('width', b.x - a.x)
+						selectBox.attr('x', a.x)
+					} else if( b.x < a.x ) {
+						selectBox.attr('width', a.x - b.x)
+						selectBox.attr('x', b.x)
+					}
+					if( b.y > a.y ) {
+						selectBox.attr('height', b.y - a.y)
+						selectBox.attr('y', a.y)
+					} else if( b.y < a.y ) {
+						selectBox.attr('height', a.y - b.y)
+						selectBox.attr('y', b.y)
+					}
+				}).on('end', () => {
+					selectBox.attr('fill-opacity', 0)
+					let a = d3.event.subject
+					let b = d3.event
+					let x1 = a.x < b.x ? a.x : b.x
+					let x2 = a.x < b.x ? b.x : a.x
+					let minUsage = Number.MAX_VALUE, maxUsage = Number.MIN_VALUE
+					let flag = false
+					rects.forEach(box => {
+						let x = parseInt(box.attr('x')) + rectWidth / 2
+						if( x1 < x && x < x2 ) {
+							flag = true
+							box.classed('selected', true)
+							let usage1 = xScale.invert(parseFloat(box.attr('x')))
+                            let usage2 = xScale.invert(parseFloat(box.attr('x')) + rectWidth)
+							minUsage = Math.min(minUsage, usage1)
+							maxUsage = Math.max(maxUsage, usage2)
+						}
+					})
+					// nothing selected
+					if( ! flag ) {
+                        this.app.insight.selection.startUsage = 0
+                        this.app.insight.selection.endUsage = 0
+						return
+					}
+					minUsage = Math.floor(minUsage)
+					maxUsage = Math.floor(maxUsage)
+					this.app.insight.selection.startUsage = minUsage
+					this.app.insight.selection.endUsage = maxUsage
+				}))
+            }
         },
         changeType(p) {
             switch( p ) {
@@ -151,6 +213,10 @@ svg.histogram {
 
     line.guide {
         display: none;
+    }
+
+    rect.selected {
+        fill: chartreuse;
     }
 }
 
