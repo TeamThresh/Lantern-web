@@ -109,7 +109,6 @@ module.exports = {
 			})
 			this.sampled.forEach(sample => {
 				let p = sample.count / countSumByX[sample.x]
-				console.log(p)
 				if( p >= 0.15 ) {
 					sample.color = this.getColor(3)
 				} else if( p >= 0.05 ) {
