@@ -247,7 +247,7 @@ window.app = new Vue({
 					{sel: `.table-scrollable`, content: `So here's all the crash your app occured<br/>click whatever you want to see its detail`, position: 'n', expose: true}
 				], {showNavigation: true, showCloseBox: true, delay: -1, tripTheme: 'minimalism'}),
 				crashDetail: new Trip([
-					{sel: '.portlet.light.crash-info.col-xs-12 .caption', content: `Crash name and its group are here`, position: 's', expose: true},
+					{sel: '.portlet.light.crash-info.col-xs-12 .caption', content: `Crash name and its group are here`, position: 'screen-ne', expose: true},
 					{sel: '.portlet.light.crash-info.col-xs-12 code', content: `The stack trace is here`, position: 's', expose: true},
 					{sel: '.device-status', content: `The device status at that time the crash occured`, position: 'n', expose: true},
 					{sel: '.row:nth-of-type(3)', content: `The information of all the device the crash occured are here`, position: 's', expose: true},

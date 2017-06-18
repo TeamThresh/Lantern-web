@@ -87,7 +87,7 @@ module.exports = {
 			this.data.forEach(d => {
 				d.x = xScale(d.date)
 				d.y = yScale(d.value)
-				countSumByX[d.x] ? countSumByX[d.x] + d.count : countSumByX[d.x] = d.count
+				countSumByX[d.x] ? countSumByX[d.x] + d.value : countSumByX[d.x] = d.value
 			})
 
 			this.sampled = []
@@ -95,7 +95,7 @@ module.exports = {
 				let found = false
 				this.sampled.forEach(sample => {
 					if( sample.x == d.x && sample.y == d.y ) {
-						sample.count += d.count
+						sample.count += d.value
 						found = true
 					}
 				})
@@ -103,12 +103,13 @@ module.exports = {
 					this.sampled.push({
 						x: d.x,
 						y: d.y,
-						count: d.count
+						count: d.value
 					})
 				}
 			})
 			this.sampled.forEach(sample => {
 				let p = sample.count / countSumByX[sample.x]
+				console.log(p)
 				if( p >= 0.15 ) {
 					sample.color = this.getColor(3)
 				} else if( p >= 0.05 ) {
