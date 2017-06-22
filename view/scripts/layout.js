@@ -60,6 +60,7 @@ Vue.component('get-started', require('../vues/get-started.vue'))
 Vue.component('crash-rank-marker', require('../vues/crash-rank-marker.vue'))
 Vue.component('insight-status', require('../vues/insight-status.vue'))
 Vue.component('os-detail-dist-graph', require('../vues/os-detail-dist-graph.vue'))
+Vue.component('help-badge', require('../vues/help-badge.vue'))
 
 /**
  * apply Vue app
