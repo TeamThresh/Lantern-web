@@ -9,13 +9,18 @@
 
 <script>
 export default {
-	props: ['msg'],
+	props: ['msg', 'white'],
 	methods: {
 		mouseover() {
 			$(this.$el).find('.help-badge-msg-wrapper').addClass('show')
 		},
 		mouseout() {
 			$(this.$el).find('.help-badge-msg-wrapper').removeClass('show')
+		}
+	},
+	mounted() {
+		if( this.white !== undefined ) {
+			$(this.$el).addClass('white')
 		}
 	}
 }
@@ -24,6 +29,10 @@ export default {
 <style lang="scss">
 	.help-badge {
 		margin-left: 5px;
+
+		&.white {
+			color: white;
+		}
 
 		.help-badge-msg-wrapper {
 			display: none;

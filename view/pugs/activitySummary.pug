@@ -11,26 +11,38 @@ block content
 	div.row
 		div.col-md-6
 			portlet(title='One-depth User Flow')
+				span(slot='title')
+					help-badge(msg='One depth user flow shows<br/>the places where user who had visited this activity have gone')
 				one-depth-user-flow
 		div.col-md-6
 			a(href='/activityDetail/' + packageName + '/' + activityName + '/rendering')
 				portlet(title='UI Rendering Elapsed Time')
+					span(slot='title')
+						help-badge(msg="Distribution Graph<br/>The activity's rendering elapsed time shows here<br/>y axe is millisecond")
 					dist-graph(type='rendering')
 	div.row
 		div.col-md-6
 			a(href='/activityDetail/' + packageName + '/' + activityName + '/cpu')
 				portlet(title='CPU Usage')
+					span(slot='title')
+						help-badge(msg="Distribution Graph<br/>The activity's cpu usage shows here<br/>y axe is percentage of usage")
 					dist-graph(type='cpu')
 		div.col-md-6
 			a(href='/activityDetail/' + packageName + '/' + activityName + '/memory')
 				portlet(title='Memory Usage')
+					span(slot='title')
+						help-badge(msg="Distribution Graph<br/>The activity's memory usage shows here<br/>y axe is mega byte of used size")
 					dist-graph(type='memory')
 	div.row
 		div.col-md-6
 			portlet(title='Network Outband Call')
+				span(slot='title')
+					help-badge(msg="The activity's whole network outbound calls are here")
 				super-table(type='network')
 		div.col-md-6
 			portlet(title='Crash List')
+				span(slot='title')
+					help-badge(msg="The activity's whole crashes are here")
 				super-table(type='crash')
 block style
 	style.

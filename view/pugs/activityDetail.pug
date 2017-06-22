@@ -11,6 +11,8 @@ block content
 	div.row
 		div.col-lg-5.col-sm-12
 			portlet(simple='true')
+				span(style='float: right;')
+					help-badge(msg='The same distribution graph you saw just before<br/>However it is selectable<br/>just drag and then you know what I mean :)')
 				dist-graph(type=resourceType selectable='true')
 				br
 				super-table(type='userList' stop-watch-package-name stop-watch-is-init-done)
@@ -20,16 +22,21 @@ block content
 					ul.nav.nav-tabs
 						li.active
 							a(href='#tabCallStack' data-toggle='tab') Reverse Stack
+								help-badge(msg='Reverse Stack<br/>just after you select every call stack collected by agent on each devices<br/>are shown here')
 						if resourceType == 'cpu'
 							li
 								a(href='#tabCpuOs' data-toggle='tab') OS
+									help-badge(msg='Specific usage information<br/>from kernel are shown here')
 							li
 								a(href='#tabCpuApp' data-toggle='tab') App
+									help-badge(msg='Specific usage information<br/>from the exact process executing the application<br/>are shown here')
 						if resourceType == 'memory'
 							li
 								a(href='#tabMemoryUsage' data-toggle='tab') Memory Usage
+									help-badge(msg='Specific usage information<br/>from kernel are shown here')
 							li
 								a(href='#tabVmstat' data-toggle='tab') Vmstat
+									help-badge(msg='Specific usage information<br/>from the exact process executing the application<br/>are shown here')
 						if resourceType == 'cpu' || resourceType == 'memory'
 							li
 								a(href='#tabRaw' data-toggle='tab') Raw
@@ -43,6 +50,7 @@ block content
 								stack-trace-tree(stop-watch-is-init-done, type='ui')
 						if resourceType == 'cpu'
 							div.tab-pane#tabCpuOs
+								help-badge(msg='hi')
 								div.row
 									div.col-xs-12
 											os-detail-dist-graph(type='stat')

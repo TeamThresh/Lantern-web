@@ -1,9 +1,11 @@
 <template lang="pug">
 div.user-connection-graph
 	div.title Connections
+		help-badge(msg='Connections and Retentions is here')
 	line-graph(:initData='connectionData')
 	br
 	div.title Retentions
+		help-badge(msg='Connections and Retentions is here')
 	line-graph(:initData='retentionData')
 </template>
 

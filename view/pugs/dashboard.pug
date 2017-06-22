@@ -12,7 +12,7 @@ block content
 		div.col-xs-12.col-sm-8
 			h4.title
 				span.font-white(style='font-weight: 300;') Activity Map
-					help-badge(msg='description')
+					help-badge(msg='Filtered elements are drawn here with their relations')
 			div.row
 				div.col-xs-12.col-sm-12
 					activity-map(ref='activityMap')
@@ -22,9 +22,11 @@ block content
 							user-connection-graph
 						div.m-grid-col.m-grid-col-xs-4.a
 							card(title='World Outbound Call' style='height: 385px;')
+								help-badge(msg='Worldmap Connections places is also here', slot='title-after', white)
 								worldmap-graph
 						div.m-grid-col.m-grid-col-xs-5.a
 							card(title='Top Error' style='height: 385px;')
+								help-badge(msg='Crash list here', slot='title-after', white)
 								super-table(type='crash5' light='true' watch-filters)
 block style
 	style.

@@ -2,6 +2,7 @@
 div.card
 	div.title-wrapper
 		span.title {{title}}
+		slot(name='title-after')
 	div.content
 		slot
 </template>
