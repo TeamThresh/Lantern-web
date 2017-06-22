@@ -207,13 +207,13 @@ module.exports = {
 				.attr('stroke-dasharray', '5, 5')
 				.attr('class', 'guide');
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
+				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange) + boxWidth)
 				.attr('y1', yScale(0) + boxHeight).attr('y2', yScale(0) + boxHeight);
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
+				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange) + boxWidth)
 				.attr('y1', yScale(yScale.domain()[1] / 2) + boxHeight).attr('y2', yScale(yScale.domain()[1] / 2) + boxHeight);
 			guideGroup.append('line').attr('class', 'guide')
-				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange))
+				.attr('x1', xScale(range.startRange)).attr('x2', xScale(range.endRange) + boxWidth)
 				.attr('y1', yScale(yScale.domain()[1])).attr('y2', yScale(yScale.domain()[1]));
 
 			// tooltip
@@ -349,12 +349,15 @@ module.exports = {
 		switch( this.type ) {
 			case 'rendering':
 				this.fetchUrl = 'rendering'
+				this.footnote = 'unit : ms'
 				break
 			case 'cpu':
 				this.fetchUrl = 'cpu'
+				this.footnote = 'unit : percentage'
 				break
 			case 'memory':
 				this.fetchUrl = 'memory'
+				this.footnote = 'unit : MB'
 				break
 		}
 		// init data accept

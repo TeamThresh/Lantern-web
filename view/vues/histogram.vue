@@ -24,9 +24,10 @@ export default {
         return {
             app: this.$root.app,
             data: {},
-            margin: {top: 10, right: 0, bottom: 20, left: 30},
+            margin: {top: 10, right: 0, bottom: 30, left: 40},
             xScale: d3.scaleLinear(),
-            yScale: d3.scaleLinear()
+            yScale: d3.scaleLinear(),
+            footnote: 'percentage,usage'
         }
     },
     watch: {
@@ -180,21 +181,38 @@ export default {
 					this.app.insight.selection.startUsage = minUsage
 					this.app.insight.selection.endUsage = maxUsage
 				}))
+
+                // footnote
+                if( this.footnote !== undefined ) {
+                    let x = this.footnote.split(',')[0]
+                    let y = this.footnote.split(',')[1]
+                    svg.append('text')
+                        .text(x)
+                        .attr('x', width / 2)
+                        .attr('y', height - 5)
+                    svg.append('text')
+                        .text(y)
+                        .attr('transform', `translate(${15}, ${height / 2})rotate(-90)`)
+                }
             }
         },
         changeType(p) {
             switch( p ) {
                 case 0:
                     this.app.insight.type = 'cpu'
+                    this.footnote = 'percentage,usage'
                     break
                 case 1:
                     this.app.insight.type = 'memory'
+                    this.footnote = 'MB,usage'
                     break
                 case 2:
                     this.app.insight.type = 'network'
+                    this.footnote = 'ms,usage'
                     break
                 case 3:
                     this.app.insight.type = 'ui'
+                    this.footnote = 'ms,usage'
                     break
             }
         }
