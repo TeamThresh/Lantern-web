@@ -61,7 +61,8 @@ module.exports = {
 				res.forEach(d => {
 					this.data.push({
 						date: moment(d.timestamp).valueOf(),
-						value: d.value
+						value: d.value,
+						count: d.count
 					})
 				})
 			})
@@ -87,7 +88,7 @@ module.exports = {
 			this.data.forEach(d => {
 				d.x = xScale(d.date)
 				d.y = yScale(d.value)
-				countSumByX[d.x] ? countSumByX[d.x] + d.value : countSumByX[d.x] = d.value
+				countSumByX[d.x] ? countSumByX[d.x] += d.count : countSumByX[d.x] = d.count
 			})
 
 			this.sampled = []
@@ -95,7 +96,7 @@ module.exports = {
 				let found = false
 				this.sampled.forEach(sample => {
 					if( sample.x == d.x && sample.y == d.y ) {
-						sample.count += d.value
+						sample.count += d.count
 						found = true
 					}
 				})
@@ -103,7 +104,7 @@ module.exports = {
 					this.sampled.push({
 						x: d.x,
 						y: d.y,
-						count: d.value
+						count: d.count
 					})
 				}
 			})
