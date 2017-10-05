@@ -87,10 +87,14 @@ module.exports = {
 					query.limit = 5
 					url = `/api/crashCount/${this.app.packageName}`
 					doNotReverse = true
+					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
+					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
 					break
 				case 'crash':
 					url = `/api/crashCount/${this.app.packageName}/${this.app.activityName}`
 					doNotReverse = true
+					query.startRange = this.app.distSelection.startRange > 0 ? this.app.distSelection.startRange : query.startRange
+					query.endRange = this.app.distSelection.endRange > 0 ? this.app.distSelection.endRange : query.endRange
 					break
 				case 'userList':
 					switch( this.app.resourceType ) {
