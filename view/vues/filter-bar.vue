@@ -9,6 +9,8 @@ div.filter-bar
 			option(value=28) 4 Weeks
 			option(value=30) 1 Month
 			option(value=90) 3 Months
+			option(value=150) 5 Months
+			option(value=180) 6 Months
 		a.type-filter.btn.grey-mint(@click='app.valueType = "crash"', :class='{active: app.valueType == "crash"}')
 			| Crash
 			i.icon-wrench
