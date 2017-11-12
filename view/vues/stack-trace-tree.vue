@@ -77,6 +77,8 @@ module.exports = {
 				})
 			} else if( this.insight !== undefined ) {
 				let params = {}
+                params.startRange = this.app.getFilters().startRange
+                params.endRange = this.app.getFilters().endRange
 				params.activity = this.app.insight.status.act.map(d => d.key).join(',')
 				params.os = this.app.insight.status.os.map(d => d.key).join(',')
 				params.device = this.app.insight.status.dev.map(d => d.key).join(',')

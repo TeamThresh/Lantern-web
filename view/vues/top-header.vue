@@ -73,13 +73,13 @@
 				<div class="hor-menu">
 					<ul class="nav navbar-nav pull-left">
 						<li :class='{active: location.pathname.split("/")[1] == "index"}'><a href="/index">Project</a></li>
-						<li :class='{active: location.pathname.split("/")[1] == "dashboard"}'><a :href="`/dashboard/${app.packageName}`">Dashboard</a></li>
-                        <li :class='{active: location.pathname.split("/")[1] == "insight"}'><a :href="`/insight/${app.packageName}`">
-                            Insight
-                            <span class="badge badge-danger">NEW</span>
-                        </a></li>
-						<li :class='{active: location.pathname.split("/")[1] == "crashList"}'><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
-                        <li><a href="javascript:eunchan();">Machine Gun</a></li>
+                            <li v-if='app.menuType.dashboard' :class='{active: location.pathname.split("/")[1] == "dashboard"}'><a :href="`/dashboard/${app.packageName}`">Dashboard</a></li>
+                            <li v-if='app.menuType.insight' :class='{active: location.pathname.split("/")[1] == "insight"}'><a :href="`/insight/${app.packageName}`">
+                                Insight
+                                <span class="badge badge-danger">NEW</span>
+                            </a></li>
+                            <li v-if='app.menuType.crashlist' :class='{active: location.pathname.split("/")[1] == "crashList"}'><a :href="`/crashList/${app.packageName}`">Crash List</a></li>
+                            <li v-if='app.menuType.dashboard'><a href="javascript:eunchan();">Machine Gun</a></li>
 					</ul>
 				</div>
                 <!-- BEGIN TOP NAVIGATION MENU -->

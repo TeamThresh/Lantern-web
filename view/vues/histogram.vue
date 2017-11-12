@@ -46,7 +46,12 @@ export default {
     },
     methods: {
         fetch() {
-            this.$http.get(`/api/histogram/${this.app.packageName}/${this.app.insight.type}`).then(res => {
+            let params = {
+                startRange : this.app.getFilters().startRange,
+                endRange : this.app.getFilters().endRange
+            }
+
+            this.$http.get(`/api/histogram/${this.app.packageName}/${this.app.insight.type}`, {params}).then(res => {
                 this.data = res.body
                 this.app.insight.p95 = this.data.p95.rate
                 this.draw()

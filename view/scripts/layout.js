@@ -71,6 +71,7 @@ window.app = new Vue({
 		debug: true,
 		serverDead: false,
 		app: {
+			menuType: {},
 			packages: [],
 			packageName: '',
 			activityName: '',
@@ -340,7 +341,7 @@ window.app = new Vue({
 					s()
 				},
 				error: (res) => {
-					this.redirectToLogin()
+					//this.redirectToLogin()
 					s()
 				}
 			})
@@ -373,6 +374,12 @@ window.app = new Vue({
 						this.app.packageName = pathNames[2]
 						this.initServer()
 						s()
+
+						this.app.menuType = {
+							dashboard : true,
+							insight : true,
+							crashlist : true
+						}
 						break
 				}
 			})
